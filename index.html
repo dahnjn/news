@@ -104,6 +104,15 @@ input[type="number"],select { width:100%; border:1px solid #bfc7c0; background:w
 .controller-row > div { display:flex; border:1px solid var(--line); border-radius:4px; overflow:hidden; }
 .controller-row button { border:0; background:transparent; min-width:48px; min-height:36px; padding:6px 10px; }
 .controller-row button[aria-pressed="true"] { background:var(--ink); color:white; }
+.rent-picker { border:0; padding:0; margin:22px 0 4px; min-width:0; }
+.rent-picker legend { font-size:.875rem; font-weight:700; margin-bottom:8px; }
+.rent-options { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line); border-radius:4px; overflow:hidden; }
+.rent-options button { border:0; background:white; min-height:40px; padding:8px; font-size:.875rem; }
+.rent-options button[aria-pressed="true"] { background:var(--ink); color:white; }
+.rent-options button:focus-visible { outline-offset:-3px; }
+.rent-picker .hint { margin:10px 0 0; }
+.rent-report { border-top:1px solid var(--line); padding-top:18px; margin-top:22px; }
+.rent-report h2 { font-size:1rem; }
 .controller-badge { display:inline-block; margin-left:5px; font:400 .7rem "DM Mono",monospace; color:var(--muted); }
 .ai-controls { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-top:22px; padding-top:10px; border-top:1px solid var(--line); color:var(--muted); font-size:.875rem; }
 .ai-controls button { font-size:18px; }
@@ -278,8 +287,6 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .business-waiting span { display:inline-flex; align-items:center; gap:6px; font-family:"DM Mono",monospace; font-size:.875rem; }
 .business-waiting i { display:inline-block; width:8px; height:8px; background:var(--income); }
 @media(max-width:520px) { .worker-tiers { grid-template-columns:repeat(2,minmax(0,1fr)); } .team-letter { display:none; } .score-top b { font-size:.875rem; } }
-
-
 .brand-logo { display:block; width:48px; height:48px; flex:none; }
 .topbar { background:white; }
 .extra-move-status { font-weight:700; color:#244954!important; }
@@ -320,6 +327,10 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .extra-move-status.used { opacity:.6; }
 .central-map-label { stroke:var(--ocean); stroke-width:8; paint-order:stroke fill; }
 .team-score { background:rgba(255,255,255,.55); border-radius:0; border-top-color:transparent; }
+.team-score { position:relative; background:rgba(255,255,255,.55); border-radius:0; border-top-color:transparent; }
+.score-turn-outline { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+.score-turn-outline .current-turn-snake { width:calc(100% - 4px); height:calc(100% - 4px); stroke:#8ce0db; stroke-width:3px; }
+@media(prefers-reduced-motion:reduce) { .current-turn-snake { stroke-dasharray:none; } }
 .team-score.active { background:#172e36; color:white; box-shadow:none; border-top-color:#172e36; }
 .team-score.active .score-detail span,.team-score.active small,.team-score.active .controller-badge { color:#d6e9ee; }
 .score-turn { font:.75rem "DM Mono",monospace; letter-spacing:.08em; padding:2px 4px; border:1px solid #8dafbb; }
@@ -331,13 +342,11 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .card-title { flex-wrap:wrap; }
 .move-receipt { line-height:1.6; }
 @media(max-width:520px) { .brand-logo { width:42px; height:42px; } .brand-name { display:none; } .extra-move-status { font-size:.7rem!important; } }
-
 .plot-order { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid var(--line); font-size:.875rem; }
 .plot-order b { font:500 1.25rem "DM Mono",monospace; }
 .plot-mark.locked { cursor:not-allowed; }
 .plot-mark.locked .plot-base { fill:#e5eff1; stroke:#83969c; stroke-width:3; }
 .plot-mark.locked .empty-plot-number { fill:#6e858e; }
-
 </style>
 </head>
 <body>
@@ -378,9 +387,12 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <li><b>Create jobs.</b> Small / medium / large industries create 25 / 50 / 100 workers. Each size has six business card options based on workforce profiles from Q. The mixes favor $ and $$ workers. CENTRAL has four slots for each size: inner ring small, middle ring medium, outer ring large. Empty slots are outlined; businesses fill them black, clockwise from the top. Click CENTRAL to see waiting workers and remaining slots.</li>
       <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. They prefer more entertainment, then the plot furthest from the port: 6, 5, 4, 3, 2, 1. Remaining ties favor a different island each round: NORTH, EAST, SOUTH, WEST. Workers queue in creation order.</li>
       <li><b>Score.</b> Only your own housing units contribute to your team’s score, across all islands. A filled housing unit earns its income value once. An empty housing unit subtracts that value while it is vacant. An empty $$$$ housing unit is −$4; once occupied, it is +$4. Industry, ports, ships, and entertainment do not earn points. There is no recurring rent in this mode.</li>
+      <li><b>Score.</b> Only your own housing units contribute to your team’s score, across all islands. With recurring rent off, a filled housing unit earns its income value once. With recurring rent on, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. Rent accumulates: a $$$$ home occupied for three round endings earns $12. In both modes, empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, ships, and entertainment do not earn points.</li>
     </ol>
     <p>↓ saves a game file; ↑ loads it. Saves include team controls, the current turn and unused extra moves. Loading a save made during arrivals replays that movement.</p>
     <p>Choose You or AI for each team before starting. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
+    <p>↓ saves a game file; ↑ loads it. Saves include team controls, recurring rent, collected rent, the current turn and unused extra moves. Loading a save made during arrivals replays that movement and pays that round’s rent once.</p>
+    <p>Choose You or AI for each team and turn recurring rent on or off before starting. The moving outline marks the active team on the board and in the scores at the top. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
     <p>Workers without a suitable housing unit stay in the center for the next round. The highest score after the final round wins. Equal scores share the win.</p>
   </dialog>
   <dialog id="newGameDialog" aria-labelledby="newGameTitle">
@@ -388,6 +400,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
     <p>Replaces the current game. Save first to keep it.</p>
     <label class="field-label" for="newGameRounds">Rounds</label><input id="newGameRounds" type="number" min="1" max="100" step="1" value="12" required />
     <div id="newGameControllers"></div>
+    <div id="newGameRent"></div>
     <button class="primary" id="confirmNewGame">Start game</button>
   </dialog>
   <dialog id="fileDialog" aria-labelledby="fileTitle">
@@ -400,7 +413,6 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 "use strict";
 // Embedded modules keep their original private scopes. No external scripts are needed.
 const newsModules = Object.create(null);
-
 // data.mjs
 newsModules["./data.mjs"] = (() => {
 const ISLANDS = [
@@ -409,21 +421,18 @@ const ISLANDS = [
   { name: "SOUTH", color: "#006074", fill: "#bfd7dc", direction: "S" },
   { name: "WEST", color: "#547870", fill: "#d4dddb", direction: "W" },
 ];
-
 const INCOME = [
   { label: "$", name: "Local", color: "#2864cc" },
   { label: "$$", name: "Standard", color: "#087f8c" },
   { label: "$$$", name: "Premium", color: "#7950bd" },
   { label: "$$$$", name: "Luxury", color: "#bb3b87" },
 ];
-
 const TEAMS = [
   { name:'Star', letter:'S' },
   { name:'Cross', letter:'C' },
   { name:'Checker', letter:'K' },
   { name:'Stripes', letter:'T' },
 ];
-
 // Workforce figures transcribed from Q FULL.pdf. The page is the PDF page number.
 // Preserve the original figures for reference and loading games played before rebalancing.
 function scaleMix(source, total) {
@@ -478,7 +487,6 @@ const PLOT_SPACING = 74;
 const PORT_RADIUS = 30;
 const UNIT_PITCH = 19;
 const UNIT_SIZE = 16;
-
 const BOARD_CENTER = [783,780];
 const DOCK_POINTS = [[783,615],[948,780],[783,945],[618,780]];
 // Coastlines traced from Group 6 (3).png, with clearance for larger building blocks.
@@ -499,20 +507,22 @@ const COASTLINES = COASTLINE_TRACES.map((coast,island)=>coast.map(point=>alignIs
 const TEAM_ANCHORS = [[-150,-150],[150,-150],[150,150],[-150,150]].map(([x,y]) => [BOARD_CENTER[0]+x,BOARD_CENTER[1]+y]);
 const LABEL_POINTS = [[1090,200],[1650,978],[1080,1400],[250,960]].map(alignIslandPoint);
 const SHIP_ROTATIONS = [0,90,180,270];
-
 return { ISLANDS, INCOME, TEAMS, scaleMix, INDUSTRY, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
 })();
-
 // game.mjs
 newsModules["./game.mjs"] = (() => {
 const { ISLANDS, INDUSTRY, TEAMS, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE } = newsModules["./data.mjs"];
 function generateTeams() {
   return TEAMS.map(({letter,name})=>({letter,name,extraMoveUsed:false,controller:'human'}));
+  return TEAMS.map(({letter,name})=>({letter,name,extraMoveUsed:false,controller:'human',rentEarned:0}));
 }
 function createGame(rounds = 12) {
+function createGame(rounds = 12, {recurringRent=false} = {}) {
   if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) throw new Error('Choose 1–100 rounds.');
+  if (typeof recurringRent!=='boolean') throw new Error('Choose whether recurring rent is on or off.');
   return {
     rounds, round:1, turn:0, phase:'playing', nextWorkerId:1,
+    rounds, recurringRent, round:1, turn:0, phase:'playing', nextWorkerId:1,
     players:generateTeams(),
     islands:ISLANDS.map(() => ({port:false,shipLevel:0,plots:Array(PLOTS_PER_ISLAND).fill(null)})),
     workers:[], industries:[], lastAction:'', lastActionType:null, actionsThisTurn:0, extraActionActive:false, lastReport:null, pending:null,
@@ -529,6 +539,7 @@ function teamStats(game, owner) {
     }
   }
   return {housed,homes,income,vacancy,score:income-vacancy};
+  return {housed,homes,income,vacancy,score:(game.recurringRent?game.players[owner].rentEarned:income)-vacancy};
 }
 function waitingCounts(game) {
   const counts=[0,0,0,0]; game.workers.forEach(worker=>counts[worker.income]++); return counts;
@@ -644,6 +655,11 @@ function finishResolution(game) {
   }
   const remaining=new Set(waiting); game.workers=game.workers.filter(worker=>remaining.has(worker.id));
   game.lastReport={round,moved:moves.length,waiting:waiting.length,byTeam,byIsland}; game.pending=null;
+  if(game.recurringRent) {
+    const rentByTeam=game.players.map((_,owner)=>teamStats(game,owner).income);
+    rentByTeam.forEach((rent,owner)=>{game.players[owner].rentEarned+=rent;});
+    game.lastReport.rentByTeam=rentByTeam;
+  }
   game.phase=game.round>=game.rounds?'finished':'roundSummary'; return game.lastReport;
 }
 function nextRound(game) {
@@ -651,10 +667,8 @@ function nextRound(game) {
   game.round++; game.turn=0; game.phase='playing'; game.lastAction=''; game.lastActionType=null; game.actionsThisTurn=0; game.extraActionActive=false;
 }
 function standings(game) { return game.players.map((player,team)=>({team,...teamStats(game,team)})).sort((a,b)=>b.score-a.score||a.team-b.team); }
-
 return { generateTeams, createGame, teamStats, waitingCounts, industryStats, islandStats, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
 })();
-
 // motion.mjs
 newsModules["./motion.mjs"] = (() => {
 const { BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, UNIT_PITCH } = newsModules["./data.mjs"];
@@ -689,15 +703,12 @@ function travelerPosition(move,elapsed,rank,origin,passengers) {
   const t = clamp((elapsed-walkStart)/1300), plot = PLOT_POINTS[move.island][move.plot];
   return { point:t < .85 ? lerp(PORT_POINTS[move.island],plot,ease(t/.85)) : lerp(plot,end,ease((t-.85)/.15)), arrived:t === 1 };
 }
-
 return { clamp, lerp, dockPoint, homePoint, queuePoint, shipPoint, travelerPosition };
 })();
-
 // ownership.mjs
 newsModules["./ownership.mjs"] = (() => {
 const { BOARD_CENTER, TEAM_ANCHORS, PLOT_POINTS, PLOT_SIZE } = newsModules["./data.mjs"];
 function teamAnchor(owner) { return [...TEAM_ANCHORS[owner]]; }
-
 // Each team uses its own rectangular track outside CENTRAL. All connections
 // follow horizontal or vertical segments, then enter the edge of a housing block.
 function ownershipPath(owner,island,plot) {
@@ -735,18 +746,16 @@ function ownershipPath(owner,island,plot) {
   }
   return clean.map((point,i)=>`${i?'L':'M'}${point.join(' ')}`).join(' ');
 }
-
 function ownershipLinks(game) {
   return game.islands.flatMap((island,index)=>island.plots.flatMap((plot,p)=>
     plot?.type==='homes' ? [{owner:plot.owner,island:index,plot:p,path:ownershipPath(plot.owner,index,p)}] : []));
 }
-
 return { teamAnchor, ownershipPath, ownershipLinks };
 })();
-
 // saves.mjs
 newsModules["./saves.mjs"] = (() => {
 const { INDUSTRY, TEAMS, scaleMix } = newsModules["./data.mjs"];
+const { teamStats } = newsModules["./game.mjs"];
 const invalid=()=>{throw new Error('This file is not a valid NEWS saved game.');};
 const check=condition=>{if(!condition) invalid();};
 const integer=(value,min,max)=>{check(Number.isInteger(value)&&value>=min&&value<=max);return value;};
@@ -754,18 +763,21 @@ const bool=value=>{check(typeof value==='boolean');return value;};
 const list=(value,length)=>{check(Array.isArray(value)&&value.length===length);return value;};
 const record=value=>{check(value!==null&&typeof value==='object'&&!Array.isArray(value));return value;};
 const sum=values=>values.reduce((a,b)=>a+b,0);
-
 // Rebuild only recognized fields; imported data never supplies markup or game rules.
 function validateGame(input) {
   const raw=record(input), game={};
   game.rounds=integer(raw.rounds,1,100); game.round=integer(raw.round,1,game.rounds);
+  game.recurringRent=raw.recurringRent===undefined?false:bool(raw.recurringRent);
   game.turn=integer(raw.turn,0,3);
   check(['playing','handoff','roundReady','roundSummary','finished'].includes(raw.phase)); game.phase=raw.phase;
   game.players=list(raw.players,4).map((player,owner)=>{
     record(player); check(typeof player.letter==='string'&&/^[A-Z]$/.test(player.letter));
     const controller=player.controller??'human';
     check(controller==='human'||controller==='ai');
+    const rentEarned=integer(player.rentEarned===undefined&&!game.recurringRent?0:player.rentEarned,0,86400);
+    check(game.recurringRent||rentEarned===0);
     return {letter:player.letter,name:TEAMS[owner].name,extraMoveUsed:bool(player.extraMoveUsed),controller};
+    return {letter:player.letter,name:TEAMS[owner].name,extraMoveUsed:bool(player.extraMoveUsed),controller,rentEarned};
   });
   check(new Set(game.players.map(p=>p.letter)).size===4);
   const people=new Map(), sizeCounts={small:0,medium:0,large:0}; let nextId=1;
@@ -828,22 +840,29 @@ function validateGame(input) {
     const byTeam=list(report.byTeam,4).map(n=>integer(n,0,120)), byIsland=list(report.byIsland,4).map(n=>integer(n,0,30));
     check(sum(byTeam)===moved&&sum(byIsland)===moved);
     game.lastReport={round:integer(report.round,1,game.round),moved,waiting,byTeam,byIsland};
+    if(game.recurringRent) game.lastReport.rentByTeam=list(report.rentByTeam,4).map(n=>integer(n,0,864));
   }
   if(['roundSummary','finished'].includes(game.phase)) {
     check(game.lastReport?.round===game.round&&game.lastReport.waiting===game.workers.length);
     check(game.phase==='finished'?game.round===game.rounds:game.round<game.rounds);
   } else check(game.round===1?game.lastReport===null:game.lastReport?.round===game.round-1);
+  if(game.recurringRent) game.players.forEach((player,owner)=>{
+    const income=teamStats(game,owner).income, paidRounds=game.lastReport?.round??0;
+    check(player.rentEarned<=income*paidRounds);
+    if(game.lastReport) {
+      check(game.lastReport.rentByTeam[owner]===income);
+      check(player.rentEarned>=income);
+    }
+  });
   game.pending=null;
   return game;
 }
-
 function serializeGame(game) {
   // Settlement has not mutated housing yet. Replay its animation after loading.
   const resumeMovement=game.phase==='resolving';
   const snapshot=validateGame({...game,phase:resumeMovement?'roundReady':game.phase,pending:null});
   return JSON.stringify({format:'NEWS',version:1,resumeMovement,game:snapshot},null,2);
 }
-
 function parseSavedGame(text) {
   if(typeof text!=='string'||text.length>1000000) invalid();
   let payload;
@@ -854,10 +873,8 @@ function parseSavedGame(text) {
   check(!resumeMovement||game.phase==='roundReady');
   return {game,resumeMovement};
 }
-
 return { serializeGame, parseSavedGame };
 })();
-
 // computer.mjs
 newsModules["./computer.mjs"] = (() => {
 const { INDUSTRY } = newsModules["./data.mjs"];
@@ -893,9 +910,9 @@ function candidates(game) {
   }
   return moves;
 }
-
 // Forecast the public board using the same matching, preference, and capacity
 // rules as real play. Future rent is never counted more than once.
+// rules as real play, including one rent payment per projected round when enabled.
 function evaluate(game,owner) {
   let future=copy(game), value=teamStats(future,owner).score;
   const remaining=game.rounds-game.round+1;
@@ -905,6 +922,7 @@ function evaluate(game,owner) {
     const gains=future.players.map((_,i)=>teamStats(future,i).score-before[i]);
     value+=.85**round*(gains[owner]-.1*gains.reduce((sum,gain,i)=>sum+(i===owner?0:gain),0));
     if(!future.workers.length) break;
+    if(!future.workers.length&&!future.recurringRent) break;
     future.round++;
   }
   // A small opportunity value helps the computer establish jobs and routes
@@ -930,7 +948,6 @@ function simulate(game,action) {
   applyAction(next,action);
   return next;
 }
-
 // A bounded two-move search gives practice opponents a useful plan without
 // network access, extra information, or exceptions to the game rules.
 function chooseComputerMove(game) {
@@ -959,10 +976,8 @@ function computerWantsExtra(game) {
   const choice=chooseComputerMove(extra);
   return choice.action.type!=='cancel-extra'&&choice.gain>2;
 }
-
 return { chooseComputerMove, computerWantsExtra };
 })();
-
 // Application and interface
 (() => {
 const { ISLANDS, INCOME, INDUSTRY, TEAMS, INDUSTRY_RINGS, COASTLINES, BOARD_CENTER, PORT_POINTS, PORT_RADIUS, PLOT_POINTS, LABEL_POINTS, SHIP_ROTATIONS, LOCATION_ORDER, PLOT_SIZE, UNIT_SIZE } = newsModules["./data.mjs"];
@@ -982,8 +997,8 @@ const undoMoves = [];
 const portPulseEpoch = Date.now();
 const turnIndicatorEpoch = Date.now();
 let computerTimer=null, aiPaused=false, newGameTeams=null;
+let computerTimer=null, aiPaused=false, newGameTeams=null, newGameRecurringRent=false;
 const ui = { island:null, action:'port', plot:0, income:0, mix:Array(9).fill(0), size:'small', card:0, error:'', highlightOwner:null };
-
 const flagNames=TEAMS.map(team=>team.name);
 function flagArtwork(owner) {
   const patterns=[
@@ -1000,7 +1015,6 @@ function teamFlag(owner) {
 function teamLabel(owner,players=game.players) {
   return `<span class="team-identity">${teamFlag(owner)}<span>${players[owner].name}</span></span>`;
 }
-
 function resetDraft() {
   ui.island=null; ui.action='port'; ui.plot=0;
   ui.mix=Array(9).fill(0); ui.income=0; ui.error='';
@@ -1022,6 +1036,9 @@ const hasComputer=()=>game.players.some(player=>player.controller==='ai');
 const computerTurn=()=>started&&game.players[game.turn].controller==='ai';
 function controllerPicker(players,scope) {
   return `<fieldset class="controller-picker"><legend>Teams</legend>${players.map((team,owner)=>`<div class="controller-row">${teamLabel(owner,players)}<div role="group" aria-label="Who controls ${team.name}">${[['human','You'],['ai','AI']].map(([controller,label])=>`<button type="button" data-controller="${controller}" data-control-owner="${owner}" data-control-scope="${scope}" aria-pressed="${(team.controller??'human')===controller}">${label}</button>`).join('')}</div></div>`).join('')}</fieldset>`;
+}
+function rentPicker(enabled,scope) {
+  return `<fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent">${[[false,'Off'],[true,'On']].map(([value,label])=>`<button type="button" data-rent="${value}" data-rent-scope="${scope}" aria-pressed="${enabled===value}">${label}</button>`).join('')}</div><p class="hint">${enabled?'Occupied homes pay at the end of every round, after arrivals.':'Occupied homes earn their value once.'} Empty homes subtract their value while vacant.</p></fieldset>`;
 }
 function stopComputer() {
   if(computerTimer!==null) window.clearTimeout(computerTimer);
@@ -1058,7 +1075,6 @@ function scheduleComputer() {
     }
   },phase==='playing'?650:1100);
 }
-
 function shipTriangles(level) {
   return Array.from({length:level},(_,i) => {
     const offset = (i-(level-1)/2)*15;
@@ -1073,13 +1089,17 @@ function shipMarkup(team, point, level, id = '') {
 function isTeamUp(owner) {
   return game.turn===owner&&(!started||['playing','handoff','roundReady'].includes(game.phase));
 }
+const turnOutlinePhase=()=>-((Date.now()-turnIndicatorEpoch)%4800)/1000;
 function renderScores() {
   $('#teamStrip').innerHTML=game.players.map((player,owner)=>{
     const stats=teamStats(game,owner);
     const active=isTeamUp(owner);
     return `<div class="team-score ${active?'active':''}" aria-current="${active?'true':'false'}" style="--team:#222">
+      ${active?`<svg class="score-turn-outline" aria-hidden="true" focusable="false"><rect class="current-turn-snake" x="2" y="2" pathLength="100" style="--turn-phase:${turnOutlinePhase()}s"/></svg>`:''}
       <div class="score-top"><b>${teamLabel(owner)}${player.controller==='ai'?'<span class="controller-badge">AI</span>':''}</b><strong>${money(stats.score)}</strong></div>
       <div class="score-detail"><span title="Filled housing income">+$${stats.income}</span><span title="Vacant housing penalty">−$${stats.vacancy}</span></div>
+      <div class="score-detail"><span title="${game.recurringRent?'Rent collected':'Filled housing income'}">+$${game.recurringRent?player.rentEarned:stats.income}</span><span title="Vacant housing penalty">−$${stats.vacancy}</span></div>
+      ${game.recurringRent?`<small>Rent +$${stats.income} / round</small>`:''}
       <div class="score-meta">${active?'<span class="score-turn">NOW</span>':''}<small title="${stats.housed} of ${stats.homes} housing units filled">▦ ${stats.housed}/${stats.homes}</small><small class="extra-move-status ${player.extraMoveUsed?'used':''}" title="${player.extraMoveUsed?'Extra move used':'Extra move available'}" aria-label="${player.extraMoveUsed?'Extra move used':'Extra move available'}">${player.extraMoveUsed?'✓':'+1'}</small></div></div>`;
   }).join('');
   $('#roundLabel').textContent=started?`${String(game.round).padStart(2,'0')} / ${String(game.rounds).padStart(2,'0')}`:'';
@@ -1087,7 +1107,6 @@ function renderScores() {
   $('#saveGameButton').disabled=!started;
   $('#undoGameButton').disabled=!undoMoves.length;
 }
-
 function waitingWorkers() { return animation ? game.workers.filter(worker => !animation.movingIds.has(worker.id)) : game.workers; }
 function renderWaiting() {
   $('#workersLayer').innerHTML='';
@@ -1132,10 +1151,10 @@ function renderIslands() {
       }).join('')}</g>`;
   }).join('');
 }
-
 function renderOwnership() {
   const selection=ui.highlightOwner, links=ownershipLinks(game);
   const outlinePhase=-((Date.now()-turnIndicatorEpoch)%4800)/1000;
+  const outlinePhase=turnOutlinePhase();
   $('#ownershipLayer').innerHTML=links.map((link,index)=>{
     const state=selection===null?'':selection===link.owner?'highlighted':'muted';
     return `<path id="ownershipLink${index}" class="ownership-line ${state}" data-link-owner="${link.owner}" data-link-island="${link.island}" data-link-plot="${link.plot}" d="${link.path}" vector-effect="non-scaling-stroke"/>`;
@@ -1145,7 +1164,6 @@ function renderOwnership() {
     return `<g id="ownerMarker${owner}" transform="translate(${x} ${y})" class="team-owner ${active?'current-turn':''} ${selected?'selected':''}" data-owner="${owner}" role="button" tabindex="0" aria-current="${active?'true':'false'}" aria-pressed="${selected}" aria-label="${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''}: ${stats.homes} housing units. ${selected?'Clear highlight':'Highlight ownership'}"><title>${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''} · ${stats.homes} housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)">${flagArtwork(owner)}</g>${active?`<rect class="current-turn-snake" x="-50" y="-54" width="100" height="100" pathLength="100" style="--turn-phase:${outlinePhase}s" aria-hidden="true"/>`:''}${selected?'<path class="owner-underline" d="M-22 72 H22"/>':''}</g>`;
   }).join('');
 }
-
 function ringSegmentPath(radius,index,total) {
   const [cx,cy]=BOARD_CENTER, gap=.035, inner=radius-9, outer=radius+9;
   const start=-Math.PI/2+index*2*Math.PI/total+gap, end=-Math.PI/2+(index+1)*2*Math.PI/total-gap;
@@ -1166,12 +1184,10 @@ function renderRoutes() {
   $('#routesLayer').innerHTML=game.islands.map((island,index)=>!island.shipLevel||animation?.byIsland[index]?'':shipMarkup(index,dockPoint(index),island.shipLevel)).join('');
 }
 function renderBoard() { renderScores(); renderRoutes(); renderIslands(); renderCenter(); renderOwnership(); renderWaiting(); }
-
 function plotPicker() {
   ui.plot=nextBuildablePlot(game,ui.island);
   return ui.plot>=0 ? `<div class="plot-order" aria-label="Next available plot ${ui.plot+1}"><span>Next plot</span><b>${ui.plot+1}</b></div>` : '<p class="notice">All six squares are in use.</p>';
 }
-
 function industryControls() {
   const industry = INDUSTRY[ui.size];
   return `<div class="size-switch">${Object.entries(INDUSTRY).map(([size,item]) => `<button data-size="${size}" aria-pressed="${size === ui.size}" style="--size:${item.color}"><span>${item.label}</span><b>+${item.jobs} workers</b><small>${industryStats(game,size).remaining} available</small></button>`).join('')}</div>
@@ -1214,6 +1230,11 @@ function reportMarkup() {
   const report = game.lastReport;
   return `<div class="round-totals"><div><strong>${report.moved}</strong><span>housed</span></div><div><strong>${report.waiting}</strong><span>waiting</span></div></div>
     <div class="arrival-list">${game.players.map((team,index) => `<div>${teamLabel(index)}<b>+${report.byTeam[index]}</b></div>`).join('')}</div>`;
+    <div class="arrival-list">${game.players.map((team,index) => `<div>${teamLabel(index)}<b>+${report.byTeam[index]}</b></div>`).join('')}</div>${rentReportMarkup()}`;
+}
+function rentReportMarkup() {
+  if(!game.recurringRent||!game.lastReport) return '';
+  return `<section class="rent-report" aria-label="Rent paid this round"><h2>Round ${game.lastReport.round} rent</h2><div class="arrival-list">${game.players.map((_,owner)=>`<div>${teamLabel(owner)}<b>+$${game.lastReport.rentByTeam[owner]}</b></div>`).join('')}</div></section>`;
 }
 function turnBanner() {
   const ai=computerTurn(), picking=game.phase==='playing';
@@ -1224,6 +1245,7 @@ function renderPanel() {
   let content;
   if(!started) {
     content=`<div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="${game.rounds}" required/>${controllerPicker(game.players,'initial')}<button class="primary" data-command="start">Start →</button></div>`;
+    content=`<div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="${game.rounds}" required/>${controllerPicker(game.players,'initial')}${rentPicker(game.recurringRent,'initial')}<button class="primary" data-command="start">Start →</button></div>`;
   } else if(computerTurn()&&['playing','handoff','roundReady'].includes(game.phase)) {
     content=`${turnBanner()}${game.phase==='playing'?`<p class="ai-thinking">${aiPaused?'Paused.':'Choosing a move…'}</p>`:`<p class="move-receipt">${escapeText(game.lastAction)}</p>`}`;
   } else if(game.phase==='playing') {
@@ -1243,19 +1265,24 @@ function renderPanel() {
     const ranking=standings(game), winners=ranking.filter(item=>item.score===ranking[0].score);
     content=`<div class="panel-intro"><h1>${winners.length>1?'A shared victory.':`${game.players[winners[0].team].name} wins.`}</h1>${winners.length>1?`<p>${winners.map(item=>game.players[item.team].name).join(' · ')}</p>`:''}</div>
       <div class="final-scores">${ranking.map(item=>`<div>${teamLabel(item.team)}<strong>${money(item.score)}</strong><small>+$${item.income} −$${item.vacancy}</small></div>`).join('')}</div><button class="primary" data-command="new">+ New game</button>`;
+      <div class="final-scores">${ranking.map(item=>`<div>${teamLabel(item.team)}<strong>${money(item.score)}</strong><small>${game.recurringRent?'Rent collected ':''}+$${game.recurringRent?game.players[item.team].rentEarned:item.income} −$${item.vacancy}${game.recurringRent?' vacant':''}</small></div>`).join('')}</div>${rentReportMarkup()}<button class="primary" data-command="new">+ New game</button>`;
   }
   const computerControls=started&&hasComputer()&&game.phase!=='finished'?`<div class="ai-controls"><span>${aiPaused?'AI paused':'AI'}</span><button class="icon-button" data-command="toggle-ai" title="${aiPaused?'Resume AI':'Pause AI'}" aria-label="${aiPaused?'Resume AI':'Pause AI'}">${aiPaused?'▶':'Ⅱ'}</button></div>`:'';
   $('#turnPanel').innerHTML=`<div class="panel-content">${content}${computerControls}</div>`;
   if(previousUnit!==undefined) $(`[data-unit="${previousUnit}"]`)?.focus({preventScroll:true});
 }
-
 function render() { renderBoard(); renderPanel(); scheduleComputer(); }
 function announce(text) { $('#boardStatus').textContent = text; }
 function startGame(input) {
   if (!input.reportValidity()) return;
+  const fromNewDialog=$('#newGameDialog').open;
+  const initialTeams=fromNewDialog?newGameTeams:game.players;
   const initialTeams=started?newGameTeams:game.players;
   stopComputer(); stopAnimation(); game=createGame(Number(input.value));
   if(initialTeams) game.players=initialTeams.map(team=>({...team,controller:team.controller??'human',extraMoveUsed:false}));
+  const recurringRent=fromNewDialog?newGameRecurringRent:game.recurringRent;
+  stopComputer(); stopAnimation(); game=createGame(Number(input.value),{recurringRent});
+  if(initialTeams) game.players=initialTeams.map(team=>({...team,controller:team.controller??'human',extraMoveUsed:false,rentEarned:0}));
   started=true; aiPaused=false; undoMoves.length=0; ui.highlightOwner=null; resetDraft(); render(); announce(`${game.players[0].name} takes the first turn.`);
 }
 function commit(type = ui.action) {
@@ -1281,6 +1308,7 @@ function completeMovement() {
   if (game.phase !== 'resolving') return;
   stopAnimation(); const report = finishResolution(game); render();
   announce(`Round ${report.round}: ${report.moved} people housed. ${report.waiting} remain at industry.`);
+  announce(`Round ${report.round}: ${report.moved} people housed. ${report.waiting} remain at industry.${game.recurringRent?' Rent paid to all teams.':''}`);
 }
 function animateRound() {
   if (game.phase !== 'roundReady') return;
@@ -1336,7 +1364,6 @@ function renderCentralDetails() {
     <div class="central-totals"><b>${workers.length} waiting</b><span>${game.industries.length} businesses</span>${animation?`<span>${animation.plan.moves.length-animation.arrived.size} traveling</span>`:''}</div>
     <div class="industry-availability">${Object.entries(INDUSTRY).map(([size,spec])=>{const {built,total,remaining}=industryStats(game,size);return `<span><b>${spec.label}</b> ${built}/${total} built · ${remaining} available</span>`;}).join('')}</div>
     <div class="worker-tiers">${INCOME.map((income,i)=>`<div style="--income:${income.color}"><h3>${income.label}</h3><strong>${counts[i]}</strong><span>waiting</span><small>${homes[i]} housing units available</small></div>`).join('')}</div>
-
     <h3 class="business-list-title">Businesses</h3><div class="central-businesses">${game.industries.length?game.industries.map(business=>{
       const spec=INDUSTRY[business.size], card=spec.cards[business.cardIndex], waiting=[0,0,0,0];
       workers.filter(worker=>worker.industryId===business.id).forEach(worker=>waiting[worker.income]++);
@@ -1345,7 +1372,6 @@ function renderCentralDetails() {
     ${started&&game.phase==='playing'&&!computerTurn()?'<button class="primary" data-build-central>+ Industry</button>':''}`;
 }
 function showCentral() { renderCentralDetails(); if(!$('#centralDialog').open) $('#centralDialog').showModal(); }
-
 $('#turnPanel').addEventListener('click',event => {
   const command = event.target.closest('[data-command]')?.dataset.command;
   if (command) {
@@ -1419,6 +1445,8 @@ function openNewGame() {
   newGameTeams=createGame(game.rounds).players.map((team,index)=>({...team,controller:game.players[index].controller??'human'}));
   $('#newGameRounds').value=game.rounds;
   $('#newGameControllers').innerHTML=controllerPicker(newGameTeams,'new');
+  newGameRecurringRent=game.recurringRent;
+  $('#newGameRent').innerHTML=rentPicker(newGameRecurringRent,'new');
   $('#newGameDialog').showModal();
 }
 function fileError(message) {
@@ -1458,6 +1486,20 @@ $('#newGameButton').addEventListener('click',openNewGame);
 $('#confirmNewGame').addEventListener('click',() => { const input = $('#newGameRounds'); if (!input.reportValidity()) return; startGame(input); $('#newGameDialog').close(); scheduleComputer(); });
 for(const selector of ['#newGameDialog','#rulesDialog','#centralDialog','#detailDialog','#fileDialog']) $(selector).addEventListener('close',scheduleComputer);
 document.addEventListener('click',event=>{
+  const rent=event.target.closest('[data-rent]');
+  if(rent) {
+    if(!['true','false'].includes(rent.dataset.rent)) return;
+    const enabled=rent.dataset.rent==='true', scope=rent.dataset.rentScope;
+    if(scope==='initial'&&!started) {
+      const rounds=$('#roundsInput').value;
+      game.recurringRent=enabled; render(); $('#roundsInput').value=rounds;
+    } else if(scope==='new'&&$('#newGameDialog').open) {
+      newGameRecurringRent=enabled;
+      $('#newGameRent').innerHTML=rentPicker(enabled,'new');
+    }
+    $(`[data-rent="${enabled}"][data-rent-scope="${scope}"]`)?.focus({preventScroll:true});
+    return;
+  }
   const control=event.target.closest('[data-controller]');
   if(control) {
     const owner=Number(control.dataset.controlOwner), controller=control.dataset.controller, scope=control.dataset.controlScope;
@@ -1476,7 +1518,6 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-build-central]')&&started&&game.phase==='playing'&&!computerTurn()) { selectLocation('central'); $('#centralDialog').close(); render(); }
 });
 render();
-
 // End NEWS application.
 })();
 </script>
