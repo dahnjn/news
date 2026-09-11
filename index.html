@@ -287,6 +287,8 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .business-waiting span { display:inline-flex; align-items:center; gap:6px; font-family:"DM Mono",monospace; font-size:.875rem; }
 .business-waiting i { display:inline-block; width:8px; height:8px; background:var(--income); }
 @media(max-width:520px) { .worker-tiers { grid-template-columns:repeat(2,minmax(0,1fr)); } .team-letter { display:none; } .score-top b { font-size:.875rem; } }
+
+
 .brand-logo { display:block; width:48px; height:48px; flex:none; }
 .topbar { background:white; }
 .extra-move-status { font-weight:700; color:#244954!important; }
@@ -326,7 +328,6 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .extra-move-status { font-family:"DM Mono",monospace; }
 .extra-move-status.used { opacity:.6; }
 .central-map-label { stroke:var(--ocean); stroke-width:8; paint-order:stroke fill; }
-.team-score { background:rgba(255,255,255,.55); border-radius:0; border-top-color:transparent; }
 .team-score { position:relative; background:rgba(255,255,255,.55); border-radius:0; border-top-color:transparent; }
 .score-turn-outline { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
 .score-turn-outline .current-turn-snake { width:calc(100% - 4px); height:calc(100% - 4px); stroke:#8ce0db; stroke-width:3px; }
@@ -342,11 +343,13 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .card-title { flex-wrap:wrap; }
 .move-receipt { line-height:1.6; }
 @media(max-width:520px) { .brand-logo { width:42px; height:42px; } .brand-name { display:none; } .extra-move-status { font-size:.7rem!important; } }
+
 .plot-order { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid var(--line); font-size:.875rem; }
 .plot-order b { font:500 1.25rem "DM Mono",monospace; }
 .plot-mark.locked { cursor:not-allowed; }
 .plot-mark.locked .plot-base { fill:#e5eff1; stroke:#83969c; stroke-width:3; }
 .plot-mark.locked .empty-plot-number { fill:#6e858e; }
+
 </style>
 </head>
 <body>
@@ -364,18 +367,133 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
   </header>
   <main class="game-shell">
     <section class="board-column" aria-label="Gameboard and scores">
-      <div class="team-strip" id="teamStrip" aria-label="Team scores"></div>
+      <div class="team-strip" id="teamStrip" aria-label="Team scores"><div class="team-score active" aria-current="true" style="--team:#222">
+      <svg class="score-turn-outline" aria-hidden="true" focusable="false"><rect class="current-turn-snake" x="2" y="2" pathLength="100" style="--turn-phase:0s"/></svg>
+      <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span></b><strong>$0</strong></div>
+      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      
+      <div class="score-meta"><span class="score-turn">NOW</span><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
+      
+      <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span></b><strong>$0</strong></div>
+      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      
+      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
+      
+      <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span></b><strong>$0</strong></div>
+      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      
+      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
+      
+      <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span></b><strong>$0</strong></div>
+      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      
+      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div></div>
       <div class="board-stage">
         <svg id="gameBoard" viewBox="-160 -170 2080 1820" role="group" aria-labelledby="boardTitle boardDesc">
           <title id="boardTitle">NEWS</title>
           <desc id="boardDesc">Star, Cross, Checker, and Stripes can all build on NORTH, EAST, SOUTH, and WEST. Each island has six plots and a shared port. Team signal flags outside CENTRAL connect to their housing units; outlined units are available and solid units with checks are filled. Click CENTRAL to see workers and businesses.</desc>
-          <g id="coastsLayer"></g><g id="ownershipLayer" aria-hidden="true"></g><g id="islandsLayer"></g><g id="centerLayer"></g><g id="routesLayer"></g><g id="teamOwnersLayer"></g><g id="workersLayer"></g><g id="animationLayer" aria-hidden="true"></g>
+          <g id="coastsLayer"><g class="player-island " style="--island:#fbe6bf"><path class="island-coast" d="M753.9,-130.5787878787878 L787.2,-43.12424242424237 L847.5,3.5181818181818585 L916.1,17.53333333333336 L939,51.28181818181821 L972.3,46.684848484848544 L985.8,144.5666666666667 L994.1,162.05757575757576 L979.6,176.0727272727273 L969.2,237.85151515151517 L905.7,58.34545454545457 L897.4,58.34545454545457 L846.4,80.43333333333334 L846.4,88.61818181818182 L899.5,261.17272727272734 L899.5,268.23636363636365 L870.4,346.27272727272725 L869.3,357.9333333333333 L959.8,479.24848484848485 L850.6,430.25151515151515 L724.8,430.25151515151515 L692.5,461.75757575757575 L683.2,402.3333333333333 L636.4,382.4878787878788 L683.2,263.5272727272727 L678,195.9181818181818 L589.6,190.0878787878788 L609.3,316 L553.2,297.3878787878788 L539.6,263.5272727272727 L516.8,248.3909090909091 L526.1,202.869696969697 L522,155.10606060606062 L542.8,155.10606060606062 L545.9,132.90606060606063 L574,125.9545454545455 L597.9,86.26363636363641 L609.3,110.81818181818187 L653,115.41515151515154 L652,81.66666666666669 L634.3,68.77272727272731 L641.6,45.451515151515196 L671.7,48.92727272727279 L711.2,30.315151515151513 L709.2,19.77575757575761 L694.6,-4.666666666666629 L721.6,-54.78484848484845 L721.6,-61.848484848484816 L708.1,-89.7666666666666 L736.2,-103.7818181818181 Z" data-island="0" role="button" tabindex="0" aria-label="Choose NORTH"/></g><g class="player-island " style="--island:#dfbfc7"><path class="island-coast" d="M1465.6363636363635,658 L1466.7575757575758,704 L1495.909090909091,731 L1535.151515151515,723 L1532.909090909091,702 L1549.7272727272727,705 L1580,689 L1593.4545454545455,700 L1599.060606060606,700 L1652.8787878787878,683 L1763.878787878788,722 L1880.4848484848485,880 L1786.3030303030303,833 L1732.4848484848485,757 L1594.5757575757575,779 L1595.6969696969695,786 L1677.5454545454545,881 L1593.4545454545455,881 L1541.8787878787878,947 L1528.4242424242425,956 L1525.060606060606,954 L1517.2121212121212,860 L1512.7272727272727,855 L1484.6969696969697,850 L1472.3636363636363,865 L1467.878787878788,866 L1425.2727272727273,837 L1418.5454545454545,837 L1383.7878787878788,860 L1397.2424242424242,838 L1397.2424242424242,832 L1319.878787878788,823 L1329.969696969697,893 L1306.4242424242425,900 L1259.3333333333333,866 L1231.3030303030303,850 L1189.8181818181818,856 L1144.969696969697,850 L1138.2424242424242,823 L1124.7878787878788,818 L1097.878787878788,818 L1133.7575757575758,794 L1132.6363636363637,786 L1112.4545454545455,749 L1019.3939393939394,713 L1050.7878787878788,713 L1086.6666666666667,696 L1105.7272727272727,722 L1132.6363636363637,712 L1149.4545454545455,735 L1184.2121212121212,731 L1184.2121212121212,706 L1196.5454545454545,710 L1222.3333333333333,706 L1276.1515151515152,722 L1285.121212121212,722 L1328.8484848484848,701 L1359.121212121212,717 L1375.939393939394,722 Z" data-island="1" role="button" tabindex="0" aria-label="Choose EAST"/></g><g class="player-island " style="--island:#bfd7dc"><path class="island-coast" d="M629.3,1048.0121212121212 L641,1059.8969696969696 L614.5,1091.9636363636364 L614.5,1100.3727272727274 L620.8,1108.6696969696968 L628.2,1108.6696969696968 L651.6,1093.1969696969697 L681.2,1095.551515151515 L672.8,1133.560606060606 L682.3,1131.2060606060606 L721.5,1096.7848484848485 L725.8,1113.378787878788 L732.1,1113.378787878788 L741.7,1100.3727272727274 L777.7,1126.4969696969697 L784.1,1126.4969696969697 L851.9,1061.1303030303031 L899.6,1049.2454545454545 L866.7,1121.6757575757576 L883.7,1200.1606060606061 L890.1,1200.1606060606061 L914.4,1105.081818181818 L961.1,1197.8060606060606 L951.5,1212.0454545454545 L951.5,1217.9878787878788 L968.5,1219.2212121212121 L956.8,1233.4606060606059 L956.8,1240.5242424242424 L971.7,1253.642424242424 L962.1,1258.351515151515 L967.4,1289.2969696969699 L943.1,1263.1727272727271 L937.8,1263.1727272727271 L940.9,1282.121212121212 L916.6,1282.121212121212 L926.1,1314.3 L895.4,1344.0121212121212 L847.7,1344.0121212121212 L843.4,1421.2636363636361 L884.8,1421.2636363636361 L931.4,1385.6090909090908 L865.7,1486.6303030303031 L807.4,1611.4212121212122 L731.1,1570.9454545454544 L705.6,1534.1696969696968 L740.6,1466.3363636363636 L741.7,1455.6848484848483 L713,1357.0181818181818 L705.6,1358.2515151515152 L673.8,1391.551515151515 L672.8,1383.142424242424 L686.5,1266.760606060606 L718.3,1232.2272727272727 L718.3,1226.2848484848485 L636.7,1226.2848484848485 L621.9,1203.7484848484848 L630.4,1201.3939393939395 L624,1168.0939393939393 L603.9,1159.7969696969699 L615.5,1141.969696969697 L615.5,1134.7939393939394 L602.8,1108.6696969696968 L575.2,1111.0242424242426 L580.5,1076.6030303030304 Z" data-island="2" role="button" tabindex="0" aria-label="Choose SOUTH"/></g><g class="player-island " style="--island:#d4dddb"><path class="island-coast" d="M454.66666666666663,483 L520.8181818181818,558 L508.4848484848485,562 L468.1212121212121,605 L468.1212121212121,616 L452.42424242424244,640 L446.8181818181818,680 L432.24242424242425,669 L393,669 L381.7878787878788,654 L373.93939393939394,654 L327.969696969697,670 L330.21212121212125,726 L335.8181818181818,726 L366.0909090909091,712 L496.1515151515151,719 L442.3333333333333,772 L452.42424242424244,829 L377.3030303030303,836 L347.030303030303,861 L319,849 L310.030303030303,848 L267.42424242424244,883 L221.45454545454547,862 L102.60606060606062,829 L-11.757575757575694,847 L-121.63636363636363,737 L-67.81818181818176,712 L-58.848484848484816,712 L169.8787878787879,738 L168.75757575757578,732 L82.42424242424244,691 L158.66666666666669,702 L157.54545454545456,693 L136.24242424242425,646 L160.90909090909093,632 L194.54545454545456,631 L196.7878787878788,620 L214.72727272727275,629 L223.69696969696972,629 L241.63636363636365,619 L282,616 L299.93939393939394,591 L330.21212121212125,591 L329.0909090909091,609 L340.3030303030303,619 L370.57575757575756,616 L389.6363636363636,606 L389.6363636363636,600 L377.3030303030303,591 L415.42424242424244,582 L428.8787878787879,570 L438.969696969697,583 L444.57575757575756,583 L447.93939393939394,552 L481.57575757575756,552 L460.27272727272725,507 Z" data-island="3" role="button" tabindex="0" aria-label="Choose WEST"/></g></g><g id="ownershipLayer" aria-hidden="true"></g><g id="islandsLayer"><g class="player-island " style="--team:#ef9b00;--island:#fbe6bf">
+      <text class="island-label" x="1091" y="132.12121212121212" text-anchor="middle">NORTH</text>
+      <g class="port-mark " data-port="0" style="--port-phase:0s" role="button" tabindex="0" aria-label="NORTH shared port: not built"><title>NORTH shared port</title>
+    
+    <circle cx="783" cy="500" r="30"/></g>
+      <g class="plot-mark    " data-plot="0" data-island="0" role="button" tabindex="0" aria-disabled="false" aria-label="NORTH plot 1: ready to build">
+          <title>NORTH plot 1 · ready to build</title><rect class="plot-base" x="751" y="358" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="395" text-anchor="middle">1</text>
+          </g><g class="plot-mark   locked " data-plot="1" data-island="0" role="button" tabindex="0" aria-disabled="true" aria-label="NORTH plot 2: Build plot 1 first">
+          <title>NORTH plot 2 · Build plot 1 first</title><rect class="plot-base" x="751" y="284" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="321" text-anchor="middle">2</text>
+          </g><g class="plot-mark   locked " data-plot="2" data-island="0" role="button" tabindex="0" aria-disabled="true" aria-label="NORTH plot 3: Build plot 1 first">
+          <title>NORTH plot 3 · Build plot 1 first</title><rect class="plot-base" x="751" y="210" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="247" text-anchor="middle">3</text>
+          </g><g class="plot-mark   locked " data-plot="3" data-island="0" role="button" tabindex="0" aria-disabled="true" aria-label="NORTH plot 4: Build plot 1 first">
+          <title>NORTH plot 4 · Build plot 1 first</title><rect class="plot-base" x="751" y="136" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="173" text-anchor="middle">4</text>
+          </g><g class="plot-mark   locked " data-plot="4" data-island="0" role="button" tabindex="0" aria-disabled="true" aria-label="NORTH plot 5: Build plot 1 first">
+          <title>NORTH plot 5 · Build plot 1 first</title><rect class="plot-base" x="751" y="62" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="99" text-anchor="middle">5</text>
+          </g><g class="plot-mark   locked " data-plot="5" data-island="0" role="button" tabindex="0" aria-disabled="true" aria-label="NORTH plot 6: Build plot 1 first">
+          <title>NORTH plot 6 · Build plot 1 first</title><rect class="plot-base" x="751" y="-12" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="25" text-anchor="middle">6</text>
+          </g></g><g class="player-island " style="--team:#800020;--island:#dfbfc7">
+      <text class="island-label" x="1667.4545454545455" y="980" text-anchor="middle">EAST</text>
+      <g class="port-mark " data-port="1" style="--port-phase:-0.65s" role="button" tabindex="0" aria-label="EAST shared port: not built"><title>EAST shared port</title>
+    
+    <circle cx="1063" cy="780" r="30"/></g>
+      <g class="plot-mark    " data-plot="0" data-island="1" role="button" tabindex="0" aria-disabled="false" aria-label="EAST plot 1: ready to build">
+          <title>EAST plot 1 · ready to build</title><rect class="plot-base" x="1141" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="1173" y="785" text-anchor="middle">1</text>
+          </g><g class="plot-mark   locked " data-plot="1" data-island="1" role="button" tabindex="0" aria-disabled="true" aria-label="EAST plot 2: Build plot 1 first">
+          <title>EAST plot 2 · Build plot 1 first</title><rect class="plot-base" x="1215" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="1247" y="785" text-anchor="middle">2</text>
+          </g><g class="plot-mark   locked " data-plot="2" data-island="1" role="button" tabindex="0" aria-disabled="true" aria-label="EAST plot 3: Build plot 1 first">
+          <title>EAST plot 3 · Build plot 1 first</title><rect class="plot-base" x="1289" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="1321" y="785" text-anchor="middle">3</text>
+          </g><g class="plot-mark   locked " data-plot="3" data-island="1" role="button" tabindex="0" aria-disabled="true" aria-label="EAST plot 4: Build plot 1 first">
+          <title>EAST plot 4 · Build plot 1 first</title><rect class="plot-base" x="1363" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="1395" y="785" text-anchor="middle">4</text>
+          </g><g class="plot-mark   locked " data-plot="4" data-island="1" role="button" tabindex="0" aria-disabled="true" aria-label="EAST plot 5: Build plot 1 first">
+          <title>EAST plot 5 · Build plot 1 first</title><rect class="plot-base" x="1437" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="1469" y="785" text-anchor="middle">5</text>
+          </g><g class="plot-mark   locked " data-plot="5" data-island="1" role="button" tabindex="0" aria-disabled="true" aria-label="EAST plot 6: Build plot 1 first">
+          <title>EAST plot 6 · Build plot 1 first</title><rect class="plot-base" x="1511" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="1543" y="785" text-anchor="middle">6</text>
+          </g></g><g class="player-island " style="--team:#006074;--island:#bfd7dc">
+      <text class="island-label" x="1080" y="1405.4545454545455" text-anchor="middle">SOUTH</text>
+      <g class="port-mark " data-port="2" style="--port-phase:-1.3s" role="button" tabindex="0" aria-label="SOUTH shared port: not built"><title>SOUTH shared port</title>
+    
+    <circle cx="783" cy="1060" r="30"/></g>
+      <g class="plot-mark    " data-plot="0" data-island="2" role="button" tabindex="0" aria-disabled="false" aria-label="SOUTH plot 1: ready to build">
+          <title>SOUTH plot 1 · ready to build</title><rect class="plot-base" x="751" y="1138" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="1175" text-anchor="middle">1</text>
+          </g><g class="plot-mark   locked " data-plot="1" data-island="2" role="button" tabindex="0" aria-disabled="true" aria-label="SOUTH plot 2: Build plot 1 first">
+          <title>SOUTH plot 2 · Build plot 1 first</title><rect class="plot-base" x="751" y="1212" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="1249" text-anchor="middle">2</text>
+          </g><g class="plot-mark   locked " data-plot="2" data-island="2" role="button" tabindex="0" aria-disabled="true" aria-label="SOUTH plot 3: Build plot 1 first">
+          <title>SOUTH plot 3 · Build plot 1 first</title><rect class="plot-base" x="751" y="1286" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="1323" text-anchor="middle">3</text>
+          </g><g class="plot-mark   locked " data-plot="3" data-island="2" role="button" tabindex="0" aria-disabled="true" aria-label="SOUTH plot 4: Build plot 1 first">
+          <title>SOUTH plot 4 · Build plot 1 first</title><rect class="plot-base" x="751" y="1360" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="1397" text-anchor="middle">4</text>
+          </g><g class="plot-mark   locked " data-plot="4" data-island="2" role="button" tabindex="0" aria-disabled="true" aria-label="SOUTH plot 5: Build plot 1 first">
+          <title>SOUTH plot 5 · Build plot 1 first</title><rect class="plot-base" x="751" y="1434" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="1471" text-anchor="middle">5</text>
+          </g><g class="plot-mark   locked " data-plot="5" data-island="2" role="button" tabindex="0" aria-disabled="true" aria-label="SOUTH plot 6: Build plot 1 first">
+          <title>SOUTH plot 6 · Build plot 1 first</title><rect class="plot-base" x="751" y="1508" width="64" height="64"/>
+          <text class="empty-plot-number" x="783" y="1545" text-anchor="middle">6</text>
+          </g></g><g class="player-island " style="--team:#547870;--island:#d4dddb">
+      <text class="island-label" x="206.8787878787879" y="952" text-anchor="middle">WEST</text>
+      <g class="port-mark " data-port="3" style="--port-phase:-1.95s" role="button" tabindex="0" aria-label="WEST shared port: not built"><title>WEST shared port</title>
+    
+    <circle cx="503" cy="780" r="30"/></g>
+      <g class="plot-mark    " data-plot="0" data-island="3" role="button" tabindex="0" aria-disabled="false" aria-label="WEST plot 1: ready to build">
+          <title>WEST plot 1 · ready to build</title><rect class="plot-base" x="361" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="393" y="785" text-anchor="middle">1</text>
+          </g><g class="plot-mark   locked " data-plot="1" data-island="3" role="button" tabindex="0" aria-disabled="true" aria-label="WEST plot 2: Build plot 1 first">
+          <title>WEST plot 2 · Build plot 1 first</title><rect class="plot-base" x="287" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="319" y="785" text-anchor="middle">2</text>
+          </g><g class="plot-mark   locked " data-plot="2" data-island="3" role="button" tabindex="0" aria-disabled="true" aria-label="WEST plot 3: Build plot 1 first">
+          <title>WEST plot 3 · Build plot 1 first</title><rect class="plot-base" x="213" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="245" y="785" text-anchor="middle">3</text>
+          </g><g class="plot-mark   locked " data-plot="3" data-island="3" role="button" tabindex="0" aria-disabled="true" aria-label="WEST plot 4: Build plot 1 first">
+          <title>WEST plot 4 · Build plot 1 first</title><rect class="plot-base" x="139" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="171" y="785" text-anchor="middle">4</text>
+          </g><g class="plot-mark   locked " data-plot="4" data-island="3" role="button" tabindex="0" aria-disabled="true" aria-label="WEST plot 5: Build plot 1 first">
+          <title>WEST plot 5 · Build plot 1 first</title><rect class="plot-base" x="65" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="97" y="785" text-anchor="middle">5</text>
+          </g><g class="plot-mark   locked " data-plot="5" data-island="3" role="button" tabindex="0" aria-disabled="true" aria-label="WEST plot 6: Build plot 1 first">
+          <title>WEST plot 6 · Build plot 1 first</title><rect class="plot-base" x="-9" y="748" width="64" height="64"/>
+          <text class="empty-plot-number" x="23" y="785" text-anchor="middle">6</text>
+          </g></g></g><g id="centerLayer"><g class="industrial-center" data-central role="button" tabindex="0" aria-label="CENTRAL: view workers and businesses">
+    <circle cx="783" cy="780" r="140" fill="var(--ocean)"/>
+    <g data-industry-ring="small" aria-label="Small: 0 built, 4 available"><path class="industry-ring unbuilt" data-industry-slot="0" d="M784.8896141486341 726.0330716237316 A54 54 0 0 1 836.9669283762684 778.1103858513659 L818.9779522508456 778.7402572342439 A36 36 0 0 0 784.2597427657561 744.0220477491544 Z"><title>Small slot 1: available</title></path><path class="industry-ring unbuilt" data-industry-slot="1" d="M836.9669283762684 781.8896141486341 A54 54 0 0 1 784.8896141486341 833.9669283762684 L784.2597427657561 815.9779522508456 A36 36 0 0 0 818.9779522508456 781.2597427657561 Z"><title>Small slot 2: available</title></path><path class="industry-ring unbuilt" data-industry-slot="2" d="M781.1103858513659 833.9669283762684 A54 54 0 0 1 729.0330716237316 781.8896141486342 L747.0220477491544 781.2597427657561 A36 36 0 0 0 781.7402572342439 815.9779522508456 Z"><title>Small slot 3: available</title></path><path class="industry-ring unbuilt" data-industry-slot="3" d="M729.0330716237316 778.1103858513659 A54 54 0 0 1 781.1103858513658 726.0330716237316 L781.7402572342439 744.0220477491544 A36 36 0 0 0 747.0220477491544 778.7402572342439 Z"><title>Small slot 4: available</title></path></g><g data-industry-ring="medium" aria-label="Medium: 0 built, 4 available"><path class="industry-ring unbuilt" data-industry-slot="0" d="M786.2193426235989 688.0563442478391 A92 92 0 0 1 874.9436557521609 776.7806573764011 L856.9546796267382 777.4105287592791 A74 74 0 0 0 785.5894712407209 706.0453203732618 Z"><title>Medium slot 1: available</title></path><path class="industry-ring unbuilt" data-industry-slot="1" d="M874.9436557521609 783.2193426235989 A92 92 0 0 1 786.2193426235989 871.9436557521609 L785.5894712407209 853.9546796267382 A74 74 0 0 0 856.9546796267382 782.5894712407209 Z"><title>Medium slot 2: available</title></path><path class="industry-ring unbuilt" data-industry-slot="2" d="M779.7806573764011 871.9436557521609 A92 92 0 0 1 691.0563442478391 783.219342623599 L709.0453203732618 782.5894712407209 A74 74 0 0 0 780.4105287592791 853.9546796267382 Z"><title>Medium slot 3: available</title></path><path class="industry-ring unbuilt" data-industry-slot="3" d="M691.0563442478391 776.7806573764011 A92 92 0 0 1 779.780657376401 688.0563442478391 L780.4105287592791 706.0453203732618 A74 74 0 0 0 709.0453203732618 777.4105287592791 Z"><title>Medium slot 4: available</title></path></g><g data-industry-ring="large" aria-label="Large: 0 built, 4 available"><path class="industry-ring unbuilt" data-industry-slot="0" d="M787.5840639531681 649.080229309423 A131 131 0 0 1 913.919770690577 775.4159360468319 L895.9307945651542 776.0458074297101 A113 113 0 0 0 786.9541925702899 667.0692054348458 Z"><title>Large slot 1: available</title></path><path class="industry-ring unbuilt" data-industry-slot="1" d="M913.919770690577 784.5840639531681 A131 131 0 0 1 787.5840639531681 910.919770690577 L786.9541925702899 892.9307945651542 A113 113 0 0 0 895.9307945651542 783.9541925702899 Z"><title>Large slot 2: available</title></path><path class="industry-ring unbuilt" data-industry-slot="2" d="M778.415936046832 910.919770690577 A131 131 0 0 1 652.080229309423 784.5840639531681 L670.0692054348458 783.95419257029 A113 113 0 0 0 779.0458074297101 892.9307945651542 Z"><title>Large slot 3: available</title></path><path class="industry-ring unbuilt" data-industry-slot="3" d="M652.080229309423 775.4159360468319 A131 131 0 0 1 778.4159360468319 649.080229309423 L779.04580742971 667.0692054348458 A113 113 0 0 0 670.0692054348458 776.04580742971 Z"><title>Large slot 4: available</title></path></g>
+    <text class="central-map-label" x="1043" y="560" text-anchor="middle">CENTRAL</text></g></g><g id="routesLayer"></g><g id="teamOwnersLayer"><g id="ownerMarker0" transform="translate(633 630)" class="team-owner current-turn " data-owner="0" role="button" tabindex="0" aria-current="true" aria-pressed="false" aria-label="Star · Star flag · Starts first: 0 housing units. Highlight ownership"><title>Star · Star flag · Starts first · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g><rect class="current-turn-snake" x="-50" y="-54" width="100" height="100" pathLength="100" style="--turn-phase:0s" aria-hidden="true"/></g><g id="ownerMarker1" transform="translate(933 630)" class="team-owner  " data-owner="1" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Cross · Cross flag: 0 housing units. Highlight ownership"><title>Cross · Cross flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g><g id="ownerMarker2" transform="translate(933 930)" class="team-owner  " data-owner="2" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Checker · Checker flag: 0 housing units. Highlight ownership"><title>Checker · Checker flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g><g id="ownerMarker3" transform="translate(633 930)" class="team-owner  " data-owner="3" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Stripes · Stripes flag: 0 housing units. Highlight ownership"><title>Stripes · Stripes flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g></g><g id="workersLayer"></g><g id="animationLayer" aria-hidden="true"></g>
         </svg>
       </div>
       <div class="board-caption"><span><i class="available-key"></i> Available</span><span><i class="filled-key">✓</i> Filled</span><span title="Housing preference, after income match and entertainment">6 → 1 · preference</span></div>
       <div class="board-status" id="boardStatus" role="status" aria-live="polite"></div>
     </section>
-    <aside class="turn-panel" id="turnPanel" aria-label="Turn controls"></aside>
+    <aside class="turn-panel" id="turnPanel" aria-label="Turn controls"><div class="panel-content"><p class="hint" role="status">Static preview. Open the downloaded HTML file in your web browser to play.</p><div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="12" required/><fieldset class="controller-picker"><legend>Teams</legend><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span><div role="group" aria-label="Who controls Star"><button type="button" data-controller="human" data-control-owner="0" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="0" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span><div role="group" aria-label="Who controls Cross"><button type="button" data-controller="human" data-control-owner="1" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="1" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span><div role="group" aria-label="Who controls Checker"><button type="button" data-controller="human" data-control-owner="2" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="2" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span><div role="group" aria-label="Who controls Stripes"><button type="button" data-controller="human" data-control-owner="3" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="3" data-control-scope="initial" aria-pressed="false">AI</button></div></div></fieldset><fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent"><button type="button" data-rent="false" data-rent-scope="initial" aria-pressed="true">Off</button><button type="button" data-rent="true" data-rent-scope="initial" aria-pressed="false">On</button></div><p class="hint">Occupied homes earn their value once. Empty homes subtract their value while vacant.</p></fieldset><button class="primary" data-command="start">Start →</button></div></div></aside>
   </main>
   <dialog id="rulesDialog" aria-labelledby="rulesTitle">
     <div class="dialog-head"><h2 id="rulesTitle">How to play</h2><button data-close-dialog aria-label="Close rules">×</button></div>
@@ -386,11 +504,8 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <li><b>Build.</b> Develop each island in order: plot 1, then 2, through 6. Each square holds nine housing units or one entertainment venue; either unlocks the next plot for any team. Choose the income level of each housing unit. The team that builds the housing units owns them, wherever they are located. The team signal flags sit outside CENTRAL. Click a flag to highlight its ownership lines and housing units. All teams share CENTRAL. Empty units are outlined; filled units are solid with a check.</li>
       <li><b>Create jobs.</b> Small / medium / large industries create 25 / 50 / 100 workers. Each size has six business card options based on workforce profiles from Q. The mixes favor $ and $$ workers. CENTRAL has four slots for each size: inner ring small, middle ring medium, outer ring large. Empty slots are outlined; businesses fill them black, clockwise from the top. Click CENTRAL to see waiting workers and remaining slots.</li>
       <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. They prefer more entertainment, then the plot furthest from the port: 6, 5, 4, 3, 2, 1. Remaining ties favor a different island each round: NORTH, EAST, SOUTH, WEST. Workers queue in creation order.</li>
-      <li><b>Score.</b> Only your own housing units contribute to your team’s score, across all islands. A filled housing unit earns its income value once. An empty housing unit subtracts that value while it is vacant. An empty $$$$ housing unit is −$4; once occupied, it is +$4. Industry, ports, ships, and entertainment do not earn points. There is no recurring rent in this mode.</li>
       <li><b>Score.</b> Only your own housing units contribute to your team’s score, across all islands. With recurring rent off, a filled housing unit earns its income value once. With recurring rent on, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. Rent accumulates: a $$$$ home occupied for three round endings earns $12. In both modes, empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, ships, and entertainment do not earn points.</li>
     </ol>
-    <p>↓ saves a game file; ↑ loads it. Saves include team controls, the current turn and unused extra moves. Loading a save made during arrivals replays that movement.</p>
-    <p>Choose You or AI for each team before starting. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
     <p>↓ saves a game file; ↑ loads it. Saves include team controls, recurring rent, collected rent, the current turn and unused extra moves. Loading a save made during arrivals replays that movement and pays that round’s rent once.</p>
     <p>Choose You or AI for each team and turn recurring rent on or off before starting. The moving outline marks the active team on the board and in the scores at the top. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
     <p>Workers without a suitable housing unit stay in the center for the next round. The highest score after the final round wins. Equal scores share the win.</p>
@@ -413,6 +528,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 "use strict";
 // Embedded modules keep their original private scopes. No external scripts are needed.
 const newsModules = Object.create(null);
+
 // data.mjs
 newsModules["./data.mjs"] = (() => {
 const ISLANDS = [
@@ -421,18 +537,21 @@ const ISLANDS = [
   { name: "SOUTH", color: "#006074", fill: "#bfd7dc", direction: "S" },
   { name: "WEST", color: "#547870", fill: "#d4dddb", direction: "W" },
 ];
+
 const INCOME = [
   { label: "$", name: "Local", color: "#2864cc" },
   { label: "$$", name: "Standard", color: "#087f8c" },
   { label: "$$$", name: "Premium", color: "#7950bd" },
   { label: "$$$$", name: "Luxury", color: "#bb3b87" },
 ];
+
 const TEAMS = [
   { name:'Star', letter:'S' },
   { name:'Cross', letter:'C' },
   { name:'Checker', letter:'K' },
   { name:'Stripes', letter:'T' },
 ];
+
 // Workforce figures transcribed from Q FULL.pdf. The page is the PDF page number.
 // Preserve the original figures for reference and loading games played before rebalancing.
 function scaleMix(source, total) {
@@ -487,6 +606,7 @@ const PLOT_SPACING = 74;
 const PORT_RADIUS = 30;
 const UNIT_PITCH = 19;
 const UNIT_SIZE = 16;
+
 const BOARD_CENTER = [783,780];
 const DOCK_POINTS = [[783,615],[948,780],[783,945],[618,780]];
 // Coastlines traced from Group 6 (3).png, with clearance for larger building blocks.
@@ -507,21 +627,20 @@ const COASTLINES = COASTLINE_TRACES.map((coast,island)=>coast.map(point=>alignIs
 const TEAM_ANCHORS = [[-150,-150],[150,-150],[150,150],[-150,150]].map(([x,y]) => [BOARD_CENTER[0]+x,BOARD_CENTER[1]+y]);
 const LABEL_POINTS = [[1090,200],[1650,978],[1080,1400],[250,960]].map(alignIslandPoint);
 const SHIP_ROTATIONS = [0,90,180,270];
+
 return { ISLANDS, INCOME, TEAMS, scaleMix, INDUSTRY, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
 })();
+
 // game.mjs
 newsModules["./game.mjs"] = (() => {
 const { ISLANDS, INDUSTRY, TEAMS, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE } = newsModules["./data.mjs"];
 function generateTeams() {
-  return TEAMS.map(({letter,name})=>({letter,name,extraMoveUsed:false,controller:'human'}));
   return TEAMS.map(({letter,name})=>({letter,name,extraMoveUsed:false,controller:'human',rentEarned:0}));
 }
-function createGame(rounds = 12) {
 function createGame(rounds = 12, {recurringRent=false} = {}) {
   if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) throw new Error('Choose 1–100 rounds.');
   if (typeof recurringRent!=='boolean') throw new Error('Choose whether recurring rent is on or off.');
   return {
-    rounds, round:1, turn:0, phase:'playing', nextWorkerId:1,
     rounds, recurringRent, round:1, turn:0, phase:'playing', nextWorkerId:1,
     players:generateTeams(),
     islands:ISLANDS.map(() => ({port:false,shipLevel:0,plots:Array(PLOTS_PER_ISLAND).fill(null)})),
@@ -538,7 +657,6 @@ function teamStats(game, owner) {
       else vacancy+=unit.income+1;
     }
   }
-  return {housed,homes,income,vacancy,score:income-vacancy};
   return {housed,homes,income,vacancy,score:(game.recurringRent?game.players[owner].rentEarned:income)-vacancy};
 }
 function waitingCounts(game) {
@@ -667,8 +785,10 @@ function nextRound(game) {
   game.round++; game.turn=0; game.phase='playing'; game.lastAction=''; game.lastActionType=null; game.actionsThisTurn=0; game.extraActionActive=false;
 }
 function standings(game) { return game.players.map((player,team)=>({team,...teamStats(game,team)})).sort((a,b)=>b.score-a.score||a.team-b.team); }
+
 return { generateTeams, createGame, teamStats, waitingCounts, industryStats, islandStats, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
 })();
+
 // motion.mjs
 newsModules["./motion.mjs"] = (() => {
 const { BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, UNIT_PITCH } = newsModules["./data.mjs"];
@@ -703,12 +823,15 @@ function travelerPosition(move,elapsed,rank,origin,passengers) {
   const t = clamp((elapsed-walkStart)/1300), plot = PLOT_POINTS[move.island][move.plot];
   return { point:t < .85 ? lerp(PORT_POINTS[move.island],plot,ease(t/.85)) : lerp(plot,end,ease((t-.85)/.15)), arrived:t === 1 };
 }
+
 return { clamp, lerp, dockPoint, homePoint, queuePoint, shipPoint, travelerPosition };
 })();
+
 // ownership.mjs
 newsModules["./ownership.mjs"] = (() => {
 const { BOARD_CENTER, TEAM_ANCHORS, PLOT_POINTS, PLOT_SIZE } = newsModules["./data.mjs"];
 function teamAnchor(owner) { return [...TEAM_ANCHORS[owner]]; }
+
 // Each team uses its own rectangular track outside CENTRAL. All connections
 // follow horizontal or vertical segments, then enter the edge of a housing block.
 function ownershipPath(owner,island,plot) {
@@ -746,12 +869,15 @@ function ownershipPath(owner,island,plot) {
   }
   return clean.map((point,i)=>`${i?'L':'M'}${point.join(' ')}`).join(' ');
 }
+
 function ownershipLinks(game) {
   return game.islands.flatMap((island,index)=>island.plots.flatMap((plot,p)=>
     plot?.type==='homes' ? [{owner:plot.owner,island:index,plot:p,path:ownershipPath(plot.owner,index,p)}] : []));
 }
+
 return { teamAnchor, ownershipPath, ownershipLinks };
 })();
+
 // saves.mjs
 newsModules["./saves.mjs"] = (() => {
 const { INDUSTRY, TEAMS, scaleMix } = newsModules["./data.mjs"];
@@ -763,6 +889,7 @@ const bool=value=>{check(typeof value==='boolean');return value;};
 const list=(value,length)=>{check(Array.isArray(value)&&value.length===length);return value;};
 const record=value=>{check(value!==null&&typeof value==='object'&&!Array.isArray(value));return value;};
 const sum=values=>values.reduce((a,b)=>a+b,0);
+
 // Rebuild only recognized fields; imported data never supplies markup or game rules.
 function validateGame(input) {
   const raw=record(input), game={};
@@ -776,7 +903,6 @@ function validateGame(input) {
     check(controller==='human'||controller==='ai');
     const rentEarned=integer(player.rentEarned===undefined&&!game.recurringRent?0:player.rentEarned,0,86400);
     check(game.recurringRent||rentEarned===0);
-    return {letter:player.letter,name:TEAMS[owner].name,extraMoveUsed:bool(player.extraMoveUsed),controller};
     return {letter:player.letter,name:TEAMS[owner].name,extraMoveUsed:bool(player.extraMoveUsed),controller,rentEarned};
   });
   check(new Set(game.players.map(p=>p.letter)).size===4);
@@ -857,12 +983,14 @@ function validateGame(input) {
   game.pending=null;
   return game;
 }
+
 function serializeGame(game) {
   // Settlement has not mutated housing yet. Replay its animation after loading.
   const resumeMovement=game.phase==='resolving';
   const snapshot=validateGame({...game,phase:resumeMovement?'roundReady':game.phase,pending:null});
   return JSON.stringify({format:'NEWS',version:1,resumeMovement,game:snapshot},null,2);
 }
+
 function parseSavedGame(text) {
   if(typeof text!=='string'||text.length>1000000) invalid();
   let payload;
@@ -873,8 +1001,10 @@ function parseSavedGame(text) {
   check(!resumeMovement||game.phase==='roundReady');
   return {game,resumeMovement};
 }
+
 return { serializeGame, parseSavedGame };
 })();
+
 // computer.mjs
 newsModules["./computer.mjs"] = (() => {
 const { INDUSTRY } = newsModules["./data.mjs"];
@@ -910,8 +1040,8 @@ function candidates(game) {
   }
   return moves;
 }
+
 // Forecast the public board using the same matching, preference, and capacity
-// rules as real play. Future rent is never counted more than once.
 // rules as real play, including one rent payment per projected round when enabled.
 function evaluate(game,owner) {
   let future=copy(game), value=teamStats(future,owner).score;
@@ -921,7 +1051,6 @@ function evaluate(game,owner) {
     future=projected(future);
     const gains=future.players.map((_,i)=>teamStats(future,i).score-before[i]);
     value+=.85**round*(gains[owner]-.1*gains.reduce((sum,gain,i)=>sum+(i===owner?0:gain),0));
-    if(!future.workers.length) break;
     if(!future.workers.length&&!future.recurringRent) break;
     future.round++;
   }
@@ -948,6 +1077,7 @@ function simulate(game,action) {
   applyAction(next,action);
   return next;
 }
+
 // A bounded two-move search gives practice opponents a useful plan without
 // network access, extra information, or exceptions to the game rules.
 function chooseComputerMove(game) {
@@ -976,8 +1106,10 @@ function computerWantsExtra(game) {
   const choice=chooseComputerMove(extra);
   return choice.action.type!=='cancel-extra'&&choice.gain>2;
 }
+
 return { chooseComputerMove, computerWantsExtra };
 })();
+
 // Application and interface
 (() => {
 const { ISLANDS, INCOME, INDUSTRY, TEAMS, INDUSTRY_RINGS, COASTLINES, BOARD_CENTER, PORT_POINTS, PORT_RADIUS, PLOT_POINTS, LABEL_POINTS, SHIP_ROTATIONS, LOCATION_ORDER, PLOT_SIZE, UNIT_SIZE } = newsModules["./data.mjs"];
@@ -996,9 +1128,9 @@ let game = createGame(12), started = false, animation = null;
 const undoMoves = [];
 const portPulseEpoch = Date.now();
 const turnIndicatorEpoch = Date.now();
-let computerTimer=null, aiPaused=false, newGameTeams=null;
 let computerTimer=null, aiPaused=false, newGameTeams=null, newGameRecurringRent=false;
 const ui = { island:null, action:'port', plot:0, income:0, mix:Array(9).fill(0), size:'small', card:0, error:'', highlightOwner:null };
+
 const flagNames=TEAMS.map(team=>team.name);
 function flagArtwork(owner) {
   const patterns=[
@@ -1015,6 +1147,7 @@ function teamFlag(owner) {
 function teamLabel(owner,players=game.players) {
   return `<span class="team-identity">${teamFlag(owner)}<span>${players[owner].name}</span></span>`;
 }
+
 function resetDraft() {
   ui.island=null; ui.action='port'; ui.plot=0;
   ui.mix=Array(9).fill(0); ui.income=0; ui.error='';
@@ -1075,6 +1208,7 @@ function scheduleComputer() {
     }
   },phase==='playing'?650:1100);
 }
+
 function shipTriangles(level) {
   return Array.from({length:level},(_,i) => {
     const offset = (i-(level-1)/2)*15;
@@ -1097,7 +1231,6 @@ function renderScores() {
     return `<div class="team-score ${active?'active':''}" aria-current="${active?'true':'false'}" style="--team:#222">
       ${active?`<svg class="score-turn-outline" aria-hidden="true" focusable="false"><rect class="current-turn-snake" x="2" y="2" pathLength="100" style="--turn-phase:${turnOutlinePhase()}s"/></svg>`:''}
       <div class="score-top"><b>${teamLabel(owner)}${player.controller==='ai'?'<span class="controller-badge">AI</span>':''}</b><strong>${money(stats.score)}</strong></div>
-      <div class="score-detail"><span title="Filled housing income">+$${stats.income}</span><span title="Vacant housing penalty">−$${stats.vacancy}</span></div>
       <div class="score-detail"><span title="${game.recurringRent?'Rent collected':'Filled housing income'}">+$${game.recurringRent?player.rentEarned:stats.income}</span><span title="Vacant housing penalty">−$${stats.vacancy}</span></div>
       ${game.recurringRent?`<small>Rent +$${stats.income} / round</small>`:''}
       <div class="score-meta">${active?'<span class="score-turn">NOW</span>':''}<small title="${stats.housed} of ${stats.homes} housing units filled">▦ ${stats.housed}/${stats.homes}</small><small class="extra-move-status ${player.extraMoveUsed?'used':''}" title="${player.extraMoveUsed?'Extra move used':'Extra move available'}" aria-label="${player.extraMoveUsed?'Extra move used':'Extra move available'}">${player.extraMoveUsed?'✓':'+1'}</small></div></div>`;
@@ -1107,6 +1240,7 @@ function renderScores() {
   $('#saveGameButton').disabled=!started;
   $('#undoGameButton').disabled=!undoMoves.length;
 }
+
 function waitingWorkers() { return animation ? game.workers.filter(worker => !animation.movingIds.has(worker.id)) : game.workers; }
 function renderWaiting() {
   $('#workersLayer').innerHTML='';
@@ -1151,9 +1285,9 @@ function renderIslands() {
       }).join('')}</g>`;
   }).join('');
 }
+
 function renderOwnership() {
   const selection=ui.highlightOwner, links=ownershipLinks(game);
-  const outlinePhase=-((Date.now()-turnIndicatorEpoch)%4800)/1000;
   const outlinePhase=turnOutlinePhase();
   $('#ownershipLayer').innerHTML=links.map((link,index)=>{
     const state=selection===null?'':selection===link.owner?'highlighted':'muted';
@@ -1164,6 +1298,7 @@ function renderOwnership() {
     return `<g id="ownerMarker${owner}" transform="translate(${x} ${y})" class="team-owner ${active?'current-turn':''} ${selected?'selected':''}" data-owner="${owner}" role="button" tabindex="0" aria-current="${active?'true':'false'}" aria-pressed="${selected}" aria-label="${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''}: ${stats.homes} housing units. ${selected?'Clear highlight':'Highlight ownership'}"><title>${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''} · ${stats.homes} housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)">${flagArtwork(owner)}</g>${active?`<rect class="current-turn-snake" x="-50" y="-54" width="100" height="100" pathLength="100" style="--turn-phase:${outlinePhase}s" aria-hidden="true"/>`:''}${selected?'<path class="owner-underline" d="M-22 72 H22"/>':''}</g>`;
   }).join('');
 }
+
 function ringSegmentPath(radius,index,total) {
   const [cx,cy]=BOARD_CENTER, gap=.035, inner=radius-9, outer=radius+9;
   const start=-Math.PI/2+index*2*Math.PI/total+gap, end=-Math.PI/2+(index+1)*2*Math.PI/total-gap;
@@ -1184,10 +1319,12 @@ function renderRoutes() {
   $('#routesLayer').innerHTML=game.islands.map((island,index)=>!island.shipLevel||animation?.byIsland[index]?'':shipMarkup(index,dockPoint(index),island.shipLevel)).join('');
 }
 function renderBoard() { renderScores(); renderRoutes(); renderIslands(); renderCenter(); renderOwnership(); renderWaiting(); }
+
 function plotPicker() {
   ui.plot=nextBuildablePlot(game,ui.island);
   return ui.plot>=0 ? `<div class="plot-order" aria-label="Next available plot ${ui.plot+1}"><span>Next plot</span><b>${ui.plot+1}</b></div>` : '<p class="notice">All six squares are in use.</p>';
 }
+
 function industryControls() {
   const industry = INDUSTRY[ui.size];
   return `<div class="size-switch">${Object.entries(INDUSTRY).map(([size,item]) => `<button data-size="${size}" aria-pressed="${size === ui.size}" style="--size:${item.color}"><span>${item.label}</span><b>+${item.jobs} workers</b><small>${industryStats(game,size).remaining} available</small></button>`).join('')}</div>
@@ -1229,7 +1366,6 @@ function actionDetails() {
 function reportMarkup() {
   const report = game.lastReport;
   return `<div class="round-totals"><div><strong>${report.moved}</strong><span>housed</span></div><div><strong>${report.waiting}</strong><span>waiting</span></div></div>
-    <div class="arrival-list">${game.players.map((team,index) => `<div>${teamLabel(index)}<b>+${report.byTeam[index]}</b></div>`).join('')}</div>`;
     <div class="arrival-list">${game.players.map((team,index) => `<div>${teamLabel(index)}<b>+${report.byTeam[index]}</b></div>`).join('')}</div>${rentReportMarkup()}`;
 }
 function rentReportMarkup() {
@@ -1244,7 +1380,6 @@ function renderPanel() {
   const previousUnit=document.activeElement?.dataset.unit;
   let content;
   if(!started) {
-    content=`<div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="${game.rounds}" required/>${controllerPicker(game.players,'initial')}<button class="primary" data-command="start">Start →</button></div>`;
     content=`<div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="${game.rounds}" required/>${controllerPicker(game.players,'initial')}${rentPicker(game.recurringRent,'initial')}<button class="primary" data-command="start">Start →</button></div>`;
   } else if(computerTurn()&&['playing','handoff','roundReady'].includes(game.phase)) {
     content=`${turnBanner()}${game.phase==='playing'?`<p class="ai-thinking">${aiPaused?'Paused.':'Choosing a move…'}</p>`:`<p class="move-receipt">${escapeText(game.lastAction)}</p>`}`;
@@ -1264,22 +1399,19 @@ function renderPanel() {
   } else {
     const ranking=standings(game), winners=ranking.filter(item=>item.score===ranking[0].score);
     content=`<div class="panel-intro"><h1>${winners.length>1?'A shared victory.':`${game.players[winners[0].team].name} wins.`}</h1>${winners.length>1?`<p>${winners.map(item=>game.players[item.team].name).join(' · ')}</p>`:''}</div>
-      <div class="final-scores">${ranking.map(item=>`<div>${teamLabel(item.team)}<strong>${money(item.score)}</strong><small>+$${item.income} −$${item.vacancy}</small></div>`).join('')}</div><button class="primary" data-command="new">+ New game</button>`;
       <div class="final-scores">${ranking.map(item=>`<div>${teamLabel(item.team)}<strong>${money(item.score)}</strong><small>${game.recurringRent?'Rent collected ':''}+$${game.recurringRent?game.players[item.team].rentEarned:item.income} −$${item.vacancy}${game.recurringRent?' vacant':''}</small></div>`).join('')}</div>${rentReportMarkup()}<button class="primary" data-command="new">+ New game</button>`;
   }
   const computerControls=started&&hasComputer()&&game.phase!=='finished'?`<div class="ai-controls"><span>${aiPaused?'AI paused':'AI'}</span><button class="icon-button" data-command="toggle-ai" title="${aiPaused?'Resume AI':'Pause AI'}" aria-label="${aiPaused?'Resume AI':'Pause AI'}">${aiPaused?'▶':'Ⅱ'}</button></div>`:'';
   $('#turnPanel').innerHTML=`<div class="panel-content">${content}${computerControls}</div>`;
   if(previousUnit!==undefined) $(`[data-unit="${previousUnit}"]`)?.focus({preventScroll:true});
 }
+
 function render() { renderBoard(); renderPanel(); scheduleComputer(); }
 function announce(text) { $('#boardStatus').textContent = text; }
 function startGame(input) {
   if (!input.reportValidity()) return;
   const fromNewDialog=$('#newGameDialog').open;
   const initialTeams=fromNewDialog?newGameTeams:game.players;
-  const initialTeams=started?newGameTeams:game.players;
-  stopComputer(); stopAnimation(); game=createGame(Number(input.value));
-  if(initialTeams) game.players=initialTeams.map(team=>({...team,controller:team.controller??'human',extraMoveUsed:false}));
   const recurringRent=fromNewDialog?newGameRecurringRent:game.recurringRent;
   stopComputer(); stopAnimation(); game=createGame(Number(input.value),{recurringRent});
   if(initialTeams) game.players=initialTeams.map(team=>({...team,controller:team.controller??'human',extraMoveUsed:false,rentEarned:0}));
@@ -1307,7 +1439,6 @@ function stopAnimation() {
 function completeMovement() {
   if (game.phase !== 'resolving') return;
   stopAnimation(); const report = finishResolution(game); render();
-  announce(`Round ${report.round}: ${report.moved} people housed. ${report.waiting} remain at industry.`);
   announce(`Round ${report.round}: ${report.moved} people housed. ${report.waiting} remain at industry.${game.recurringRent?' Rent paid to all teams.':''}`);
 }
 function animateRound() {
@@ -1364,6 +1495,7 @@ function renderCentralDetails() {
     <div class="central-totals"><b>${workers.length} waiting</b><span>${game.industries.length} businesses</span>${animation?`<span>${animation.plan.moves.length-animation.arrived.size} traveling</span>`:''}</div>
     <div class="industry-availability">${Object.entries(INDUSTRY).map(([size,spec])=>{const {built,total,remaining}=industryStats(game,size);return `<span><b>${spec.label}</b> ${built}/${total} built · ${remaining} available</span>`;}).join('')}</div>
     <div class="worker-tiers">${INCOME.map((income,i)=>`<div style="--income:${income.color}"><h3>${income.label}</h3><strong>${counts[i]}</strong><span>waiting</span><small>${homes[i]} housing units available</small></div>`).join('')}</div>
+
     <h3 class="business-list-title">Businesses</h3><div class="central-businesses">${game.industries.length?game.industries.map(business=>{
       const spec=INDUSTRY[business.size], card=spec.cards[business.cardIndex], waiting=[0,0,0,0];
       workers.filter(worker=>worker.industryId===business.id).forEach(worker=>waiting[worker.income]++);
@@ -1372,6 +1504,7 @@ function renderCentralDetails() {
     ${started&&game.phase==='playing'&&!computerTurn()?'<button class="primary" data-build-central>+ Industry</button>':''}`;
 }
 function showCentral() { renderCentralDetails(); if(!$('#centralDialog').open) $('#centralDialog').showModal(); }
+
 $('#turnPanel').addEventListener('click',event => {
   const command = event.target.closest('[data-command]')?.dataset.command;
   if (command) {
@@ -1518,6 +1651,7 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-build-central]')&&started&&game.phase==='playing'&&!computerTurn()) { selectLocation('central'); $('#centralDialog').close(); render(); }
 });
 render();
+
 // End NEWS application.
 })();
 </script>
