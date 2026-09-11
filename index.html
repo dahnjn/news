@@ -26,7 +26,7 @@ h2 { font-size:1.2rem; letter-spacing:-.025em; margin-bottom:10px; }
 .topbar nav { justify-self:end; display:flex; gap:2px; }
 .quiet-button { background:transparent; border:1px solid var(--line); border-radius:7px; padding:9px 12px; font-size:.875rem; }
 .quiet-button:hover { background:white; border-color:var(--ink); }
-.game-shell { display:grid; grid-template-columns:minmax(0,1fr) 380px; }
+.game-shell { display:grid; grid-template-columns:minmax(0,1fr) 304px; }
 .board-column { height:calc(100dvh - 72px); min-height:610px; padding:18px 24px 12px; display:grid; grid-template-rows:auto minmax(250px,1fr) auto auto; min-width:0; background:var(--ocean); }
 .team-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
 .team-score { border-top:3px solid var(--team); background:#f7f8f5; padding:10px 12px 8px; border-radius:0 0 7px 7px; min-width:0; transition:background .2s; }
@@ -190,7 +190,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .home-inspector span { font-size:.875rem; }
 .home-inspector small { font-size:.875rem; color:var(--muted); }
 @media(max-width:1150px) {
-  .game-shell { grid-template-columns:minmax(0,1fr) 350px; }
+  .game-shell { grid-template-columns:minmax(0,1fr) 280px; }
   .board-column { padding:14px 12px 10px; }
   .team-score { padding:8px; }
   .score-top { flex-direction:column; align-items:flex-start; gap:3px; }
@@ -1332,7 +1332,7 @@ function renderCentralDetails() {
   workers.forEach(worker=>counts[worker.income]++);
   const reserved=new Set(animation?.plan.moves.map(move=>`${move.island}-${move.plot}-${move.cell}`)||[]);
   game.islands.forEach((island,i)=>island.plots.forEach((plot,p)=>{ if(plot?.type==='homes') plot.units.forEach((unit,c)=>{if(unit.workerId===null&&!reserved.has(`${i}-${p}-${c}`)) homes[unit.income]++;}); }));
-  $('#centralDialog').innerHTML=`<div class="dialog-head"><div><span class="eyebrow">CENTRAL</span><h2>Workers & businesses</h2></div><button data-close-dialog aria-label="Close CENTRAL">×</button></div>
+  $('#centralDialog').innerHTML=`<div class="dialog-head"><span class="eyebrow">CENTRAL</span><button data-close-dialog aria-label="Close CENTRAL">×</button></div>
     <div class="central-totals"><b>${workers.length} waiting</b><span>${game.industries.length} businesses</span>${animation?`<span>${animation.plan.moves.length-animation.arrived.size} traveling</span>`:''}</div>
     <div class="industry-availability">${Object.entries(INDUSTRY).map(([size,spec])=>{const {built,total,remaining}=industryStats(game,size);return `<span><b>${spec.label}</b> ${built}/${total} built · ${remaining} available</span>`;}).join('')}</div>
     <div class="worker-tiers">${INCOME.map((income,i)=>`<div style="--income:${income.color}"><h3>${income.label}</h3><strong>${counts[i]}</strong><span>waiting</span><small>${homes[i]} housing units available</small></div>`).join('')}</div>
