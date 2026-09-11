@@ -27,6 +27,7 @@ h2 { font-size:1.2rem; letter-spacing:-.025em; margin-bottom:10px; }
 .quiet-button { background:transparent; border:1px solid var(--line); border-radius:7px; padding:9px 12px; font-size:.875rem; }
 .quiet-button:hover { background:white; border-color:var(--ink); }
 .game-shell { display:grid; grid-template-columns:minmax(0,1fr) 304px; }
+.board-column { height:calc(100dvh - 72px); min-height:610px; padding:18px 24px 12px; display:grid; grid-template-rows:auto minmax(250px,1fr) auto auto; min-width:0; background:var(--ocean); }
 .board-column { height:calc(100dvh - 72px); min-height:610px; padding:18px 24px 12px; display:grid; grid-template-rows:auto minmax(250px,1fr) auto; min-width:0; background:var(--ocean); }
 .team-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
 .team-score { border-top:3px solid var(--team); background:#f7f8f5; padding:10px 12px 8px; border-radius:0 0 7px 7px; min-width:0; transition:background .2s; }
@@ -75,6 +76,8 @@ h2 { font-size:1.2rem; letter-spacing:-.025em; margin-bottom:10px; }
 .ship-triangle { fill:none; stroke:#111; stroke-width:3; stroke-linejoin:miter; }
 .waiting-person { stroke:white; stroke-width:.7; animation:appear .6s both; }
 @keyframes appear { from { opacity:0; } to { opacity:1; } }
+.board-caption { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; color:var(--muted); font-size:.75rem; padding:4px 0 9px; }
+.board-caption span { display:inline-flex; align-items:center; gap:6px; }
 .occupied-key { width:9px; height:9px; border-radius:50%; background:#111; }
 .board-status { min-height:32px; font-size:.875rem; color:var(--muted); line-height:1.4; text-align:center; padding-top:5px; border-top:1px solid #eef0eb; }
 .turn-panel { height:calc(100dvh - 72px); min-height:610px; display:flex; flex-direction:column; border-left:1px solid var(--line); background:var(--paper); }
@@ -108,6 +111,7 @@ input[type="number"],select { width:100%; border:1px solid #bfc7c0; background:w
 .rent-options button { border:0; background:white; min-height:40px; padding:8px; font-size:.875rem; }
 .rent-options button[aria-pressed="true"] { background:var(--ink); color:white; }
 .rent-options button:focus-visible { outline-offset:-3px; }
+.rent-picker .hint { margin:10px 0 0; }
 .rent-report { border-top:1px solid var(--line); padding-top:18px; margin-top:22px; }
 .rent-report h2 { font-size:1rem; }
 .controller-badge { display:inline-block; margin-left:5px; font:400 .7rem "DM Mono",monospace; color:var(--muted); }
@@ -230,6 +234,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
   .team-score small { font-size:.75rem; line-height:1.4; }
   .workforce-bar { justify-content:center; gap:9px; }
   .waiting-mix { width:100%; justify-content:center; }
+  .board-caption { gap:7px 12px; }
   .panel-content { padding:22px 16px; }
   .action-menu { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .action-menu button:last-child { justify-content:flex-start; }
@@ -283,8 +288,6 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .business-waiting span { display:inline-flex; align-items:center; gap:6px; font-family:"DM Mono",monospace; font-size:.875rem; }
 .business-waiting i { display:inline-block; width:8px; height:8px; background:var(--income); }
 @media(max-width:520px) { .worker-tiers { grid-template-columns:repeat(2,minmax(0,1fr)); } .team-letter { display:none; } .score-top b { font-size:.875rem; } }
-
-
 .brand-logo { display:block; width:48px; height:48px; flex:none; }
 .topbar { background:white; }
 .extra-move-status { font-weight:700; color:#244954!important; }
@@ -330,6 +333,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 @media(prefers-reduced-motion:reduce) { .current-turn-snake { stroke-dasharray:none; } }
 .team-score.active { background:#172e36; color:white; box-shadow:none; border-top-color:#172e36; }
 .team-score.active .score-detail span,.team-score.active small,.team-score.active .controller-badge { color:#d6e9ee; }
+.score-turn { font:.75rem "DM Mono",monospace; letter-spacing:.08em; padding:2px 4px; border:1px solid #8dafbb; }
 .active-turn-banner { padding:18px; background:#172e36; color:white; margin:-4px -4px 22px; }
 .active-turn-banner .eyebrow { color:#cfe8f0; font-size:.875rem; letter-spacing:.08em; }
 .active-turn-banner h1 { margin-bottom:0; font-size:2rem; letter-spacing:-.025em; }
@@ -338,13 +342,11 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .card-title { flex-wrap:wrap; }
 .move-receipt { line-height:1.6; }
 @media(max-width:520px) { .brand-logo { width:42px; height:42px; } .brand-name { display:none; } .extra-move-status { font-size:.7rem!important; } }
-
 .plot-order { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid var(--line); font-size:.875rem; }
 .plot-order b { font:500 1.25rem "DM Mono",monospace; }
 .plot-mark.locked { cursor:not-allowed; }
 .plot-mark.locked .plot-base { fill:#e5eff1; stroke:#83969c; stroke-width:3; }
 .plot-mark.locked .empty-plot-number { fill:#6e858e; }
-
 </style>
 </head>
 <body>
@@ -367,6 +369,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span></b><strong>$0</strong></div>
       <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
       
+      <div class="score-meta"><span class="score-turn">NOW</span><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
       <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
       
       <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span></b><strong>$0</strong></div>
@@ -485,8 +488,10 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
     <text class="central-map-label" x="1043" y="560" text-anchor="middle">CENTRAL</text></g></g><g id="routesLayer"></g><g id="teamOwnersLayer"><g id="ownerMarker0" transform="translate(633 630)" class="team-owner current-turn " data-owner="0" role="button" tabindex="0" aria-current="true" aria-pressed="false" aria-label="Star · Star flag · Starts first: 0 housing units. Highlight ownership"><title>Star · Star flag · Starts first · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g><rect class="current-turn-snake" x="-50" y="-54" width="100" height="100" pathLength="100" style="--turn-phase:0s" aria-hidden="true"/></g><g id="ownerMarker1" transform="translate(933 630)" class="team-owner  " data-owner="1" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Cross · Cross flag: 0 housing units. Highlight ownership"><title>Cross · Cross flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g><g id="ownerMarker2" transform="translate(933 930)" class="team-owner  " data-owner="2" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Checker · Checker flag: 0 housing units. Highlight ownership"><title>Checker · Checker flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g><g id="ownerMarker3" transform="translate(633 930)" class="team-owner  " data-owner="3" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Stripes · Stripes flag: 0 housing units. Highlight ownership"><title>Stripes · Stripes flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g></g><g id="workersLayer"></g><g id="animationLayer" aria-hidden="true"></g>
         </svg>
       </div>
+      <div class="board-caption"><span><i class="available-key"></i> Available</span><span><i class="filled-key">✓</i> Filled</span><span title="Housing preference, after income match and entertainment">6 → 1 · preference</span></div>
       <div class="board-status" id="boardStatus" role="status" aria-live="polite"></div>
     </section>
+    <aside class="turn-panel" id="turnPanel" aria-label="Turn controls"><div class="panel-content"><p class="hint" role="status">Static preview. Open the downloaded HTML file in your web browser to play.</p><div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="12" required/><fieldset class="controller-picker"><legend>Teams</legend><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span><div role="group" aria-label="Who controls Star"><button type="button" data-controller="human" data-control-owner="0" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="0" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span><div role="group" aria-label="Who controls Cross"><button type="button" data-controller="human" data-control-owner="1" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="1" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span><div role="group" aria-label="Who controls Checker"><button type="button" data-controller="human" data-control-owner="2" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="2" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span><div role="group" aria-label="Who controls Stripes"><button type="button" data-controller="human" data-control-owner="3" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="3" data-control-scope="initial" aria-pressed="false">AI</button></div></div></fieldset><fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent"><button type="button" data-rent="false" data-rent-scope="initial" aria-pressed="true">Off</button><button type="button" data-rent="true" data-rent-scope="initial" aria-pressed="false">On</button></div><p class="hint">Occupied homes earn their value once. Empty homes subtract their value while vacant.</p></fieldset><button class="primary" data-command="start">Start →</button></div></div></aside>
     <aside class="turn-panel" id="turnPanel" aria-label="Turn controls"><div class="panel-content"><p class="hint" role="status">Static preview. Open the downloaded HTML file in your web browser to play.</p><div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="12" required/><fieldset class="controller-picker"><legend>Teams</legend><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span><div role="group" aria-label="Who controls Star"><button type="button" data-controller="human" data-control-owner="0" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="0" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span><div role="group" aria-label="Who controls Cross"><button type="button" data-controller="human" data-control-owner="1" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="1" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span><div role="group" aria-label="Who controls Checker"><button type="button" data-controller="human" data-control-owner="2" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="2" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span><div role="group" aria-label="Who controls Stripes"><button type="button" data-controller="human" data-control-owner="3" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="3" data-control-scope="initial" aria-pressed="false">AI</button></div></div></fieldset><fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent"><button type="button" data-rent="false" data-rent-scope="initial" aria-pressed="true">Off</button><button type="button" data-rent="true" data-rent-scope="initial" aria-pressed="false">On</button></div></fieldset><button class="primary" data-command="start">Start →</button></div></div></aside>
   </main>
   <dialog id="rulesDialog" aria-labelledby="rulesTitle">
@@ -497,6 +502,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <li><b>Connect.</b> An empty harbor circle is inactive; its center dot appears when activated. Build a shared port on any outer island, then launch an L1 ship serving that island. Upgrade it on later turns. L1 / L2 / L3 transport 10 / 20 / 30 people per round.</li>
       <li><b>Build.</b> Develop each island in order: plot 1, then 2, through 6. Each square holds nine housing units or one entertainment venue; either unlocks the next plot for any team. Choose the income level of each housing unit. The team that builds the housing units owns them, wherever they are located. The team signal flags sit outside CENTRAL. Click a flag to highlight its ownership lines and housing units. All teams share CENTRAL. Empty units are outlined; filled units are solid with a check.</li>
       <li><b>Create jobs.</b> Small / medium / large industries create 25 / 50 / 100 workers. Each size has six business card options based on workforce profiles from Q. The mixes favor $ and $$ workers. CENTRAL has four slots for each size: inner ring small, middle ring medium, outer ring large. Empty slots are outlined; businesses fill them black, clockwise from the top. Click CENTRAL to see waiting workers and remaining slots.</li>
+      <li><b>Create jobs.</b> Small / medium / large industries create 25 / 50 / 100 workers. Each size has six business card options. In a new game, building all 12 businesses creates 700 workers: exactly 36 $$$$, 72 $$$, and 592 split between $ and $$. Your business choices determine the $ and $$ split. CENTRAL has four slots for each size: inner ring small, middle ring medium, outer ring large. Empty slots are outlined; businesses fill them black, clockwise from the top. Click CENTRAL to see waiting workers and remaining slots.</li>
       <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. They prefer more entertainment, then the plot furthest from the port: 6, 5, 4, 3, 2, 1. Remaining ties favor a different island each round: NORTH, EAST, SOUTH, WEST. Workers queue in creation order.</li>
       <li><b>Score.</b> Only your own housing units contribute to your team’s score, across all islands. With recurring rent off, a filled housing unit earns its income value once. With recurring rent on, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. Rent accumulates: a $$$$ home occupied for three round endings earns $12. In both modes, empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, ships, and entertainment do not earn points.</li>
     </ol>
@@ -522,7 +528,6 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 "use strict";
 // Embedded modules keep their original private scopes. No external scripts are needed.
 const newsModules = Object.create(null);
-
 // data.mjs
 newsModules["./data.mjs"] = (() => {
 const ISLANDS = [
@@ -531,21 +536,18 @@ const ISLANDS = [
   { name: "SOUTH", color: "#006074", fill: "#bfd7dc", direction: "S" },
   { name: "WEST", color: "#547870", fill: "#d4dddb", direction: "W" },
 ];
-
 const INCOME = [
   { label: "$", name: "Local", color: "#2864cc" },
   { label: "$$", name: "Standard", color: "#087f8c" },
   { label: "$$$", name: "Premium", color: "#7950bd" },
   { label: "$$$$", name: "Luxury", color: "#bb3b87" },
 ];
-
 const TEAMS = [
   { name:'Star', letter:'S' },
   { name:'Cross', letter:'C' },
   { name:'Checker', letter:'K' },
   { name:'Stripes', letter:'T' },
 ];
-
 // Workforce figures transcribed from Q FULL.pdf. The page is the PDF page number.
 // Preserve the original figures for reference and loading games played before rebalancing.
 function scaleMix(source, total) {
@@ -557,6 +559,9 @@ function scaleMix(source, total) {
   for (let i=0; i<remainder; i++) mix[order[i].index]++;
   return mix;
 }
+// Four slots of each size produce exactly 72 $$$ and 36 $$$$ workers.
+// Keep these counts the same for every card so repeated choices preserve the totals.
+const DEFAULT_HIGH_INCOME_BY_JOBS = {25:[3,1],50:[5,3],100:[10,5]};
 const legacyCard = (name, legacyMix, sourcePage, jobs, whiteCollar=false, override=null) => {
   const mix=scaleMix(legacyMix,jobs);
   const reassigned=mix[3]-Math.floor(mix[3]/2);
@@ -564,6 +569,15 @@ const legacyCard = (name, legacyMix, sourcePage, jobs, whiteCollar=false, overri
   mix[0]+=Math.floor(reassigned/2);
   mix[1]+=Math.ceil(reassigned/2);
   return {name,legacyMix,sourcePage,mix:override??mix,whiteCollar};
+  const rebalanced=scaleMix(legacyMix,jobs);
+  const reassigned=rebalanced[3]-Math.floor(rebalanced[3]/2);
+  rebalanced[3]-=reassigned;
+  rebalanced[0]+=Math.floor(reassigned/2);
+  rebalanced[1]+=Math.ceil(reassigned/2);
+  const previousMix=override??rebalanced;
+  const [premium,luxury]=DEFAULT_HIGH_INCOME_BY_JOBS[jobs];
+  const lowerIncomes=scaleMix(previousMix.slice(0,2),jobs-premium-luxury);
+  return {name,legacyMix,previousMix,sourcePage,mix:[...lowerIncomes,premium,luxury],whiteCollar};
 };
 const INDUSTRY = {
   small: { label:"Small", jobs:25, color:"#666", cards:[
@@ -600,7 +614,6 @@ const PLOT_SPACING = 74;
 const PORT_RADIUS = 30;
 const UNIT_PITCH = 19;
 const UNIT_SIZE = 16;
-
 const BOARD_CENTER = [783,780];
 const DOCK_POINTS = [[783,615],[948,780],[783,945],[618,780]];
 // Coastlines traced from Group 6 (3).png, with clearance for larger building blocks.
@@ -621,10 +634,8 @@ const COASTLINES = COASTLINE_TRACES.map((coast,island)=>coast.map(point=>alignIs
 const TEAM_ANCHORS = [[-150,-150],[150,-150],[150,150],[-150,150]].map(([x,y]) => [BOARD_CENTER[0]+x,BOARD_CENTER[1]+y]);
 const LABEL_POINTS = [[1090,200],[1650,978],[1080,1400],[250,960]].map(alignIslandPoint);
 const SHIP_ROTATIONS = [0,90,180,270];
-
 return { ISLANDS, INCOME, TEAMS, scaleMix, INDUSTRY, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
 })();
-
 // game.mjs
 newsModules["./game.mjs"] = (() => {
 const { ISLANDS, INDUSTRY, TEAMS, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE } = newsModules["./data.mjs"];
@@ -779,10 +790,8 @@ function nextRound(game) {
   game.round++; game.turn=0; game.phase='playing'; game.lastAction=''; game.lastActionType=null; game.actionsThisTurn=0; game.extraActionActive=false;
 }
 function standings(game) { return game.players.map((player,team)=>({team,...teamStats(game,team)})).sort((a,b)=>b.score-a.score||a.team-b.team); }
-
 return { generateTeams, createGame, teamStats, waitingCounts, industryStats, islandStats, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
 })();
-
 // motion.mjs
 newsModules["./motion.mjs"] = (() => {
 const { BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, UNIT_PITCH } = newsModules["./data.mjs"];
@@ -817,15 +826,12 @@ function travelerPosition(move,elapsed,rank,origin,passengers) {
   const t = clamp((elapsed-walkStart)/1300), plot = PLOT_POINTS[move.island][move.plot];
   return { point:t < .85 ? lerp(PORT_POINTS[move.island],plot,ease(t/.85)) : lerp(plot,end,ease((t-.85)/.15)), arrived:t === 1 };
 }
-
 return { clamp, lerp, dockPoint, homePoint, queuePoint, shipPoint, travelerPosition };
 })();
-
 // ownership.mjs
 newsModules["./ownership.mjs"] = (() => {
 const { BOARD_CENTER, TEAM_ANCHORS, PLOT_POINTS, PLOT_SIZE } = newsModules["./data.mjs"];
 function teamAnchor(owner) { return [...TEAM_ANCHORS[owner]]; }
-
 // Each team uses its own rectangular track outside CENTRAL. All connections
 // follow horizontal or vertical segments, then enter the edge of a housing block.
 function ownershipPath(owner,island,plot) {
@@ -863,15 +869,12 @@ function ownershipPath(owner,island,plot) {
   }
   return clean.map((point,i)=>`${i?'L':'M'}${point.join(' ')}`).join(' ');
 }
-
 function ownershipLinks(game) {
   return game.islands.flatMap((island,index)=>island.plots.flatMap((plot,p)=>
     plot?.type==='homes' ? [{owner:plot.owner,island:index,plot:p,path:ownershipPath(plot.owner,index,p)}] : []));
 }
-
 return { teamAnchor, ownershipPath, ownershipLinks };
 })();
-
 // saves.mjs
 newsModules["./saves.mjs"] = (() => {
 const { INDUSTRY, TEAMS, scaleMix } = newsModules["./data.mjs"];
@@ -883,7 +886,6 @@ const bool=value=>{check(typeof value==='boolean');return value;};
 const list=(value,length)=>{check(Array.isArray(value)&&value.length===length);return value;};
 const record=value=>{check(value!==null&&typeof value==='object'&&!Array.isArray(value));return value;};
 const sum=values=>values.reduce((a,b)=>a+b,0);
-
 // Rebuild only recognized fields; imported data never supplies markup or game rules.
 function validateGame(input) {
   const raw=record(input), game={};
@@ -910,6 +912,7 @@ function validateGame(input) {
     const spec=INDUSTRY[item.size], card=spec.cards[cardIndex], legacy=scaleMix(card.legacyMix,spec.jobs);
     item.mix=business.mix===undefined?legacy:list(business.mix,4).map(n=>integer(n,0,spec.jobs));
     check([card.mix,legacy].some(mix=>mix.every((count,i)=>count===item.mix[i])));
+    check([card.mix,card.previousMix,legacy].some(mix=>mix.every((count,i)=>count===item.mix[i])));
     item.mix.forEach((count,income)=>{
       for(let n=0;n<count;n++) people.set(nextId,{id:nextId++,income,industryId:item.id});
     });
@@ -977,14 +980,12 @@ function validateGame(input) {
   game.pending=null;
   return game;
 }
-
 function serializeGame(game) {
   // Settlement has not mutated housing yet. Replay its animation after loading.
   const resumeMovement=game.phase==='resolving';
   const snapshot=validateGame({...game,phase:resumeMovement?'roundReady':game.phase,pending:null});
   return JSON.stringify({format:'NEWS',version:1,resumeMovement,game:snapshot},null,2);
 }
-
 function parseSavedGame(text) {
   if(typeof text!=='string'||text.length>1000000) invalid();
   let payload;
@@ -995,10 +996,8 @@ function parseSavedGame(text) {
   check(!resumeMovement||game.phase==='roundReady');
   return {game,resumeMovement};
 }
-
 return { serializeGame, parseSavedGame };
 })();
-
 // computer.mjs
 newsModules["./computer.mjs"] = (() => {
 const { INDUSTRY } = newsModules["./data.mjs"];
@@ -1034,7 +1033,6 @@ function candidates(game) {
   }
   return moves;
 }
-
 // Forecast the public board using the same matching, preference, and capacity
 // rules as real play, including one rent payment per projected round when enabled.
 function evaluate(game,owner) {
@@ -1071,7 +1069,6 @@ function simulate(game,action) {
   applyAction(next,action);
   return next;
 }
-
 // A bounded two-move search gives practice opponents a useful plan without
 // network access, extra information, or exceptions to the game rules.
 function chooseComputerMove(game) {
@@ -1100,10 +1097,8 @@ function computerWantsExtra(game) {
   const choice=chooseComputerMove(extra);
   return choice.action.type!=='cancel-extra'&&choice.gain>2;
 }
-
 return { chooseComputerMove, computerWantsExtra };
 })();
-
 // Application and interface
 (() => {
 const { ISLANDS, INCOME, INDUSTRY, TEAMS, INDUSTRY_RINGS, COASTLINES, BOARD_CENTER, PORT_POINTS, PORT_RADIUS, PLOT_POINTS, LABEL_POINTS, SHIP_ROTATIONS, LOCATION_ORDER, PLOT_SIZE, UNIT_SIZE } = newsModules["./data.mjs"];
@@ -1124,7 +1119,6 @@ const portPulseEpoch = Date.now();
 const turnIndicatorEpoch = Date.now();
 let computerTimer=null, aiPaused=false, newGameTeams=null, newGameRecurringRent=false;
 const ui = { island:null, action:'port', plot:0, income:0, mix:Array(9).fill(0), size:'small', card:0, error:'', highlightOwner:null };
-
 const flagNames=TEAMS.map(team=>team.name);
 function flagArtwork(owner) {
   const patterns=[
@@ -1141,7 +1135,6 @@ function teamFlag(owner) {
 function teamLabel(owner,players=game.players) {
   return `<span class="team-identity">${teamFlag(owner)}<span>${players[owner].name}</span></span>`;
 }
-
 function resetDraft() {
   ui.island=null; ui.action='port'; ui.plot=0;
   ui.mix=Array(9).fill(0); ui.income=0; ui.error='';
@@ -1165,6 +1158,7 @@ function controllerPicker(players,scope) {
   return `<fieldset class="controller-picker"><legend>Teams</legend>${players.map((team,owner)=>`<div class="controller-row">${teamLabel(owner,players)}<div role="group" aria-label="Who controls ${team.name}">${[['human','You'],['ai','AI']].map(([controller,label])=>`<button type="button" data-controller="${controller}" data-control-owner="${owner}" data-control-scope="${scope}" aria-pressed="${(team.controller??'human')===controller}">${label}</button>`).join('')}</div></div>`).join('')}</fieldset>`;
 }
 function rentPicker(enabled,scope) {
+  return `<fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent">${[[false,'Off'],[true,'On']].map(([value,label])=>`<button type="button" data-rent="${value}" data-rent-scope="${scope}" aria-pressed="${enabled===value}">${label}</button>`).join('')}</div><p class="hint">${enabled?'Occupied homes pay at the end of every round, after arrivals.':'Occupied homes earn their value once.'} Empty homes subtract their value while vacant.</p></fieldset>`;
   return `<fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent">${[[false,'Off'],[true,'On']].map(([value,label])=>`<button type="button" data-rent="${value}" data-rent-scope="${scope}" aria-pressed="${enabled===value}">${label}</button>`).join('')}</div></fieldset>`;
 }
 function stopComputer() {
@@ -1202,7 +1196,6 @@ function scheduleComputer() {
     }
   },phase==='playing'?650:1100);
 }
-
 function shipTriangles(level) {
   return Array.from({length:level},(_,i) => {
     const offset = (i-(level-1)/2)*15;
@@ -1227,6 +1220,7 @@ function renderScores() {
       <div class="score-top"><b>${teamLabel(owner)}${player.controller==='ai'?'<span class="controller-badge">AI</span>':''}</b><strong>${money(stats.score)}</strong></div>
       <div class="score-detail"><span title="${game.recurringRent?'Rent collected':'Filled housing income'}">+$${game.recurringRent?player.rentEarned:stats.income}</span><span title="Vacant housing penalty">−$${stats.vacancy}</span></div>
       ${game.recurringRent?`<small>Rent +$${stats.income} / round</small>`:''}
+      <div class="score-meta">${active?'<span class="score-turn">NOW</span>':''}<small title="${stats.housed} of ${stats.homes} housing units filled">▦ ${stats.housed}/${stats.homes}</small><small class="extra-move-status ${player.extraMoveUsed?'used':''}" title="${player.extraMoveUsed?'Extra move used':'Extra move available'}" aria-label="${player.extraMoveUsed?'Extra move used':'Extra move available'}">${player.extraMoveUsed?'✓':'+1'}</small></div></div>`;
       <div class="score-meta"><small title="${stats.housed} of ${stats.homes} housing units filled">▦ ${stats.housed}/${stats.homes}</small><small class="extra-move-status ${player.extraMoveUsed?'used':''}" title="${player.extraMoveUsed?'Extra move used':'Extra move available'}" aria-label="${player.extraMoveUsed?'Extra move used':'Extra move available'}">${player.extraMoveUsed?'✓':'+1'}</small></div></div>`;
   }).join('');
   $('#roundLabel').textContent=started?`${String(game.round).padStart(2,'0')} / ${String(game.rounds).padStart(2,'0')}`:'';
@@ -1234,7 +1228,6 @@ function renderScores() {
   $('#saveGameButton').disabled=!started;
   $('#undoGameButton').disabled=!undoMoves.length;
 }
-
 function waitingWorkers() { return animation ? game.workers.filter(worker => !animation.movingIds.has(worker.id)) : game.workers; }
 function renderWaiting() {
   $('#workersLayer').innerHTML='';
@@ -1279,7 +1272,6 @@ function renderIslands() {
       }).join('')}</g>`;
   }).join('');
 }
-
 function renderOwnership() {
   const selection=ui.highlightOwner, links=ownershipLinks(game);
   const outlinePhase=turnOutlinePhase();
@@ -1292,7 +1284,6 @@ function renderOwnership() {
     return `<g id="ownerMarker${owner}" transform="translate(${x} ${y})" class="team-owner ${active?'current-turn':''} ${selected?'selected':''}" data-owner="${owner}" role="button" tabindex="0" aria-current="${active?'true':'false'}" aria-pressed="${selected}" aria-label="${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''}: ${stats.homes} housing units. ${selected?'Clear highlight':'Highlight ownership'}"><title>${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''} · ${stats.homes} housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)">${flagArtwork(owner)}</g>${active?`<rect class="current-turn-snake" x="-50" y="-54" width="100" height="100" pathLength="100" style="--turn-phase:${outlinePhase}s" aria-hidden="true"/>`:''}${selected?'<path class="owner-underline" d="M-22 72 H22"/>':''}</g>`;
   }).join('');
 }
-
 function ringSegmentPath(radius,index,total) {
   const [cx,cy]=BOARD_CENTER, gap=.035, inner=radius-9, outer=radius+9;
   const start=-Math.PI/2+index*2*Math.PI/total+gap, end=-Math.PI/2+(index+1)*2*Math.PI/total-gap;
@@ -1313,12 +1304,10 @@ function renderRoutes() {
   $('#routesLayer').innerHTML=game.islands.map((island,index)=>!island.shipLevel||animation?.byIsland[index]?'':shipMarkup(index,dockPoint(index),island.shipLevel)).join('');
 }
 function renderBoard() { renderScores(); renderRoutes(); renderIslands(); renderCenter(); renderOwnership(); renderWaiting(); }
-
 function plotPicker() {
   ui.plot=nextBuildablePlot(game,ui.island);
   return ui.plot>=0 ? `<div class="plot-order" aria-label="Next available plot ${ui.plot+1}"><span>Next plot</span><b>${ui.plot+1}</b></div>` : '<p class="notice">All six squares are in use.</p>';
 }
-
 function industryControls() {
   const industry = INDUSTRY[ui.size];
   return `<div class="size-switch">${Object.entries(INDUSTRY).map(([size,item]) => `<button data-size="${size}" aria-pressed="${size === ui.size}" style="--size:${item.color}"><span>${item.label}</span><b>+${item.jobs} workers</b><small>${industryStats(game,size).remaining} available</small></button>`).join('')}</div>
@@ -1412,7 +1401,6 @@ function renderPanel() {
   $('#turnPanel').innerHTML=`<div class="panel-content">${content}${computerControls}</div>`;
   if(previousUnit!==undefined) $(`[data-unit="${previousUnit}"]`)?.focus({preventScroll:true});
 }
-
 function render() { renderBoard(); renderPanel(); scheduleComputer(); }
 function announce(text) { $('#boardStatus').textContent = text; }
 function startGame(input) {
@@ -1502,7 +1490,6 @@ function renderCentralDetails() {
     <div class="central-totals"><b>${workers.length} waiting</b><span>${game.industries.length} businesses</span>${animation?`<span>${animation.plan.moves.length-animation.arrived.size} traveling</span>`:''}</div>
     <div class="industry-availability">${Object.entries(INDUSTRY).map(([size,spec])=>{const {built,total,remaining}=industryStats(game,size);return `<span><b>${spec.label}</b> ${built}/${total} built · ${remaining} available</span>`;}).join('')}</div>
     <div class="worker-tiers">${INCOME.map((income,i)=>`<div style="--income:${income.color}"><h3>${income.label}</h3><strong>${counts[i]}</strong><span>waiting</span><small>${homes[i]} housing units available</small></div>`).join('')}</div>
-
     <h3 class="business-list-title">Businesses</h3><div class="central-businesses">${game.industries.length?game.industries.map(business=>{
       const spec=INDUSTRY[business.size], card=spec.cards[business.cardIndex], waiting=[0,0,0,0];
       workers.filter(worker=>worker.industryId===business.id).forEach(worker=>waiting[worker.income]++);
@@ -1511,7 +1498,6 @@ function renderCentralDetails() {
     ${started&&game.phase==='playing'&&!computerTurn()?'<button class="primary" data-build-central>+ Industry</button>':''}`;
 }
 function showCentral() { renderCentralDetails(); if(!$('#centralDialog').open) $('#centralDialog').showModal(); }
-
 $('#turnPanel').addEventListener('click',event => {
   const command = event.target.closest('[data-command]')?.dataset.command;
   if (command) {
@@ -1535,8 +1521,10 @@ $('#turnPanel').addEventListener('click',event => {
   const action = event.target.closest('[data-action]');
   if (action && actionAllowed(action.dataset.action)) { ui.action = action.dataset.action; ui.error = ''; renderPanel(); renderIslands(); renderCenter(); return; }
   const income = event.target.closest('[data-income]');
+  if (income) { ui.income = Number(income.dataset.income); renderPanel(); return; }
   if (income) { ui.income = Number(income.dataset.income); updateHomesControls(); return; }
   const unit = event.target.closest('[data-unit]');
+  if (unit) { ui.mix[Number(unit.dataset.unit)] = ui.income; ui.mix.sort((a,b)=>a-b); renderPanel(); return; }
   if (unit) { ui.mix[Number(unit.dataset.unit)] = ui.income; ui.mix.sort((a,b)=>a-b); updateHomesControls(); return; }
   const size = event.target.closest('[data-size]');
   if (size) { ui.size = size.dataset.size; ui.card = 0; renderPanel(); renderCenter(); return; }
@@ -1658,7 +1646,6 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-build-central]')&&started&&game.phase==='playing'&&!computerTurn()) { selectLocation('central'); $('#centralDialog').close(); render(); }
 });
 render();
-
 // End NEWS application.
 })();
 </script>
