@@ -1220,7 +1220,7 @@ const $ = selector => document.querySelector(selector);
 const escapeText = value => value.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const money = value => `${value < 0 ? '−' : ''}$${Math.abs(value)}`;
 const actions = ['port','ship','industry','homes','entertainment'];
-const actionLabels = {port:'PORT',ship:'SHIP',industry:'INDUSTRY',homes:'HOUSING UNITS',entertainment:'ENTERTAINMENT'};
+const actionLabels = {port:'PORT',ship:'SHIP',industry:'INDUSTRY',homes:'HOUSING',entertainment:'ENTERTAINMENT'};
 const actionIcons = { port:'◯', ship:'△', industry:'◎', homes:'▦', entertainment:'✳' };
 let game = createGame(12), started = false, animation = null;
 const undoMoves = [];
