@@ -150,7 +150,8 @@ input[type="number"],select { width:100%; border:1px solid #bfc7c0; background:w
 .mix-heading b { color:#8f354b; font-size:.875rem; }
 .income-palette { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:12px; }
 .income-palette button { border:1px solid var(--line); background:white; padding:9px 2px; border-radius:5px; font-family:"DM Mono",monospace; font-size:.875rem; min-height:44px; }
-.income-palette i { display:block; width:100%; max-width:34px; height:5px; background:var(--income); margin:0 auto 7px; }
+.income-palette i { display:block; width:100%; max-width:34px; height:8px; background:var(--income); margin:0 auto 7px; }
+.income-color-name { display:block; margin-top:4px; color:var(--ink); font:500 .7rem "Manrope",sans-serif; }
 .income-palette button[aria-pressed="true"] { border:2px solid var(--income); padding:8px 1px; }
 .income-palette button[data-income="4"] { grid-column:1 / -1; }
 .home-editor { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; border:3px solid var(--ink); background:var(--ink); padding:3px; width:min(100%,240px); margin:auto; }
@@ -546,11 +547,11 @@ const ISLANDS = [
 ];
 
 const INCOME = [
-  { label: "$", name: "Local", color: "#2864cc", value:1 },
-  { label: "$$", name: "Standard", color: "#087f8c", value:2 },
-  { label: "$$$", name: "Premium", color: "#7950bd", value:3 },
-  { label: "$$$$", name: "Luxury", color: "#bb3b87", value:4 },
-  { label: "$$$$$$$$$$", name: "Exclusive", color: "#946400", value:10 },
+  { label: "$", name: "Local", color: "#2864cc", colorName:"Blue", value:1 },
+  { label: "$$", name: "Standard", color: "#16803c", colorName:"Green", value:2 },
+  { label: "$$$", name: "Premium", color: "#bf5700", colorName:"Orange", value:3 },
+  { label: "$$$$", name: "Luxury", color: "#ce292f", colorName:"Red", value:4 },
+  { label: "$$$$$$$$$$", name: "Exclusive", color: "#946400", colorName:"Gold", value:10 },
 ];
 
 const EXCLUSIVE_INCOME = 4;
@@ -1443,7 +1444,7 @@ function homesControls() {
   const picker = plotPicker();
   if (ui.plot < 0) return picker;
   return `${picker}<div class="mix-heading"><span>9 housing units</span><b>−$${ui.mix.reduce((sum,value) => sum+INCOME[value].value,0)} if empty</b></div>
-    <div class="income-palette" aria-label="Choose an income level">${INCOME.map((item,index) => `<button data-income="${index}" aria-pressed="${ui.income === index}" style="--income:${item.color}"><i></i>${item.label}</button>`).join('')}</div>
+    <div class="income-palette" aria-label="Choose an income level">${INCOME.map((item,index) => `<button data-income="${index}" aria-pressed="${ui.income === index}" style="--income:${item.color}"><i></i>${item.label}<span class="income-color-name">${item.colorName}</span></button>`).join('')}</div>
     <p class="hint">At most one $10 unit per plot.</p>
     <div class="home-editor">${ui.mix.map((income,index) => `<button data-unit="${index}" data-tier="${income}" style="--income:${INCOME[income].color}" aria-label="Housing unit ${index+1}: ${INCOME[income].label}. Assign ${INCOME[ui.income].label}">${INCOME[income].label}</button>`).join('')}</div>`;
 }
