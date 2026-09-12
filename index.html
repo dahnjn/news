@@ -27,7 +27,6 @@ h2 { font-size:1.2rem; letter-spacing:-.025em; margin-bottom:10px; }
 .quiet-button { background:transparent; border:1px solid var(--line); border-radius:7px; padding:9px 12px; font-size:.875rem; }
 .quiet-button:hover { background:white; border-color:var(--ink); }
 .game-shell { display:grid; grid-template-columns:minmax(0,1fr) 304px; }
-.board-column { height:calc(100dvh - 72px); min-height:610px; padding:18px 24px 12px; display:grid; grid-template-rows:auto minmax(250px,1fr) auto auto; min-width:0; background:var(--ocean); }
 .board-column { height:calc(100dvh - 72px); min-height:610px; padding:18px 24px 12px; display:grid; grid-template-rows:auto minmax(250px,1fr) auto; min-width:0; background:var(--ocean); }
 .team-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
 .team-score { border-top:3px solid var(--team); background:#f7f8f5; padding:10px 12px 8px; border-radius:0 0 7px 7px; min-width:0; transition:background .2s; }
@@ -76,8 +75,6 @@ h2 { font-size:1.2rem; letter-spacing:-.025em; margin-bottom:10px; }
 .ship-triangle { fill:none; stroke:#111; stroke-width:3; stroke-linejoin:miter; }
 .waiting-person { stroke:white; stroke-width:.7; animation:appear .6s both; }
 @keyframes appear { from { opacity:0; } to { opacity:1; } }
-.board-caption { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; color:var(--muted); font-size:.75rem; padding:4px 0 9px; }
-.board-caption span { display:inline-flex; align-items:center; gap:6px; }
 .occupied-key { width:9px; height:9px; border-radius:50%; background:#111; }
 .board-status { min-height:32px; font-size:.875rem; color:var(--muted); line-height:1.4; text-align:center; padding-top:5px; border-top:1px solid #eef0eb; }
 .turn-panel { height:calc(100dvh - 72px); min-height:610px; display:flex; flex-direction:column; border-left:1px solid var(--line); background:var(--paper); }
@@ -111,7 +108,6 @@ input[type="number"],select { width:100%; border:1px solid #bfc7c0; background:w
 .rent-options button { border:0; background:white; min-height:40px; padding:8px; font-size:.875rem; }
 .rent-options button[aria-pressed="true"] { background:var(--ink); color:white; }
 .rent-options button:focus-visible { outline-offset:-3px; }
-.rent-picker .hint { margin:10px 0 0; }
 .rent-report { border-top:1px solid var(--line); padding-top:18px; margin-top:22px; }
 .rent-report h2 { font-size:1rem; }
 .controller-badge { display:inline-block; margin-left:5px; font:400 .7rem "DM Mono",monospace; color:var(--muted); }
@@ -156,9 +152,11 @@ input[type="number"],select { width:100%; border:1px solid #bfc7c0; background:w
 .income-palette button { border:1px solid var(--line); background:white; padding:9px 2px; border-radius:5px; font-family:"DM Mono",monospace; font-size:.875rem; min-height:44px; }
 .income-palette i { display:block; width:100%; max-width:34px; height:5px; background:var(--income); margin:0 auto 7px; }
 .income-palette button[aria-pressed="true"] { border:2px solid var(--income); padding:8px 1px; }
+.income-palette button[data-income="4"] { grid-column:1 / -1; }
 .home-editor { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; border:3px solid var(--ink); background:var(--ink); padding:3px; width:min(100%,240px); margin:auto; }
 .home-editor button { aspect-ratio:1; border:0; border-radius:0; background:var(--income); color:white; text-shadow:0 1px 3px #0008; font-family:"DM Mono",monospace; font-size:.9rem; font-weight:500; }
 .home-editor button:hover { filter:brightness(1.1); }
+.home-editor button[data-tier="4"] { font-size:.58rem; overflow-wrap:anywhere; padding:3px; }
 .entertainment-preview { height:90px; display:grid; place-items:center; font-size:48px; }
 .notice { padding:12px; background:var(--paper); border-radius:5px; }
 .error { color:#a10c2c; font-size:.875rem; }
@@ -196,7 +194,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .rules-list li { margin-bottom:15px; padding-left:5px; }
 .home-inspector { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
 .home-inspector div { background:color-mix(in srgb,var(--income) 12%,white); border-top:5px solid var(--income); padding:14px 8px; display:grid; gap:7px; text-align:center; }
-.home-inspector b { font-family:"DM Mono",monospace; }
+.home-inspector b { font-family:"DM Mono",monospace; overflow-wrap:anywhere; }
 .home-inspector span { font-size:.875rem; }
 .home-inspector small { font-size:.875rem; color:var(--muted); }
 @media(max-width:1150px) {
@@ -234,7 +232,6 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
   .team-score small { font-size:.75rem; line-height:1.4; }
   .workforce-bar { justify-content:center; gap:9px; }
   .waiting-mix { width:100%; justify-content:center; }
-  .board-caption { gap:7px 12px; }
   .panel-content { padding:22px 16px; }
   .action-menu { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .action-menu button:last-child { justify-content:flex-start; }
@@ -272,9 +269,10 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .central-totals b { color:var(--ink); font-size:1.2rem; }
 .industry-availability { display:flex; flex-wrap:wrap; gap:9px 20px; padding:0 0 20px; font-size:.875rem; color:var(--muted); }
 .industry-availability b { color:var(--ink); margin-right:4px; }
-.worker-tiers { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.worker-tiers { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
 .worker-tiers > div { border:1px solid var(--line); border-top:5px solid var(--income); background:white; padding:13px; display:flex; flex-direction:column; gap:5px; }
 .worker-tiers h3 { font:500 1rem "DM Mono",monospace; color:var(--income); margin:0; }
+.worker-tiers > div:last-child h3 { font-size:.75rem; overflow-wrap:anywhere; }
 .worker-tiers strong { font:500 2rem "DM Mono",monospace; margin:4px 0; }
 .worker-tiers span { font-size:.875rem; }
 .worker-tiers small { color:var(--muted); font-size:.75rem; line-height:1.5; margin-top:6px; }
@@ -288,6 +286,8 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .business-waiting span { display:inline-flex; align-items:center; gap:6px; font-family:"DM Mono",monospace; font-size:.875rem; }
 .business-waiting i { display:inline-block; width:8px; height:8px; background:var(--income); }
 @media(max-width:520px) { .worker-tiers { grid-template-columns:repeat(2,minmax(0,1fr)); } .team-letter { display:none; } .score-top b { font-size:.875rem; } }
+
+
 .brand-logo { display:block; width:48px; height:48px; flex:none; }
 .topbar { background:white; }
 .extra-move-status { font-weight:700; color:#244954!important; }
@@ -333,7 +333,6 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 @media(prefers-reduced-motion:reduce) { .current-turn-snake { stroke-dasharray:none; } }
 .team-score.active { background:#172e36; color:white; box-shadow:none; border-top-color:#172e36; }
 .team-score.active .score-detail span,.team-score.active small,.team-score.active .controller-badge { color:#d6e9ee; }
-.score-turn { font:.75rem "DM Mono",monospace; letter-spacing:.08em; padding:2px 4px; border:1px solid #8dafbb; }
 .active-turn-banner { padding:18px; background:#172e36; color:white; margin:-4px -4px 22px; }
 .active-turn-banner .eyebrow { color:#cfe8f0; font-size:.875rem; letter-spacing:.08em; }
 .active-turn-banner h1 { margin-bottom:0; font-size:2rem; letter-spacing:-.025em; }
@@ -342,11 +341,13 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .card-title { flex-wrap:wrap; }
 .move-receipt { line-height:1.6; }
 @media(max-width:520px) { .brand-logo { width:42px; height:42px; } .brand-name { display:none; } .extra-move-status { font-size:.7rem!important; } }
+
 .plot-order { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid var(--line); font-size:.875rem; }
 .plot-order b { font:500 1.25rem "DM Mono",monospace; }
 .plot-mark.locked { cursor:not-allowed; }
 .plot-mark.locked .plot-base { fill:#e5eff1; stroke:#83969c; stroke-width:3; }
 .plot-mark.locked .empty-plot-number { fill:#6e858e; }
+
 </style>
 </head>
 <body>
@@ -364,26 +365,33 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
   </header>
   <main class="game-shell">
     <section class="board-column" aria-label="Gameboard and scores">
-      <div class="team-strip" id="teamStrip" aria-label="Team scores"><div class="team-score active" aria-current="true" style="--team:#222">
+      <div class="team-strip" id="teamStrip" aria-label="Team scores"><div class="team-score active" data-score-owner="0" aria-current="true" style="--team:#222">
       <svg class="score-turn-outline" aria-hidden="true" focusable="false"><rect class="current-turn-snake" x="2" y="2" pathLength="100" style="--turn-phase:0s"/></svg>
       <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span></b><strong>$0</strong></div>
-      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <div class="score-detail"><span title="Rent collected">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <small>Rent +$0 / round</small>
+      <small>Entertainment +$0 collected · +$0 / round</small>
       
-      <div class="score-meta"><span class="score-turn">NOW</span><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
-      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
+      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " data-score-owner="1" aria-current="false" style="--team:#222">
       
       <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span></b><strong>$0</strong></div>
-      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <div class="score-detail"><span title="Rent collected">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <small>Rent +$0 / round</small>
+      <small>Entertainment +$0 collected · +$0 / round</small>
       
-      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
+      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " data-score-owner="2" aria-current="false" style="--team:#222">
       
       <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span></b><strong>$0</strong></div>
-      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <div class="score-detail"><span title="Rent collected">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <small>Rent +$0 / round</small>
+      <small>Entertainment +$0 collected · +$0 / round</small>
       
-      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " aria-current="false" style="--team:#222">
+      <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div><div class="team-score " data-score-owner="3" aria-current="false" style="--team:#222">
       
       <div class="score-top"><b><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span></b><strong>$0</strong></div>
-      <div class="score-detail"><span title="Filled housing income">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <div class="score-detail"><span title="Rent collected">+$0</span><span title="Vacant housing penalty">−$0</span></div>
+      <small>Rent +$0 / round</small>
+      <small>Entertainment +$0 collected · +$0 / round</small>
       
       <div class="score-meta"><small title="0 of 0 housing units filled">▦ 0/0</small><small class="extra-move-status " title="Extra move available" aria-label="Extra move available">+1</small></div></div></div>
       <div class="board-stage">
@@ -488,11 +496,9 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
     <text class="central-map-label" x="1043" y="560" text-anchor="middle">CENTRAL</text></g></g><g id="routesLayer"></g><g id="teamOwnersLayer"><g id="ownerMarker0" transform="translate(633 630)" class="team-owner current-turn " data-owner="0" role="button" tabindex="0" aria-current="true" aria-pressed="false" aria-label="Star · Star flag · Starts first: 0 housing units. Highlight ownership"><title>Star · Star flag · Starts first · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g><rect class="current-turn-snake" x="-50" y="-54" width="100" height="100" pathLength="100" style="--turn-phase:0s" aria-hidden="true"/></g><g id="ownerMarker1" transform="translate(933 630)" class="team-owner  " data-owner="1" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Cross · Cross flag: 0 housing units. Highlight ownership"><title>Cross · Cross flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g><g id="ownerMarker2" transform="translate(933 930)" class="team-owner  " data-owner="2" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Checker · Checker flag: 0 housing units. Highlight ownership"><title>Checker · Checker flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g><g id="ownerMarker3" transform="translate(633 930)" class="team-owner  " data-owner="3" role="button" tabindex="0" aria-current="false" aria-pressed="false" aria-label="Stripes · Stripes flag: 0 housing units. Highlight ownership"><title>Stripes · Stripes flag · 0 housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></g></g></g><g id="workersLayer"></g><g id="animationLayer" aria-hidden="true"></g>
         </svg>
       </div>
-      <div class="board-caption"><span><i class="available-key"></i> Available</span><span><i class="filled-key">✓</i> Filled</span><span title="Housing preference, after income match and entertainment">6 → 1 · preference</span></div>
       <div class="board-status" id="boardStatus" role="status" aria-live="polite"></div>
     </section>
-    <aside class="turn-panel" id="turnPanel" aria-label="Turn controls"><div class="panel-content"><p class="hint" role="status">Static preview. Open the downloaded HTML file in your web browser to play.</p><div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="12" required/><fieldset class="controller-picker"><legend>Teams</legend><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span><div role="group" aria-label="Who controls Star"><button type="button" data-controller="human" data-control-owner="0" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="0" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span><div role="group" aria-label="Who controls Cross"><button type="button" data-controller="human" data-control-owner="1" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="1" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span><div role="group" aria-label="Who controls Checker"><button type="button" data-controller="human" data-control-owner="2" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="2" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span><div role="group" aria-label="Who controls Stripes"><button type="button" data-controller="human" data-control-owner="3" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="3" data-control-scope="initial" aria-pressed="false">AI</button></div></div></fieldset><fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent"><button type="button" data-rent="false" data-rent-scope="initial" aria-pressed="true">Off</button><button type="button" data-rent="true" data-rent-scope="initial" aria-pressed="false">On</button></div><p class="hint">Occupied homes earn their value once. Empty homes subtract their value while vacant.</p></fieldset><button class="primary" data-command="start">Start →</button></div></div></aside>
-    <aside class="turn-panel" id="turnPanel" aria-label="Turn controls"><div class="panel-content"><p class="hint" role="status">Static preview. Open the downloaded HTML file in your web browser to play.</p><div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="12" required/><fieldset class="controller-picker"><legend>Teams</legend><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span><div role="group" aria-label="Who controls Star"><button type="button" data-controller="human" data-control-owner="0" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="0" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span><div role="group" aria-label="Who controls Cross"><button type="button" data-controller="human" data-control-owner="1" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="1" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span><div role="group" aria-label="Who controls Checker"><button type="button" data-controller="human" data-control-owner="2" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="2" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span><div role="group" aria-label="Who controls Stripes"><button type="button" data-controller="human" data-control-owner="3" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="3" data-control-scope="initial" aria-pressed="false">AI</button></div></div></fieldset><fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent"><button type="button" data-rent="false" data-rent-scope="initial" aria-pressed="true">Off</button><button type="button" data-rent="true" data-rent-scope="initial" aria-pressed="false">On</button></div></fieldset><button class="primary" data-command="start">Start →</button></div></div></aside>
+    <aside class="turn-panel" id="turnPanel" aria-label="Turn controls"><div class="panel-content"><p class="hint" role="status">Static preview. Open the downloaded HTML file in your web browser to play.</p><div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="12" required/><fieldset class="controller-picker"><legend>Teams</legend><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="star" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M16 1 18.5 9.1 27 9.1 20.2 14.1 22.8 22 16 17.1 9.2 22 11.8 14.1 5 9.1 13.5 9.1Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Star</span></span><div role="group" aria-label="Who controls Star"><button type="button" data-controller="human" data-control-owner="0" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="0" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="cross" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M12 0H20V8H32V16H20V24H12V16H0V8H12Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Cross</span></span><div role="group" aria-label="Who controls Cross"><button type="button" data-controller="human" data-control-owner="1" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="1" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="checker" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H16V12H0ZM16 12H32V24H16Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Checker</span></span><div role="group" aria-label="Who controls Checker"><button type="button" data-controller="human" data-control-owner="2" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="2" data-control-scope="initial" aria-pressed="false">AI</button></div></div><div class="controller-row"><span class="team-identity"><svg class="team-flag" viewBox="-6 -3 41 38" aria-hidden="true"><g class="signal-flag" data-flag="stripes" aria-hidden="true"><rect class="flag-field" width="32" height="24"/><g class="flag-pattern"><path d="M0 0H32V4H0ZM0 8H32V12H0ZM0 16H32V20H0Z"/></g><rect class="flag-border" width="32" height="24"/><path class="flag-pole" d="M-3-1V32"/></g></svg><span>Stripes</span></span><div role="group" aria-label="Who controls Stripes"><button type="button" data-controller="human" data-control-owner="3" data-control-scope="initial" aria-pressed="true">You</button><button type="button" data-controller="ai" data-control-owner="3" data-control-scope="initial" aria-pressed="false">AI</button></div></div></fieldset><fieldset class="rent-picker"><legend>Rent</legend><div class="rent-options" role="group" aria-label="Rent mode"><button type="button" data-rent="false" data-rent-scope="initial" aria-pressed="false">Once</button><button type="button" data-rent="true" data-rent-scope="initial" aria-pressed="true">Recurring</button></div></fieldset><fieldset class="rent-picker"><legend>Entertainment income</legend><div class="rent-options" role="group" aria-label="Entertainment income mode"><button type="button" data-entertainment="off" data-entertainment-scope="initial" aria-pressed="false">Off</button><button type="button" data-entertainment="recurring" data-entertainment-scope="initial" aria-pressed="true">Recurring</button></div></fieldset><button class="primary" data-command="start">Start →</button></div></div></aside>
   </main>
   <dialog id="rulesDialog" aria-labelledby="rulesTitle">
     <div class="dialog-head"><h2 id="rulesTitle">How to play</h2><button data-close-dialog aria-label="Close rules">×</button></div>
@@ -501,13 +507,13 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <li><b>Extra move.</b> Once per game, each team may take a second action immediately after its first move, before handing off or ending the round. Select “+1.” The extra move is used only when an action is completed; you can keep it for later while choosing.</li>
       <li><b>Connect.</b> An empty harbor circle is inactive; its center dot appears when activated. Build a shared port on any outer island, then launch an L1 ship serving that island. Upgrade it on later turns. L1 / L2 / L3 transport 10 / 20 / 30 people per round.</li>
       <li><b>Build.</b> Develop each island in order: plot 1, then 2, through 6. Each square holds nine housing units or one entertainment venue; either unlocks the next plot for any team. Choose the income level of each housing unit. The team that builds the housing units owns them, wherever they are located. The team signal flags sit outside CENTRAL. Click a flag to highlight its ownership lines and housing units. All teams share CENTRAL. Empty units are outlined; filled units are solid with a check.</li>
-      <li><b>Create jobs.</b> Small / medium / large industries create 25 / 50 / 100 workers. Each size has six business card options based on workforce profiles from Q. The mixes favor $ and $$ workers. CENTRAL has four slots for each size: inner ring small, middle ring medium, outer ring large. Empty slots are outlined; businesses fill them black, clockwise from the top. Click CENTRAL to see waiting workers and remaining slots.</li>
-      <li><b>Create jobs.</b> Small / medium / large industries create 25 / 50 / 100 workers. Each size has six business card options. In a new game, building all 12 businesses creates 700 workers: exactly 36 $$$$, 72 $$$, and 592 split between $ and $$. Your business choices determine the $ and $$ split. CENTRAL has four slots for each size: inner ring small, middle ring medium, outer ring large. Empty slots are outlined; businesses fill them black, clockwise from the top. Click CENTRAL to see waiting workers and remaining slots.</li>
+      <li><b>Create jobs.</b> Small / medium / large industries create 25 / 50 / 100 workers. In a new game, all 12 businesses together create exactly 389 $ workers, 200 $$, 100 $$$, 10 $$$$, and one $$$$$$$$$$ worker: 700 total. The first large business brings the single $10 worker. Each size has six business names to choose from; worker counts follow the business slot, regardless of the name chosen. CENTRAL has four slots for each size: inner ring small, middle ring medium, outer ring large. Click CENTRAL to see waiting workers and remaining slots.</li>
       <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. They prefer more entertainment, then the plot furthest from the port: 6, 5, 4, 3, 2, 1. Remaining ties favor a different island each round: NORTH, EAST, SOUTH, WEST. Workers queue in creation order.</li>
-      <li><b>Score.</b> Only your own housing units contribute to your team’s score, across all islands. With recurring rent off, a filled housing unit earns its income value once. With recurring rent on, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. Rent accumulates: a $$$$ home occupied for three round endings earns $12. In both modes, empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, ships, and entertainment do not earn points.</li>
+      <li><b>Entertainment income.</b> In Recurring mode, each venue pays its builder $1 for every housed resident on its island at the end of every round, after arrivals, including the final round. All income levels, housing owners, existing residents, and new arrivals count. Each venue receives the full amount: two venues on an island with 20 residents each pay $20. Empty housing and workers waiting at CENTRAL do not count. Adjacency does not matter. With entertainment income Off, venues still attract workers but earn no money. Building housing does not charge a tax.</li>
+      <li><b>Score.</b> Your housing income and collected entertainment income contribute to your score across all islands. Rent and entertainment both default to Recurring and can be set separately before starting. With rent set to Once, a filled housing unit earns its income value once. With recurring rent, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. The five income values are $1, $2, $3, $4, and $10. A $$$$$$$$$$ home occupied for three round endings earns $30 with recurring rent. Empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, and ships do not earn points.</li>
     </ol>
-    <p>↓ saves a game file; ↑ loads it. Saves include team controls, recurring rent, collected rent, the current turn and unused extra moves. Loading a save made during arrivals replays that movement and pays that round’s rent once.</p>
-    <p>Choose You or AI for each team and turn recurring rent on or off before starting. The moving outline marks the active team on the board and in the scores at the top. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
+    <p>↓ saves a game file; ↑ loads it. Saves include team controls, income modes, collected rent and entertainment income, the current turn and unused extra moves. Loading a save made during arrivals replays that movement and pays that round’s income once. Older saves keep their original rules; start a new game for the new default modes.</p>
+    <p>Choose You or AI for each team and set rent and entertainment income before starting. The moving outline marks the active team on the board and in the scores at the top. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
     <p>Workers without a suitable housing unit stay in the center for the next round. The highest score after the final round wins. Equal scores share the win.</p>
   </dialog>
   <dialog id="newGameDialog" aria-labelledby="newGameTitle">
@@ -516,6 +522,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
     <label class="field-label" for="newGameRounds">Rounds</label><input id="newGameRounds" type="number" min="1" max="100" step="1" value="12" required />
     <div id="newGameControllers"></div>
     <div id="newGameRent"></div>
+    <div id="newGameEntertainment"></div>
     <button class="primary" id="confirmNewGame">Start game</button>
   </dialog>
   <dialog id="fileDialog" aria-labelledby="fileTitle">
@@ -528,6 +535,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 "use strict";
 // Embedded modules keep their original private scopes. No external scripts are needed.
 const newsModules = Object.create(null);
+
 // data.mjs
 newsModules["./data.mjs"] = (() => {
 const ISLANDS = [
@@ -536,18 +544,30 @@ const ISLANDS = [
   { name: "SOUTH", color: "#006074", fill: "#bfd7dc", direction: "S" },
   { name: "WEST", color: "#547870", fill: "#d4dddb", direction: "W" },
 ];
+
 const INCOME = [
-  { label: "$", name: "Local", color: "#2864cc" },
-  { label: "$$", name: "Standard", color: "#087f8c" },
-  { label: "$$$", name: "Premium", color: "#7950bd" },
-  { label: "$$$$", name: "Luxury", color: "#bb3b87" },
+  { label: "$", name: "Local", color: "#2864cc", value:1 },
+  { label: "$$", name: "Standard", color: "#087f8c", value:2 },
+  { label: "$$$", name: "Premium", color: "#7950bd", value:3 },
+  { label: "$$$$", name: "Luxury", color: "#bb3b87", value:4 },
+  { label: "$$$$$$$$$$", name: "Exclusive", color: "#946400", value:10 },
 ];
+
+// One profile per shared business slot. All 12 slots total [389,200,100,10,1].
+// The first large business supplies the unique $10 worker, whichever card is chosen.
+const WORKFORCE = {
+  small:[[14,7,3,1,0],[14,7,4,0,0],[14,7,3,1,0],[14,7,4,0,0]],
+  medium:[[27,14,8,1,0],[28,14,7,1,0],[28,14,7,1,0],[28,15,7,0,0]],
+  large:[[54,29,14,2,1],[56,29,14,1,0],[56,29,14,1,0],[56,28,15,1,0]],
+};
+
 const TEAMS = [
   { name:'Star', letter:'S' },
   { name:'Cross', letter:'C' },
   { name:'Checker', letter:'K' },
   { name:'Stripes', letter:'T' },
 ];
+
 // Workforce figures transcribed from Q FULL.pdf. The page is the PDF page number.
 // Preserve the original figures for reference and loading games played before rebalancing.
 function scaleMix(source, total) {
@@ -559,16 +579,9 @@ function scaleMix(source, total) {
   for (let i=0; i<remainder; i++) mix[order[i].index]++;
   return mix;
 }
-// Four slots of each size produce exactly 72 $$$ and 36 $$$$ workers.
-// Keep these counts the same for every card so repeated choices preserve the totals.
+// Retain the earlier 72 / 36 profiles for saved games from that rules edition.
 const DEFAULT_HIGH_INCOME_BY_JOBS = {25:[3,1],50:[5,3],100:[10,5]};
 const legacyCard = (name, legacyMix, sourcePage, jobs, whiteCollar=false, override=null) => {
-  const mix=scaleMix(legacyMix,jobs);
-  const reassigned=mix[3]-Math.floor(mix[3]/2);
-  mix[3]-=reassigned;
-  mix[0]+=Math.floor(reassigned/2);
-  mix[1]+=Math.ceil(reassigned/2);
-  return {name,legacyMix,sourcePage,mix:override??mix,whiteCollar};
   const rebalanced=scaleMix(legacyMix,jobs);
   const reassigned=rebalanced[3]-Math.floor(rebalanced[3]/2);
   rebalanced[3]-=reassigned;
@@ -614,6 +627,7 @@ const PLOT_SPACING = 74;
 const PORT_RADIUS = 30;
 const UNIT_PITCH = 19;
 const UNIT_SIZE = 16;
+
 const BOARD_CENTER = [783,780];
 const DOCK_POINTS = [[783,615],[948,780],[783,945],[618,780]];
 // Coastlines traced from Group 6 (3).png, with clearance for larger building blocks.
@@ -634,45 +648,67 @@ const COASTLINES = COASTLINE_TRACES.map((coast,island)=>coast.map(point=>alignIs
 const TEAM_ANCHORS = [[-150,-150],[150,-150],[150,150],[-150,150]].map(([x,y]) => [BOARD_CENTER[0]+x,BOARD_CENTER[1]+y]);
 const LABEL_POINTS = [[1090,200],[1650,978],[1080,1400],[250,960]].map(alignIslandPoint);
 const SHIP_ROTATIONS = [0,90,180,270];
-return { ISLANDS, INCOME, TEAMS, scaleMix, INDUSTRY, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
+
+return { ISLANDS, INCOME, WORKFORCE, TEAMS, scaleMix, INDUSTRY, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
 })();
+
 // game.mjs
 newsModules["./game.mjs"] = (() => {
-const { ISLANDS, INDUSTRY, TEAMS, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE } = newsModules["./data.mjs"];
+const { ISLANDS, INCOME, INDUSTRY, WORKFORCE, TEAMS, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE } = newsModules["./data.mjs"];
 function generateTeams() {
-  return TEAMS.map(({letter,name})=>({letter,name,extraMoveUsed:false,controller:'human',rentEarned:0}));
+  return TEAMS.map(({letter,name})=>({letter,name,extraMoveUsed:false,controller:'human',rentEarned:0,entertainmentEarned:0}));
 }
-function createGame(rounds = 12, {recurringRent=false} = {}) {
+function createGame(rounds = 12, {recurringRent=true,entertainmentMode='recurring'} = {}) {
   if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) throw new Error('Choose 1–100 rounds.');
   if (typeof recurringRent!=='boolean') throw new Error('Choose whether recurring rent is on or off.');
+  if (!['recurring','off'].includes(entertainmentMode)) throw new Error('Choose recurring entertainment income or off.');
   return {
-    rounds, recurringRent, round:1, turn:0, phase:'playing', nextWorkerId:1,
+    rounds, recurringRent, entertainmentMode, workforceVersion:2, round:1, turn:0, phase:'playing', nextWorkerId:1,
     players:generateTeams(),
     islands:ISLANDS.map(() => ({port:false,shipLevel:0,plots:Array(PLOTS_PER_ISLAND).fill(null)})),
     workers:[], industries:[], lastAction:'', lastActionType:null, actionsThisTurn:0, extraActionActive:false, lastReport:null, pending:null,
   };
 }
+function entertainmentIncomeByTeam(game) {
+  const income=game.players.map(()=>0);
+  for(const island of game.islands) {
+    const residents=island.plots.reduce((total,plot)=>total+(plot?.type==='homes'?plot.units.filter(unit=>unit.workerId!==null).length:0),0);
+    for(const plot of island.plots) if(plot?.type==='entertainment') income[plot.builtBy]+=residents;
+  }
+  return income;
+}
 function teamStats(game, owner) {
-  let housed=0, homes=0, income=0, vacancy=0;
+  let housed=0, homes=0, income=0, vacancy=0, tax=0;
   for (const island of game.islands) for (const plot of island.plots) {
-    if (plot?.type !== 'homes' || plot.owner !== owner) continue;
+    if (plot?.type !== 'homes') continue;
+    if(game.entertainmentMode==='legacy-tax') {
+      const taxable=plot.units.filter(unit=>INCOME[unit.income].value>=3).length;
+      for(const source of plot.taxedBy??[]) if(island.plots[source]?.builtBy===owner) tax+=taxable;
+    }
+    if (plot.owner !== owner) continue;
     for (const unit of plot.units) {
       homes++;
-      if (unit.workerId !== null) { housed++; income+=unit.income+1; }
-      else vacancy+=unit.income+1;
+      if (unit.workerId !== null) { housed++; income+=INCOME[unit.income].value; }
+      else vacancy+=INCOME[unit.income].value;
     }
   }
-  return {housed,homes,income,vacancy,score:(game.recurringRent?game.players[owner].rentEarned:income)-vacancy};
+  const entertainmentIncome=game.entertainmentMode==='recurring'?entertainmentIncomeByTeam(game)[owner]:0;
+  const entertainmentEarned=game.players[owner].entertainmentEarned??0;
+  return {housed,homes,income,vacancy,tax,entertainmentIncome,entertainmentEarned,score:(game.recurringRent?game.players[owner].rentEarned:income)+entertainmentEarned+tax-vacancy};
 }
 function waitingCounts(game) {
-  const counts=[0,0,0,0]; game.workers.forEach(worker=>counts[worker.income]++); return counts;
+  const counts=INCOME.map(()=>0); game.workers.forEach(worker=>counts[worker.income]++); return counts;
 }
 function industryStats(game, size) {
   const built=game.industries.filter(business=>business.size===size).length;
   return {built,total:INDUSTRY_SLOTS_PER_SIZE,remaining:Math.max(0,INDUSTRY_SLOTS_PER_SIZE-built)};
 }
+function industryMix(game,size,cardIndex) {
+  if(game.workforceVersion===2) return WORKFORCE[size]?.[industryStats(game,size).built]??INCOME.map(()=>0);
+  return INDUSTRY[size]?.cards[cardIndex]?.mix;
+}
 function islandStats(game, index) {
-  const stats={entertainment:0,empty:[0,0,0,0],filled:[0,0,0,0]};
+  const stats={entertainment:0,empty:INCOME.map(()=>0),filled:INCOME.map(()=>0)};
   for(const plot of game.islands[index].plots) {
     if(plot?.type==='entertainment') stats.entertainment++;
     if(plot?.type==='homes') for(const unit of plot.units) stats[unit.workerId===null?'empty':'filled'][unit.income]++;
@@ -705,8 +741,9 @@ function applyAction(game, action) {
       if(!card || !Number.isInteger(action.cardIndex)) throw new Error('Choose a business card.');
       if(!industryStats(game,action.size).remaining) throw new Error(`The ${industry.label.toLowerCase()} industry ring is full. Choose another size.`);
       const id=game.industries.length+1;
-      game.industries.push({id,owner:game.turn,size:action.size,cardIndex:action.cardIndex,round:game.round,mix:[...card.mix]});
-      card.mix.forEach((count,income)=>{ for(let i=0;i<count;i++) game.workers.push({id:game.nextWorkerId++,income,industryId:id}); });
+      const mix=industryMix(game,action.size,action.cardIndex);
+      game.industries.push({id,owner:game.turn,size:action.size,cardIndex:action.cardIndex,round:game.round,mix:[...mix]});
+      mix.forEach((count,income)=>{ for(let i=0;i<count;i++) game.workers.push({id:game.nextWorkerId++,income,industryId:id}); });
       message=`${name} established ${card.name} at CENTRAL · +${industry.jobs} workers.`; break;
     }
     case 'homes':
@@ -715,10 +752,13 @@ function applyAction(game, action) {
       const next=nextBuildablePlot(game,action.island);
       if(action.plot!==next) throw new Error(`Build plot ${next+1} on ${location} first.`);
       if(action.type==='homes') {
-        if(!Array.isArray(action.mix)||action.mix.length!==9||action.mix.some(value=>!Number.isInteger(value)||value<0||value>3)) throw new Error('Configure all nine housing units.');
-        island.plots[action.plot]={type:'homes',owner:game.turn,units:[...action.mix].sort((a,b)=>a-b).map(income=>({income,workerId:null}))};
-        const cost=action.mix.reduce((sum,income)=>sum+income+1,0);
+        if(!Array.isArray(action.mix)||action.mix.length!==9||action.mix.some(value=>!Number.isInteger(value)||value<0||value>=INCOME.length)) throw new Error('Configure all nine housing units.');
+        const taxedBy=game.entertainmentMode==='legacy-tax'?[action.plot-1,action.plot+1].filter(index=>island.plots[index]?.type==='entertainment'):[];
+        island.plots[action.plot]={type:'homes',owner:game.turn,taxedBy,units:[...action.mix].sort((a,b)=>a-b).map(income=>({income,workerId:null}))};
+        const cost=action.mix.reduce((sum,income)=>sum+INCOME[income].value,0);
         message=`${name} built nine housing units on ${location}, plot ${action.plot+1} · −$${cost} until filled.`;
+        const tax=action.mix.filter(income=>INCOME[income].value>=3).length;
+        if(tax) for(const index of taxedBy) message+=` ${game.players[island.plots[index].builtBy].name} earned $${tax} entertainment tax.`;
       } else {
         island.plots[action.plot]={type:'entertainment',builtBy:game.turn};
         message=`${name} added shared entertainment on ${location}, plot ${action.plot+1}.`;
@@ -783,6 +823,11 @@ function finishResolution(game) {
     rentByTeam.forEach((rent,owner)=>{game.players[owner].rentEarned+=rent;});
     game.lastReport.rentByTeam=rentByTeam;
   }
+  if(game.entertainmentMode==='recurring') {
+    const entertainmentByTeam=entertainmentIncomeByTeam(game);
+    entertainmentByTeam.forEach((income,owner)=>{game.players[owner].entertainmentEarned+=income;});
+    game.lastReport.entertainmentByTeam=entertainmentByTeam;
+  }
   game.phase=game.round>=game.rounds?'finished':'roundSummary'; return game.lastReport;
 }
 function nextRound(game) {
@@ -790,8 +835,10 @@ function nextRound(game) {
   game.round++; game.turn=0; game.phase='playing'; game.lastAction=''; game.lastActionType=null; game.actionsThisTurn=0; game.extraActionActive=false;
 }
 function standings(game) { return game.players.map((player,team)=>({team,...teamStats(game,team)})).sort((a,b)=>b.score-a.score||a.team-b.team); }
-return { generateTeams, createGame, teamStats, waitingCounts, industryStats, islandStats, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
+
+return { generateTeams, createGame, entertainmentIncomeByTeam, teamStats, waitingCounts, industryStats, industryMix, islandStats, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
 })();
+
 // motion.mjs
 newsModules["./motion.mjs"] = (() => {
 const { BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, UNIT_PITCH } = newsModules["./data.mjs"];
@@ -826,12 +873,15 @@ function travelerPosition(move,elapsed,rank,origin,passengers) {
   const t = clamp((elapsed-walkStart)/1300), plot = PLOT_POINTS[move.island][move.plot];
   return { point:t < .85 ? lerp(PORT_POINTS[move.island],plot,ease(t/.85)) : lerp(plot,end,ease((t-.85)/.15)), arrived:t === 1 };
 }
+
 return { clamp, lerp, dockPoint, homePoint, queuePoint, shipPoint, travelerPosition };
 })();
+
 // ownership.mjs
 newsModules["./ownership.mjs"] = (() => {
 const { BOARD_CENTER, TEAM_ANCHORS, PLOT_POINTS, PLOT_SIZE } = newsModules["./data.mjs"];
 function teamAnchor(owner) { return [...TEAM_ANCHORS[owner]]; }
+
 // Each team uses its own rectangular track outside CENTRAL. All connections
 // follow horizontal or vertical segments, then enter the edge of a housing block.
 function ownershipPath(owner,island,plot) {
@@ -869,16 +919,19 @@ function ownershipPath(owner,island,plot) {
   }
   return clean.map((point,i)=>`${i?'L':'M'}${point.join(' ')}`).join(' ');
 }
+
 function ownershipLinks(game) {
   return game.islands.flatMap((island,index)=>island.plots.flatMap((plot,p)=>
     plot?.type==='homes' ? [{owner:plot.owner,island:index,plot:p,path:ownershipPath(plot.owner,index,p)}] : []));
 }
+
 return { teamAnchor, ownershipPath, ownershipLinks };
 })();
+
 // saves.mjs
 newsModules["./saves.mjs"] = (() => {
-const { INDUSTRY, TEAMS, scaleMix } = newsModules["./data.mjs"];
-const { teamStats } = newsModules["./game.mjs"];
+const { INDUSTRY, INCOME, WORKFORCE, TEAMS, scaleMix } = newsModules["./data.mjs"];
+const { teamStats, entertainmentIncomeByTeam } = newsModules["./game.mjs"];
 const invalid=()=>{throw new Error('This file is not a valid NEWS saved game.');};
 const check=condition=>{if(!condition) invalid();};
 const integer=(value,min,max)=>{check(Number.isInteger(value)&&value>=min&&value<=max);return value;};
@@ -886,20 +939,26 @@ const bool=value=>{check(typeof value==='boolean');return value;};
 const list=(value,length)=>{check(Array.isArray(value)&&value.length===length);return value;};
 const record=value=>{check(value!==null&&typeof value==='object'&&!Array.isArray(value));return value;};
 const sum=values=>values.reduce((a,b)=>a+b,0);
+
 // Rebuild only recognized fields; imported data never supplies markup or game rules.
-function validateGame(input) {
+function validateGame(input,{allowLegacy=false}={}) {
   const raw=record(input), game={};
   game.rounds=integer(raw.rounds,1,100); game.round=integer(raw.round,1,game.rounds);
+  game.workforceVersion=raw.workforceVersion===undefined?1:integer(raw.workforceVersion,1,2);
   game.recurringRent=raw.recurringRent===undefined?false:bool(raw.recurringRent);
+  const entertainmentMode=raw.entertainmentMode??(allowLegacy?'legacy-tax':null);
+  check(['recurring','off','legacy-tax'].includes(entertainmentMode)); game.entertainmentMode=entertainmentMode;
   game.turn=integer(raw.turn,0,3);
   check(['playing','handoff','roundReady','roundSummary','finished'].includes(raw.phase)); game.phase=raw.phase;
   game.players=list(raw.players,4).map((player,owner)=>{
     record(player); check(typeof player.letter==='string'&&/^[A-Z]$/.test(player.letter));
     const controller=player.controller??'human';
     check(controller==='human'||controller==='ai');
-    const rentEarned=integer(player.rentEarned===undefined&&!game.recurringRent?0:player.rentEarned,0,86400);
+    const rentEarned=integer(player.rentEarned===undefined&&!game.recurringRent?0:player.rentEarned,0,216000);
     check(game.recurringRent||rentEarned===0);
-    return {letter:player.letter,name:TEAMS[owner].name,extraMoveUsed:bool(player.extraMoveUsed),controller,rentEarned};
+    const entertainmentEarned=integer(player.entertainmentEarned===undefined&&game.entertainmentMode!=='recurring'?0:player.entertainmentEarned,0,32400);
+    check(game.entertainmentMode==='recurring'||entertainmentEarned===0);
+    return {letter:player.letter,name:TEAMS[owner].name,extraMoveUsed:bool(player.extraMoveUsed),controller,rentEarned,entertainmentEarned};
   });
   check(new Set(game.players.map(p=>p.letter)).size===4);
   const people=new Map(), sizeCounts={small:0,medium:0,large:0}; let nextId=1;
@@ -910,9 +969,9 @@ function validateGame(input) {
     const cardIndex=integer(business.cardIndex,0,5);
     const item={id:index+1,owner:integer(business.owner,0,3),size:business.size,cardIndex,round:integer(business.round,1,game.round)};
     const spec=INDUSTRY[item.size], card=spec.cards[cardIndex], legacy=scaleMix(card.legacyMix,spec.jobs);
-    item.mix=business.mix===undefined?legacy:list(business.mix,4).map(n=>integer(n,0,spec.jobs));
-    check([card.mix,legacy].some(mix=>mix.every((count,i)=>count===item.mix[i])));
-    check([card.mix,card.previousMix,legacy].some(mix=>mix.every((count,i)=>count===item.mix[i])));
+    const expected=game.workforceVersion===2?WORKFORCE[item.size][sizeCounts[item.size]-1]:null;
+    item.mix=business.mix===undefined?legacy:list(business.mix,expected?INCOME.length:4).map(n=>integer(n,0,spec.jobs));
+    check((expected?[expected]:[card.mix,card.previousMix,legacy]).some(mix=>mix.length===item.mix.length&&mix.every((count,i)=>count===item.mix[i])));
     item.mix.forEach((count,income)=>{
       for(let n=0;n<count;n++) people.set(nextId,{id:nextId++,income,industryId:item.id});
     });
@@ -924,13 +983,21 @@ function validateGame(input) {
   game.islands=list(raw.islands,4).map(island=>{
     record(island); const port=bool(island.port), shipLevel=integer(island.shipLevel,0,3);
     check(port||shipLevel===0);
-    const plots=list(island.plots,6).map(plot=>{
+    const plots=list(island.plots,6).map((plot,index)=>{
       if(plot===null) return null;
       record(plot);
       if(plot.type==='entertainment') return {type:'entertainment',builtBy:integer(plot.builtBy,0,3)};
       check(plot.type==='homes');
-      return {type:'homes',owner:integer(plot.owner,0,3),units:list(plot.units,9).map(unit=>{
-        record(unit); const income=integer(unit.income,0,3);
+      let taxes={};
+      if(plot.taxedBy!==undefined) {
+        check(Array.isArray(plot.taxedBy)&&plot.taxedBy.length<=2);
+        const taxedBy=plot.taxedBy.map(source=>integer(source,0,5));
+        check(new Set(taxedBy).size===taxedBy.length);
+        check(taxedBy.every(source=>Math.abs(source-index)===1&&island.plots[source]?.type==='entertainment'));
+        taxes={taxedBy};
+      }
+      return {type:'homes',owner:integer(plot.owner,0,3),...taxes,units:list(plot.units,9).map(unit=>{
+        record(unit); const income=integer(unit.income,0,INCOME.length-1);
         if(unit.workerId!==null) {check(port&&shipLevel>0);claim(unit.workerId,income);}
         return {income,workerId:unit.workerId};
       }).sort((a,b)=>a.income-b.income)};
@@ -963,7 +1030,8 @@ function validateGame(input) {
     const byTeam=list(report.byTeam,4).map(n=>integer(n,0,120)), byIsland=list(report.byIsland,4).map(n=>integer(n,0,30));
     check(sum(byTeam)===moved&&sum(byIsland)===moved);
     game.lastReport={round:integer(report.round,1,game.round),moved,waiting,byTeam,byIsland};
-    if(game.recurringRent) game.lastReport.rentByTeam=list(report.rentByTeam,4).map(n=>integer(n,0,864));
+    if(game.recurringRent) game.lastReport.rentByTeam=list(report.rentByTeam,4).map(n=>integer(n,0,2160));
+    if(game.entertainmentMode==='recurring') game.lastReport.entertainmentByTeam=list(report.entertainmentByTeam,4).map(n=>integer(n,0,324));
   }
   if(['roundSummary','finished'].includes(game.phase)) {
     check(game.lastReport?.round===game.round&&game.lastReport.waiting===game.workers.length);
@@ -977,35 +1045,47 @@ function validateGame(input) {
       check(player.rentEarned>=income);
     }
   });
+  if(game.entertainmentMode==='recurring') {
+    const currentIncome=entertainmentIncomeByTeam(game), settled=['roundSummary','finished'].includes(game.phase);
+    game.players.forEach((player,owner)=>{
+      const lastPayment=game.lastReport?.entertainmentByTeam[owner]??0, paidRounds=game.lastReport?.round??0;
+      check(player.entertainmentEarned>=lastPayment&&player.entertainmentEarned<=lastPayment*paidRounds);
+      check(settled?lastPayment===currentIncome[owner]:lastPayment<=currentIncome[owner]);
+    });
+  }
   game.pending=null;
   return game;
 }
+
 function serializeGame(game) {
   // Settlement has not mutated housing yet. Replay its animation after loading.
   const resumeMovement=game.phase==='resolving';
   const snapshot=validateGame({...game,phase:resumeMovement?'roundReady':game.phase,pending:null});
-  return JSON.stringify({format:'NEWS',version:1,resumeMovement,game:snapshot},null,2);
+  return JSON.stringify({format:'NEWS',version:3,resumeMovement,game:snapshot},null,2);
 }
+
 function parseSavedGame(text) {
   if(typeof text!=='string'||text.length>1000000) invalid();
   let payload;
   try { payload=JSON.parse(text); } catch { invalid(); }
   record(payload); check(payload.format==='NEWS');
-  if(payload.version!==1) throw new Error('This NEWS save uses an unsupported version.');
-  const game=validateGame(payload.game), resumeMovement=bool(payload.resumeMovement);
+  if(![1,2,3].includes(payload.version)) throw new Error('This NEWS save uses an unsupported version.');
+  const game=validateGame(payload.game,{allowLegacy:payload.version<3}), resumeMovement=bool(payload.resumeMovement);
   check(!resumeMovement||game.phase==='roundReady');
   return {game,resumeMovement};
 }
+
 return { serializeGame, parseSavedGame };
 })();
+
 // computer.mjs
 newsModules["./computer.mjs"] = (() => {
-const { INDUSTRY } = newsModules["./data.mjs"];
+const { INDUSTRY, INCOME } = newsModules["./data.mjs"];
 const { applyAction, nextBuildablePlot, industryStats, teamStats, waitingCounts, beginResolution, finishResolution, canTakeExtraAction, takeExtraAction } = newsModules["./game.mjs"];
 const copy=value=>JSON.parse(JSON.stringify(value));
 function incomeMix(counts) {
   const mix=[];
-  for(let income=3;income>=0;income--) for(let n=0;n<counts[income]&&mix.length<9;n++) mix.push(income);
+  for(let income=INCOME.length-1;income>=0;income--) for(let n=0;n<counts[income]&&mix.length<9;n++) mix.push(income);
   while(mix.length<9) mix.push(0);
   return mix.sort((a,b)=>a-b);
 }
@@ -1017,7 +1097,7 @@ function projected(game) {
 }
 function candidates(game) {
   const moves=[], mixes=[incomeMix(waitingCounts(game)),incomeMix(waitingCounts(projected(game)))];
-  for(let income=0;income<4;income++) mixes.push(Array(9).fill(income));
+  for(let income=0;income<INCOME.length;income++) mixes.push(Array(9).fill(income));
   const uniqueMixes=[...new Map(mixes.map(mix=>[mix.join(','),mix])).values()];
   game.islands.forEach((island,index)=>{
     if(!island.port) moves.push({type:'port',island:index});
@@ -1033,6 +1113,7 @@ function candidates(game) {
   }
   return moves;
 }
+
 // Forecast the public board using the same matching, preference, and capacity
 // rules as real play, including one rent payment per projected round when enabled.
 function evaluate(game,owner) {
@@ -1043,7 +1124,7 @@ function evaluate(game,owner) {
     future=projected(future);
     const gains=future.players.map((_,i)=>teamStats(future,i).score-before[i]);
     value+=.85**round*(gains[owner]-.1*gains.reduce((sum,gain,i)=>sum+(i===owner?0:gain),0));
-    if(!future.workers.length&&!future.recurringRent) break;
+    if(!future.workers.length&&!future.recurringRent&&future.entertainmentMode!=='recurring') break;
     future.round++;
   }
   // A small opportunity value helps the computer establish jobs and routes
@@ -1053,7 +1134,7 @@ function evaluate(game,owner) {
     const demandValue=mix.reduce((sum,income)=>{
       const occupied=counts[income]>0;
       if(occupied) counts[income]--;
-      return sum+(occupied?income+1:-(income+1));
+      return sum+(occupied?INCOME[income].value:-INCOME[income].value);
     },0);
     let readiness=0;
     future.islands.forEach((island,index)=>{
@@ -1069,6 +1150,7 @@ function simulate(game,action) {
   applyAction(next,action);
   return next;
 }
+
 // A bounded two-move search gives practice opponents a useful plan without
 // network access, extra information, or exceptions to the game rules.
 function chooseComputerMove(game) {
@@ -1097,12 +1179,14 @@ function computerWantsExtra(game) {
   const choice=chooseComputerMove(extra);
   return choice.action.type!=='cancel-extra'&&choice.gain>2;
 }
+
 return { chooseComputerMove, computerWantsExtra };
 })();
+
 // Application and interface
 (() => {
 const { ISLANDS, INCOME, INDUSTRY, TEAMS, INDUSTRY_RINGS, COASTLINES, BOARD_CENTER, PORT_POINTS, PORT_RADIUS, PLOT_POINTS, LABEL_POINTS, SHIP_ROTATIONS, LOCATION_ORDER, PLOT_SIZE, UNIT_SIZE } = newsModules["./data.mjs"];
-const { createGame, teamStats, industryStats, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, beginResolution, finishResolution, nextRound, standings } = newsModules["./game.mjs"];
+const { createGame, teamStats, industryStats, industryMix, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, beginResolution, finishResolution, nextRound, standings } = newsModules["./game.mjs"];
 const { dockPoint, homePoint, shipPoint, travelerPosition } = newsModules["./motion.mjs"];
 const { ownershipLinks, teamAnchor } = newsModules["./ownership.mjs"];
 const { serializeGame, parseSavedGame } = newsModules["./saves.mjs"];
@@ -1117,8 +1201,9 @@ let game = createGame(12), started = false, animation = null;
 const undoMoves = [];
 const portPulseEpoch = Date.now();
 const turnIndicatorEpoch = Date.now();
-let computerTimer=null, aiPaused=false, newGameTeams=null, newGameRecurringRent=false;
+let computerTimer=null, aiPaused=false, newGameTeams=null, newGameRecurringRent=true, newGameEntertainmentMode='recurring';
 const ui = { island:null, action:'port', plot:0, income:0, mix:Array(9).fill(0), size:'small', card:0, error:'', highlightOwner:null };
+
 const flagNames=TEAMS.map(team=>team.name);
 function flagArtwork(owner) {
   const patterns=[
@@ -1135,6 +1220,7 @@ function teamFlag(owner) {
 function teamLabel(owner,players=game.players) {
   return `<span class="team-identity">${teamFlag(owner)}<span>${players[owner].name}</span></span>`;
 }
+
 function resetDraft() {
   ui.island=null; ui.action='port'; ui.plot=0;
   ui.mix=Array(9).fill(0); ui.income=0; ui.error='';
@@ -1158,8 +1244,15 @@ function controllerPicker(players,scope) {
   return `<fieldset class="controller-picker"><legend>Teams</legend>${players.map((team,owner)=>`<div class="controller-row">${teamLabel(owner,players)}<div role="group" aria-label="Who controls ${team.name}">${[['human','You'],['ai','AI']].map(([controller,label])=>`<button type="button" data-controller="${controller}" data-control-owner="${owner}" data-control-scope="${scope}" aria-pressed="${(team.controller??'human')===controller}">${label}</button>`).join('')}</div></div>`).join('')}</fieldset>`;
 }
 function rentPicker(enabled,scope) {
-  return `<fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent">${[[false,'Off'],[true,'On']].map(([value,label])=>`<button type="button" data-rent="${value}" data-rent-scope="${scope}" aria-pressed="${enabled===value}">${label}</button>`).join('')}</div><p class="hint">${enabled?'Occupied homes pay at the end of every round, after arrivals.':'Occupied homes earn their value once.'} Empty homes subtract their value while vacant.</p></fieldset>`;
-  return `<fieldset class="rent-picker"><legend>Recurring rent</legend><div class="rent-options" role="group" aria-label="Recurring rent">${[[false,'Off'],[true,'On']].map(([value,label])=>`<button type="button" data-rent="${value}" data-rent-scope="${scope}" aria-pressed="${enabled===value}">${label}</button>`).join('')}</div></fieldset>`;
+  return `<fieldset class="rent-picker"><legend>Rent</legend><div class="rent-options" role="group" aria-label="Rent mode">${[[false,'Once'],[true,'Recurring']].map(([value,label])=>`<button type="button" data-rent="${value}" data-rent-scope="${scope}" aria-pressed="${enabled===value}">${label}</button>`).join('')}</div></fieldset>`;
+}
+function entertainmentPicker(mode,scope) {
+  return `<fieldset class="rent-picker"><legend>Entertainment income</legend><div class="rent-options" role="group" aria-label="Entertainment income mode">${[['off','Off'],['recurring','Recurring']].map(([value,label])=>`<button type="button" data-entertainment="${value}" data-entertainment-scope="${scope}" aria-pressed="${mode===value}">${label}</button>`).join('')}</div></fieldset>`;
+}
+function entertainmentDescription() {
+  if(game.entertainmentMode==='recurring') return 'Each venue earns its owner $1 per housed resident on this island at the end of every round, after arrivals. All income levels and existing residents count. Every venue receives the full amount.';
+  if(game.entertainmentMode==='legacy-tax') return 'This saved game uses the previous construction tax: $1 per eligible unit in new adjacent housing, paid once.';
+  return 'Entertainment income is off for this game.';
 }
 function stopComputer() {
   if(computerTimer!==null) window.clearTimeout(computerTimer);
@@ -1196,6 +1289,7 @@ function scheduleComputer() {
     }
   },phase==='playing'?650:1100);
 }
+
 function shipTriangles(level) {
   return Array.from({length:level},(_,i) => {
     const offset = (i-(level-1)/2)*15;
@@ -1215,12 +1309,13 @@ function renderScores() {
   $('#teamStrip').innerHTML=game.players.map((player,owner)=>{
     const stats=teamStats(game,owner);
     const active=isTeamUp(owner);
-    return `<div class="team-score ${active?'active':''}" aria-current="${active?'true':'false'}" style="--team:#222">
+    return `<div class="team-score ${active?'active':''}" data-score-owner="${owner}" aria-current="${active?'true':'false'}" style="--team:#222">
       ${active?`<svg class="score-turn-outline" aria-hidden="true" focusable="false"><rect class="current-turn-snake" x="2" y="2" pathLength="100" style="--turn-phase:${turnOutlinePhase()}s"/></svg>`:''}
       <div class="score-top"><b>${teamLabel(owner)}${player.controller==='ai'?'<span class="controller-badge">AI</span>':''}</b><strong>${money(stats.score)}</strong></div>
       <div class="score-detail"><span title="${game.recurringRent?'Rent collected':'Filled housing income'}">+$${game.recurringRent?player.rentEarned:stats.income}</span><span title="Vacant housing penalty">−$${stats.vacancy}</span></div>
       ${game.recurringRent?`<small>Rent +$${stats.income} / round</small>`:''}
-      <div class="score-meta">${active?'<span class="score-turn">NOW</span>':''}<small title="${stats.housed} of ${stats.homes} housing units filled">▦ ${stats.housed}/${stats.homes}</small><small class="extra-move-status ${player.extraMoveUsed?'used':''}" title="${player.extraMoveUsed?'Extra move used':'Extra move available'}" aria-label="${player.extraMoveUsed?'Extra move used':'Extra move available'}">${player.extraMoveUsed?'✓':'+1'}</small></div></div>`;
+      ${game.entertainmentMode==='recurring'?`<small>Entertainment +$${stats.entertainmentEarned} collected · +$${stats.entertainmentIncome} / round</small>`:''}
+      ${stats.tax?`<small>Entertainment tax +$${stats.tax}</small>`:''}
       <div class="score-meta"><small title="${stats.housed} of ${stats.homes} housing units filled">▦ ${stats.housed}/${stats.homes}</small><small class="extra-move-status ${player.extraMoveUsed?'used':''}" title="${player.extraMoveUsed?'Extra move used':'Extra move available'}" aria-label="${player.extraMoveUsed?'Extra move used':'Extra move available'}">${player.extraMoveUsed?'✓':'+1'}</small></div></div>`;
   }).join('');
   $('#roundLabel').textContent=started?`${String(game.round).padStart(2,'0')} / ${String(game.rounds).padStart(2,'0')}`:'';
@@ -1228,6 +1323,7 @@ function renderScores() {
   $('#saveGameButton').disabled=!started;
   $('#undoGameButton').disabled=!undoMoves.length;
 }
+
 function waitingWorkers() { return animation ? game.workers.filter(worker => !animation.movingIds.has(worker.id)) : game.workers; }
 function renderWaiting() {
   $('#workersLayer').innerHTML='';
@@ -1272,6 +1368,7 @@ function renderIslands() {
       }).join('')}</g>`;
   }).join('');
 }
+
 function renderOwnership() {
   const selection=ui.highlightOwner, links=ownershipLinks(game);
   const outlinePhase=turnOutlinePhase();
@@ -1284,6 +1381,7 @@ function renderOwnership() {
     return `<g id="ownerMarker${owner}" transform="translate(${x} ${y})" class="team-owner ${active?'current-turn':''} ${selected?'selected':''}" data-owner="${owner}" role="button" tabindex="0" aria-current="${active?'true':'false'}" aria-pressed="${selected}" aria-label="${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''}: ${stats.homes} housing units. ${selected?'Clear highlight':'Highlight ownership'}"><title>${team.name} · ${flagNames[owner]} flag${active?' · '+(started?'Current turn':'Starts first'):''} · ${stats.homes} housing units</title><rect x="-44" y="-48" width="88" height="96" fill="transparent"/><rect class="owner-marker-tile" x="-41" y="-46" width="82" height="84"/><g transform="translate(-29 -26) scale(2)">${flagArtwork(owner)}</g>${active?`<rect class="current-turn-snake" x="-50" y="-54" width="100" height="100" pathLength="100" style="--turn-phase:${outlinePhase}s" aria-hidden="true"/>`:''}${selected?'<path class="owner-underline" d="M-22 72 H22"/>':''}</g>`;
   }).join('');
 }
+
 function ringSegmentPath(radius,index,total) {
   const [cx,cy]=BOARD_CENTER, gap=.035, inner=radius-9, outer=radius+9;
   const start=-Math.PI/2+index*2*Math.PI/total+gap, end=-Math.PI/2+(index+1)*2*Math.PI/total-gap;
@@ -1304,33 +1402,36 @@ function renderRoutes() {
   $('#routesLayer').innerHTML=game.islands.map((island,index)=>!island.shipLevel||animation?.byIsland[index]?'':shipMarkup(index,dockPoint(index),island.shipLevel)).join('');
 }
 function renderBoard() { renderScores(); renderRoutes(); renderIslands(); renderCenter(); renderOwnership(); renderWaiting(); }
+
 function plotPicker() {
   ui.plot=nextBuildablePlot(game,ui.island);
   return ui.plot>=0 ? `<div class="plot-order" aria-label="Next available plot ${ui.plot+1}"><span>Next plot</span><b>${ui.plot+1}</b></div>` : '<p class="notice">All six squares are in use.</p>';
 }
+
 function industryControls() {
   const industry = INDUSTRY[ui.size];
   return `<div class="size-switch">${Object.entries(INDUSTRY).map(([size,item]) => `<button data-size="${size}" aria-pressed="${size === ui.size}" style="--size:${item.color}"><span>${item.label}</span><b>+${item.jobs} workers</b><small>${industryStats(game,size).remaining} available</small></button>`).join('')}</div>
     <div class="industry-deck">${industry.cards.map((card,index) => `<button class="industry-card ${ui.card === index ? 'selected' : ''}" data-card="${index}" aria-pressed="${ui.card === index}">
       <div class="card-title"><span>${String.fromCharCode(65+index)}</span><b>${card.name}</b></div>
-      <div class="card-mix">${card.mix.map((count,i) => `<span style="--income:${INCOME[i].color}"><i></i><b>${INCOME[i].label}</b> ${count}</span>`).join('')}</div></button>`).join('')}</div>`;
+      <div class="card-mix">${industryMix(game,ui.size,index).map((count,i) => `<span style="--income:${INCOME[i].color}"><i></i><b>${INCOME[i].label}</b> ${count}</span>`).join('')}</div></button>`).join('')}</div>`;
 }
 function homesControls() {
   const picker = plotPicker();
   if (ui.plot < 0) return picker;
-  return `${picker}<div class="mix-heading"><span>9 housing units</span><b>−$${ui.mix.reduce((sum,value) => sum+value+1,0)} if empty</b></div>
+  return `${picker}<div class="mix-heading"><span>9 housing units</span><b>−$${ui.mix.reduce((sum,value) => sum+INCOME[value].value,0)} if empty</b></div>
     <div class="income-palette" aria-label="Choose an income level">${INCOME.map((item,index) => `<button data-income="${index}" aria-pressed="${ui.income === index}" style="--income:${item.color}"><i></i>${item.label}</button>`).join('')}</div>
-    <div class="home-editor">${ui.mix.map((income,index) => `<button data-unit="${index}" style="--income:${INCOME[income].color}" aria-label="Housing unit ${index+1}: ${INCOME[income].label}. Assign ${INCOME[ui.income].label}">${INCOME[income].label}</button>`).join('')}</div>`;
+    <div class="home-editor">${ui.mix.map((income,index) => `<button data-unit="${index}" data-tier="${income}" style="--income:${INCOME[income].color}" aria-label="Housing unit ${index+1}: ${INCOME[income].label}. Assign ${INCOME[ui.income].label}">${INCOME[income].label}</button>`).join('')}</div>`;
 }
 function updateHomesControls() {
   // Keep the scroll container and focused buttons mounted while painting units.
-  $('#turnPanel .mix-heading b').textContent=`−$${ui.mix.reduce((sum,value)=>sum+value+1,0)} if empty`;
+  $('#turnPanel .mix-heading b').textContent=`−$${ui.mix.reduce((sum,value)=>sum+INCOME[value].value,0)} if empty`;
   INCOME.forEach((_,index)=>{
     $(`#turnPanel [data-income="${index}"]`).setAttribute('aria-pressed',String(ui.income===index));
   });
   ui.mix.forEach((income,index)=>{
     const button=$(`#turnPanel [data-unit="${index}"]`), label=INCOME[income].label;
     button.textContent=label;
+    button.setAttribute('data-tier',String(income));
     button.style.setProperty('--income',INCOME[income].color);
     button.setAttribute('aria-label',`Housing unit ${index+1}: ${label}. Assign ${INCOME[ui.income].label}`);
   });
@@ -1354,7 +1455,7 @@ function actionDetails() {
   } else if (ui.action === 'homes') {
     body = homesControls(); disabled = ui.plot < 0; label = 'Build 9 housing units';
   } else {
-    body = `${plotPicker()}<div class="entertainment-preview">✳</div><p class="hint">Attracts workers to this island.</p>`;
+    body = `${plotPicker()}<div class="entertainment-preview">✳</div><p class="hint">Attracts workers to this island. ${entertainmentDescription()}</p>`;
     disabled = ui.plot < 0; label = 'Build entertainment';
   }
   return `<section class="action-details">${body}<p class="error" role="alert">${ui.error}</p><button class="primary" data-command="commit" ${disabled ? 'disabled' : ''}>${label}</button></section>`;
@@ -1362,11 +1463,12 @@ function actionDetails() {
 function reportMarkup() {
   const report = game.lastReport;
   return `<div class="round-totals"><div><strong>${report.moved}</strong><span>housed</span></div><div><strong>${report.waiting}</strong><span>waiting</span></div></div>
-    <div class="arrival-list">${game.players.map((team,index) => `<div>${teamLabel(index)}<b>+${report.byTeam[index]}</b></div>`).join('')}</div>${rentReportMarkup()}`;
+    <div class="arrival-list">${game.players.map((team,index) => `<div>${teamLabel(index)}<b>+${report.byTeam[index]}</b></div>`).join('')}</div>${incomeReportMarkup()}`;
 }
-function rentReportMarkup() {
-  if(!game.recurringRent||!game.lastReport) return '';
-  return `<section class="rent-report" aria-label="Rent paid this round"><h2>Round ${game.lastReport.round} rent</h2><div class="arrival-list">${game.players.map((_,owner)=>`<div>${teamLabel(owner)}<b>+$${game.lastReport.rentByTeam[owner]}</b></div>`).join('')}</div></section>`;
+function incomeReportMarkup() {
+  if(!game.lastReport) return '';
+  return [[game.recurringRent,'rent','Rent',game.lastReport.rentByTeam],[game.entertainmentMode==='recurring','entertainment','Entertainment',game.lastReport.entertainmentByTeam]]
+    .filter(([enabled])=>enabled).map(([,label,title,amounts])=>`<section class="rent-report" aria-label="${title} paid this round"><h2>Round ${game.lastReport.round} ${label}</h2><div class="arrival-list">${game.players.map((_,owner)=>`<div>${teamLabel(owner)}<b>+$${amounts[owner]}</b></div>`).join('')}</div></section>`).join('');
 }
 function turnBanner() {
   const ai=computerTurn(), picking=game.phase==='playing';
@@ -1376,7 +1478,7 @@ function renderPanel() {
   const previousUnit=document.activeElement?.dataset.unit;
   let content;
   if(!started) {
-    content=`<div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="${game.rounds}" required/>${controllerPicker(game.players,'initial')}${rentPicker(game.recurringRent,'initial')}<button class="primary" data-command="start">Start →</button></div>`;
+    content=`<div class="setup-card"><label class="field-label" for="roundsInput">Rounds</label><input id="roundsInput" type="number" min="1" max="100" step="1" value="${game.rounds}" required/>${controllerPicker(game.players,'initial')}${rentPicker(game.recurringRent,'initial')}${entertainmentPicker(game.entertainmentMode,'initial')}<button class="primary" data-command="start">Start →</button></div>`;
   } else if(computerTurn()&&['playing','handoff','roundReady'].includes(game.phase)) {
     content=`${turnBanner()}${game.phase==='playing'?`<p class="ai-thinking">${aiPaused?'Paused.':'Choosing a move…'}</p>`:`<p class="move-receipt">${escapeText(game.lastAction)}</p>`}`;
   } else if(game.phase==='playing') {
@@ -1395,12 +1497,13 @@ function renderPanel() {
   } else {
     const ranking=standings(game), winners=ranking.filter(item=>item.score===ranking[0].score);
     content=`<div class="panel-intro"><h1>${winners.length>1?'A shared victory.':`${game.players[winners[0].team].name} wins.`}</h1>${winners.length>1?`<p>${winners.map(item=>game.players[item.team].name).join(' · ')}</p>`:''}</div>
-      <div class="final-scores">${ranking.map(item=>`<div>${teamLabel(item.team)}<strong>${money(item.score)}</strong><small>${game.recurringRent?'Rent collected ':''}+$${game.recurringRent?game.players[item.team].rentEarned:item.income} −$${item.vacancy}${game.recurringRent?' vacant':''}</small></div>`).join('')}</div>${rentReportMarkup()}<button class="primary" data-command="new">+ New game</button>`;
+      <div class="final-scores">${ranking.map(item=>`<div>${teamLabel(item.team)}<strong>${money(item.score)}</strong><small>${game.recurringRent?'Rent collected ':''}+$${game.recurringRent?game.players[item.team].rentEarned:item.income} −$${item.vacancy}${game.recurringRent?' vacant':''}${game.entertainmentMode==='recurring'?` · Entertainment +$${item.entertainmentEarned}`:''}${item.tax?` · Entertainment tax +$${item.tax}`:''}</small></div>`).join('')}</div>${incomeReportMarkup()}<button class="primary" data-command="new">+ New game</button>`;
   }
   const computerControls=started&&hasComputer()&&game.phase!=='finished'?`<div class="ai-controls"><span>${aiPaused?'AI paused':'AI'}</span><button class="icon-button" data-command="toggle-ai" title="${aiPaused?'Resume AI':'Pause AI'}" aria-label="${aiPaused?'Resume AI':'Pause AI'}">${aiPaused?'▶':'Ⅱ'}</button></div>`:'';
   $('#turnPanel').innerHTML=`<div class="panel-content">${content}${computerControls}</div>`;
   if(previousUnit!==undefined) $(`[data-unit="${previousUnit}"]`)?.focus({preventScroll:true});
 }
+
 function render() { renderBoard(); renderPanel(); scheduleComputer(); }
 function announce(text) { $('#boardStatus').textContent = text; }
 function startGame(input) {
@@ -1408,8 +1511,9 @@ function startGame(input) {
   const fromNewDialog=$('#newGameDialog').open;
   const initialTeams=fromNewDialog?newGameTeams:game.players;
   const recurringRent=fromNewDialog?newGameRecurringRent:game.recurringRent;
-  stopComputer(); stopAnimation(); game=createGame(Number(input.value),{recurringRent});
-  if(initialTeams) game.players=initialTeams.map(team=>({...team,controller:team.controller??'human',extraMoveUsed:false,rentEarned:0}));
+  const entertainmentMode=fromNewDialog?newGameEntertainmentMode:game.entertainmentMode;
+  stopComputer(); stopAnimation(); game=createGame(Number(input.value),{recurringRent,entertainmentMode});
+  if(initialTeams) game.players=initialTeams.map(team=>({...team,controller:team.controller??'human',extraMoveUsed:false,rentEarned:0,entertainmentEarned:0}));
   started=true; aiPaused=false; undoMoves.length=0; ui.highlightOwner=null; resetDraft(); render(); announce(`${game.players[0].name} takes the first turn.`);
 }
 function commit(type = ui.action) {
@@ -1434,7 +1538,7 @@ function stopAnimation() {
 function completeMovement() {
   if (game.phase !== 'resolving') return;
   stopAnimation(); const report = finishResolution(game); render();
-  announce(`Round ${report.round}: ${report.moved} people housed. ${report.waiting} remain at industry.${game.recurringRent?' Rent paid to all teams.':''}`);
+  announce(`Round ${report.round}: ${report.moved} people housed. ${report.waiting} remain at industry.${game.recurringRent?' Rent paid to all teams.':''}${game.entertainmentMode==='recurring'?' Entertainment income paid.':''}`);
 }
 function animateRound() {
   if (game.phase !== 'roundReady') return;
@@ -1478,11 +1582,11 @@ function showPlot(island,index) {
   const plot=game.islands[island].plots[index];
   if(!plot) return;
   $('#detailDialog').innerHTML=`<div class="dialog-head"><h2>${ISLANDS[island].name} · plot ${index+1}</h2><button data-close-dialog aria-label="Close plot details">×</button></div>
-    ${plot.type==='homes'?`<p class="plot-owner-detail"><b>${teamLabel(plot.owner)}</b> · 9 housing units</p><div class="home-inspector">${plot.units.map(unit=>`<div class="${unit.workerId!==null?'filled':'available'}" style="--income:${INCOME[unit.income].color}"><b>${INCOME[unit.income].label}</b><span>${unit.workerId!==null?'✓ Filled':'□ Available'}</span><small>${unit.workerId!==null?'+':'−'}$${unit.income+1}</small></div>`).join('')}</div>`:'<p>Shared entertainment attracts workers to every team’s housing units on this island.</p>'}`;
+    ${plot.type==='homes'?`<p class="plot-owner-detail"><b>${teamLabel(plot.owner)}</b> · 9 housing units</p><div class="home-inspector">${plot.units.map(unit=>`<div class="${unit.workerId!==null?'filled':'available'}" style="--income:${INCOME[unit.income].color}"><b>${INCOME[unit.income].label}</b><span>${unit.workerId!==null?'✓ Filled':'□ Available'}</span><small>${unit.workerId!==null?'+':'−'}$${INCOME[unit.income].value}</small></div>`).join('')}</div>`:`<p>Built by ${teamLabel(plot.builtBy)}. Attracts workers to this island. ${entertainmentDescription()}</p>`}`;
   $('#detailDialog').showModal();
 }
 function renderCentralDetails() {
-  const workers=waitingWorkers(), counts=[0,0,0,0], homes=[0,0,0,0];
+  const workers=waitingWorkers(), counts=INCOME.map(()=>0), homes=INCOME.map(()=>0);
   workers.forEach(worker=>counts[worker.income]++);
   const reserved=new Set(animation?.plan.moves.map(move=>`${move.island}-${move.plot}-${move.cell}`)||[]);
   game.islands.forEach((island,i)=>island.plots.forEach((plot,p)=>{ if(plot?.type==='homes') plot.units.forEach((unit,c)=>{if(unit.workerId===null&&!reserved.has(`${i}-${p}-${c}`)) homes[unit.income]++;}); }));
@@ -1490,14 +1594,16 @@ function renderCentralDetails() {
     <div class="central-totals"><b>${workers.length} waiting</b><span>${game.industries.length} businesses</span>${animation?`<span>${animation.plan.moves.length-animation.arrived.size} traveling</span>`:''}</div>
     <div class="industry-availability">${Object.entries(INDUSTRY).map(([size,spec])=>{const {built,total,remaining}=industryStats(game,size);return `<span><b>${spec.label}</b> ${built}/${total} built · ${remaining} available</span>`;}).join('')}</div>
     <div class="worker-tiers">${INCOME.map((income,i)=>`<div style="--income:${income.color}"><h3>${income.label}</h3><strong>${counts[i]}</strong><span>waiting</span><small>${homes[i]} housing units available</small></div>`).join('')}</div>
+
     <h3 class="business-list-title">Businesses</h3><div class="central-businesses">${game.industries.length?game.industries.map(business=>{
-      const spec=INDUSTRY[business.size], card=spec.cards[business.cardIndex], waiting=[0,0,0,0];
+      const spec=INDUSTRY[business.size], card=spec.cards[business.cardIndex], waiting=INCOME.map(()=>0);
       workers.filter(worker=>worker.industryId===business.id).forEach(worker=>waiting[worker.income]++);
       return `<article><div><b>${card.name}</b><small>${spec.label} · +${spec.jobs} workers · built by ${game.players[business.owner].name}</small></div><div class="business-waiting">${waiting.map((n,i)=>`<span style="--income:${INCOME[i].color}"><i></i>${INCOME[i].label} <b>${n}</b></span>`).join('')}</div><span class="business-caption">Waiting by income</span></article>`;
     }).join(''):'<p>No businesses yet.</p>'}</div>
     ${started&&game.phase==='playing'&&!computerTurn()?'<button class="primary" data-build-central>+ Industry</button>':''}`;
 }
 function showCentral() { renderCentralDetails(); if(!$('#centralDialog').open) $('#centralDialog').showModal(); }
+
 $('#turnPanel').addEventListener('click',event => {
   const command = event.target.closest('[data-command]')?.dataset.command;
   if (command) {
@@ -1521,10 +1627,8 @@ $('#turnPanel').addEventListener('click',event => {
   const action = event.target.closest('[data-action]');
   if (action && actionAllowed(action.dataset.action)) { ui.action = action.dataset.action; ui.error = ''; renderPanel(); renderIslands(); renderCenter(); return; }
   const income = event.target.closest('[data-income]');
-  if (income) { ui.income = Number(income.dataset.income); renderPanel(); return; }
   if (income) { ui.income = Number(income.dataset.income); updateHomesControls(); return; }
   const unit = event.target.closest('[data-unit]');
-  if (unit) { ui.mix[Number(unit.dataset.unit)] = ui.income; ui.mix.sort((a,b)=>a-b); renderPanel(); return; }
   if (unit) { ui.mix[Number(unit.dataset.unit)] = ui.income; ui.mix.sort((a,b)=>a-b); updateHomesControls(); return; }
   const size = event.target.closest('[data-size]');
   if (size) { ui.size = size.dataset.size; ui.card = 0; renderPanel(); renderCenter(); return; }
@@ -1575,6 +1679,8 @@ function openNewGame() {
   $('#newGameControllers').innerHTML=controllerPicker(newGameTeams,'new');
   newGameRecurringRent=game.recurringRent;
   $('#newGameRent').innerHTML=rentPicker(newGameRecurringRent,'new');
+  newGameEntertainmentMode=game.entertainmentMode==='legacy-tax'?'recurring':game.entertainmentMode;
+  $('#newGameEntertainment').innerHTML=entertainmentPicker(newGameEntertainmentMode,'new');
   $('#newGameDialog').showModal();
 }
 function fileError(message) {
@@ -1614,6 +1720,20 @@ $('#newGameButton').addEventListener('click',openNewGame);
 $('#confirmNewGame').addEventListener('click',() => { const input = $('#newGameRounds'); if (!input.reportValidity()) return; startGame(input); $('#newGameDialog').close(); scheduleComputer(); });
 for(const selector of ['#newGameDialog','#rulesDialog','#centralDialog','#detailDialog','#fileDialog']) $(selector).addEventListener('close',scheduleComputer);
 document.addEventListener('click',event=>{
+  const entertainment=event.target.closest('[data-entertainment]');
+  if(entertainment) {
+    const mode=entertainment.dataset.entertainment, scope=entertainment.dataset.entertainmentScope;
+    if(!['recurring','off'].includes(mode)) return;
+    if(scope==='initial'&&!started) {
+      const rounds=$('#roundsInput').value;
+      game.entertainmentMode=mode; render(); $('#roundsInput').value=rounds;
+    } else if(scope==='new'&&$('#newGameDialog').open) {
+      newGameEntertainmentMode=mode;
+      $('#newGameEntertainment').innerHTML=entertainmentPicker(mode,'new');
+    }
+    $(`[data-entertainment="${mode}"][data-entertainment-scope="${scope}"]`)?.focus({preventScroll:true});
+    return;
+  }
   const rent=event.target.closest('[data-rent]');
   if(rent) {
     if(!['true','false'].includes(rent.dataset.rent)) return;
@@ -1646,6 +1766,7 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-build-central]')&&started&&game.phase==='playing'&&!computerTurn()) { selectLocation('central'); $('#centralDialog').close(); render(); }
 });
 render();
+
 // End NEWS application.
 })();
 </script>
