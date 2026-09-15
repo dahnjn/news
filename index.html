@@ -514,17 +514,17 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
   </main>
   <dialog id="rulesDialog" aria-labelledby="rulesTitle">
     <div class="dialog-head"><h2 id="rulesTitle">How to play</h2><button data-close-dialog aria-label="Close rules">×</button></div>
-    <p>Each of the four teams takes one action per round, plus one optional extra action during the game. Select CENTRAL, WEST, SOUTH, EAST, or NORTH before choosing your action. Teams can build on every island.</p>
+    <p>Each of the four teams takes one action per round, plus one optional extra action during the game. Turns move clockwise, with a different starting team each round: Star, then Cross, then Checker, then Stripes, repeating. Every team plays in each position once every four rounds. Select CENTRAL, WEST, SOUTH, EAST, or NORTH before choosing your action. Teams can build on every island.</p>
     <ol class="rules-list">
       <li><b>Extra move.</b> Once per game, each team may take a second action immediately after its first move, before handing off or ending the round. Select “+1.” The extra move is used only when an action is completed; you can keep it for later while choosing.</li>
       <li><b>Connect.</b> An empty harbor circle is inactive; its center dot appears when activated. Build a shared port on any outer island, then launch an L1 ship serving that island. Upgrade it on later turns. L1 / L2 / L3 transport 10 / 20 / 30 people per round.</li>
-      <li><b>Build.</b> Develop each island in order: plot 1, then 2, through 6. Each square holds nine housing units or one entertainment venue; either unlocks the next plot for any team. Choose the income level of each housing unit, with at most one $$$$$$$$$$ ($10) unit per housing plot. The team that builds the housing units owns them, wherever they are located. The team signal flags sit outside CENTRAL. Click a flag to highlight its ownership lines and housing units. All teams share CENTRAL. Empty units are outlined; filled units are solid with a check.</li>
-      <li><b>Create jobs.</b> Small / medium / large industries create 10 / 25 / 50 workers. CENTRAL has four slots for each size, for 340 workers when all 12 businesses are built. Each size has six businesses to choose from, each with a distinct income mix shown on its card. In new games, at most 80 workers earn above $: small / medium / large businesses bring at most 3 / 5 / 12 higher-income workers, even when the same business is built repeatedly. A full game has 260–276 $ workers, with the remaining $$ and $$$ totals depending on business choices. Every large business brings one $$$$ worker and one $$$$$$$$$$ ($10) worker, for four of each when all large slots are built; smaller businesses bring neither. The inner ring is small, middle medium, and outer large. Click CENTRAL to see waiting workers and remaining slots.</li>
+      <li><b>Build.</b> Develop each island in order: plot 1, then 2, through 6. Each square holds nine housing units or one entertainment venue; either unlocks the next plot for any team. Zoning requires at least one housing plot between entertainment venues on the same island, regardless of ownership. Entertainment on different islands is allowed on consecutive turns. Choose the income level of each housing unit, with at most one $$$$$$$$$$ ($10) unit per housing plot. The team that builds the housing units owns them, wherever they are located. The team signal flags sit outside CENTRAL. Click a flag to highlight its ownership lines and housing units. All teams share CENTRAL. Empty units are outlined; filled units are solid with a check.</li>
+      <li><b>Create jobs.</b> Small / medium / large industries create 10 / 25 / 50 workers. CENTRAL has four slots for each size, for 340 workers when all 12 businesses are built. Each size has six businesses to choose from, each with a distinct income mix shown on its card. In new games, at most 100 workers earn above $: small / medium / large businesses bring at most 3 / 8 / 14 higher-income workers, even when the same business is built repeatedly. A full game has 240–256 $ workers, with the remaining $$ and $$$ totals depending on business choices. Every large business brings one $$$$ worker and one $$$$$$$$$$ ($10) worker, for four of each when all large slots are built; smaller businesses bring neither. The inner ring is small, middle medium, and outer large. Click CENTRAL to see waiting workers and remaining slots.</li>
       <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. They prefer more entertainment, then the plot furthest from the port: 6, 5, 4, 3, 2, 1. Remaining ties favor a different island each round: NORTH, EAST, SOUTH, WEST. Workers queue in creation order.</li>
-      <li><b>Entertainment income.</b> In Recurring mode, each venue pays its builder $1 for every housed resident on its island at the end of every round, after arrivals, including the final round. All income levels, housing owners, existing residents, and new arrivals count. Each venue receives the full amount: two venues on an island with 20 residents each pay $20. Empty housing and workers waiting at CENTRAL do not count. Adjacency does not matter. With entertainment income Off, venues still attract workers but earn no money. Building housing does not charge a tax.</li>
+      <li><b>Entertainment income.</b> In Recurring mode, each venue pays its builder $1 for every housed resident on its island at the end of every round, after arrivals, including the final round. All income levels, housing owners, existing residents, and new arrivals count. Each venue receives the full amount: two venues on an island with 20 residents each pay $20. Empty housing and workers waiting at CENTRAL do not count. Income counts the entire island; zoning still requires housing between entertainment venues. With entertainment income Off, venues still attract workers but earn no money. Building housing does not charge a tax.</li>
       <li><b>Score.</b> Your housing income and collected entertainment income contribute to your score across all islands. Rent and entertainment both default to Recurring and can be set separately before starting. With rent set to Once, a filled housing unit earns its income value once. With recurring rent, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. The five income values are $1, $2, $3, $4, and $10. A $$$$$$$$$$ home occupied for three round endings earns $30 with recurring rent. Empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, and ships do not earn points.</li>
     </ol>
-    <p>↓ saves a game file; ↑ loads it. Saves include team controls, income modes, collected rent and entertainment income, the current turn and unused extra moves. Loading a save made during arrivals replays that movement and pays that round’s income once. Older saves keep their original rules; start a new game for the new default modes.</p>
+    <p>↓ saves a game file; ↑ loads it. Saves include team controls, income modes, collected rent and entertainment income, the current turn and unused extra moves. Loading a save made during arrivals replays that movement and pays that round’s income once. Older saves keep their original turn order, zoning rules, worker mix, and income modes. Start a new game for rotating turns, entertainment zoning, and the 100-worker higher-income cap.</p>
     <p>Choose You or AI for each team and set rent and entertainment income before starting. The moving outline marks the active team on the board and in the scores at the top. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
     <p>Click a team’s score card for its breakdown. The grid count shows people housed / housing units owned. The repeat symbol shows combined recurring income per round at the current occupancy; it updates as housing fills. Rent set to Once and entertainment set to Off do not contribute to this rate.</p>
     <p>Workers without a suitable housing unit stay in the center for the next round. The highest score after the final round wins. Equal scores share the win.</p>
@@ -606,7 +606,7 @@ const WORKFORCE_340_ORIGINAL = {
 // Four slots of each size therefore cap higher-income workers at 80, even
 // when the richest cards are repeated. Full games have 260–276 $ workers.
 // Every large company brings one $$$$ worker and one $10 worker.
-const WORKFORCE = {
+const WORKFORCE_80 = {
   small:[
     [9,1,0,0,0], [8,2,0,0,0], [8,1,1,0,0],
     [7,3,0,0,0], [7,1,2,0,0], [7,2,1,0,0],
@@ -619,6 +619,15 @@ const WORKFORCE = {
     [38,8,2,1,1], [38,7,3,1,1], [38,9,1,1,1],
     [38,6,4,1,1], [38,10,0,1,1], [38,5,5,1,1],
   ],
+};
+
+// New games add three $$ workers per medium business and two per large,
+// replacing $ workers. Caps of 3 / 8 / 14 above $ total at most 100 across
+// the twelve slots. Distinct profiles and the four $$$$ / four $10 remain.
+const WORKFORCE = {
+  small:WORKFORCE_80.small.map(mix=>[...mix]),
+  medium:WORKFORCE_80.medium.map(([local,standard,...other])=>[local-3,standard+3,...other]),
+  large:WORKFORCE_80.large.map(([local,standard,...other])=>[local-2,standard+2,...other]),
 };
 
 const TEAMS = [
@@ -678,11 +687,12 @@ const INDUSTRY = {
     legacyCard("INNOVATIVE CARE", [5,20,30,20],20,100),
   ]},
 };
-function industryJobs(size,workforceVersion=5) {
+function industryJobs(size,workforceVersion=6) {
   return workforceVersion>=4?INDUSTRY[size]?.jobs:INDUSTRY[size]?.legacyJobs;
 }
 function workforceMix(workforceVersion,size,cardIndex,slot) {
-  if(workforceVersion>=5) return WORKFORCE[size]?.[cardIndex];
+  if(workforceVersion>=6) return WORKFORCE[size]?.[cardIndex];
+  if(workforceVersion===5) return WORKFORCE_80[size]?.[cardIndex];
   if(workforceVersion===4) return WORKFORCE_340_ORIGINAL[size]?.[cardIndex];
   if(workforceVersion>=2) return (workforceVersion===2?PREVIOUS_WORKFORCE:WORKFORCE_700)[size]?.[slot];
   return INDUSTRY[size]?.cards[cardIndex]?.mix;
@@ -718,7 +728,7 @@ const TEAM_ANCHORS = [[-150,-150],[150,-150],[150,150],[-150,150]].map(([x,y]) =
 const LABEL_POINTS = [[1090,200],[1650,978],[1080,1400],[250,960]].map(alignIslandPoint);
 const SHIP_ROTATIONS = [0,90,180,270];
 
-return { ISLANDS, INCOME, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT, PREVIOUS_WORKFORCE, WORKFORCE_700, WORKFORCE_340_ORIGINAL, WORKFORCE, TEAMS, scaleMix, INDUSTRY, industryJobs, workforceMix, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
+return { ISLANDS, INCOME, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT, PREVIOUS_WORKFORCE, WORKFORCE_700, WORKFORCE_340_ORIGINAL, WORKFORCE_80, WORKFORCE, TEAMS, scaleMix, INDUSTRY, industryJobs, workforceMix, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
 })();
 
 // game.mjs
@@ -732,7 +742,7 @@ function createGame(rounds = 12, {recurringRent=true,entertainmentMode='recurrin
   if (typeof recurringRent!=='boolean') throw new Error('Choose whether recurring rent is on or off.');
   if (!['recurring','off'].includes(entertainmentMode)) throw new Error('Choose recurring entertainment income or off.');
   return {
-    rounds, recurringRent, entertainmentMode, workforceVersion:5, round:1, turn:0, phase:'playing', nextWorkerId:1,
+    rounds, recurringRent, entertainmentMode, workforceVersion:6, rulesVersion:2, round:1, turn:0, phase:'playing', nextWorkerId:1,
     players:generateTeams(),
     islands:ISLANDS.map(() => ({port:false,shipLevel:0,plots:Array(PLOTS_PER_ISLAND).fill(null)})),
     workers:[], industries:[], lastAction:'', lastActionType:null, actionsThisTurn:0, extraActionActive:false, lastReport:null, pending:null,
@@ -788,6 +798,14 @@ function islandStats(game, index) {
 function nextBuildablePlot(game, island) {
   return game.islands[island]?.plots.findIndex(plot=>plot===null) ?? -1;
 }
+function startingTeam(game) { return game.rulesVersion>=2?(game.round-1)%4:0; }
+function turnPosition(game,owner=game.turn) { return (owner-startingTeam(game)+4)%4; }
+function nextTeam(game) { return (game.turn+1)%4; }
+function canBuildEntertainment(game,island,plot=nextBuildablePlot(game,island)) {
+  const plots=game.islands[island]?.plots;
+  return !!plots&&Number.isInteger(plot)&&plot>=0&&plot<plots.length&&plot===nextBuildablePlot(game,island)&&
+    (game.rulesVersion<2||game.rulesVersion===undefined||![plot-1,plot+1].some(index=>plots[index]?.type==='entertainment'));
+}
 function applyAction(game, action) {
   if(game.phase!=='playing') throw new Error('Continue to the next turn first.');
   if(game.extraActionActive && action.type==='pass') { cancelExtraAction(game); return game.lastAction; }
@@ -831,6 +849,7 @@ function applyAction(game, action) {
         const tax=action.mix.filter(income=>INCOME[income].value>=3).length;
         if(tax) for(const index of taxedBy) message+=` ${game.players[island.plots[index].builtBy].name} earned $${tax} entertainment tax.`;
       } else {
+        if(!canBuildEntertainment(game,action.island,action.plot)) throw new Error('Zoning: entertainment venues must have at least one housing plot between them.');
         island.plots[action.plot]={type:'entertainment',builtBy:game.turn};
         message=`${name} added shared entertainment on ${location}, plot ${action.plot+1}.`;
       }
@@ -843,7 +862,7 @@ function applyAction(game, action) {
   game.lastActionType=action.type;
   game.actionsThisTurn++;
   if(game.extraActionActive) { game.players[game.turn].extraMoveUsed=true; game.extraActionActive=false; }
-  game.phase=game.turn===3?'roundReady':'handoff';
+  game.phase=turnPosition(game)===3?'roundReady':'handoff';
   return message;
 }
 function canTakeExtraAction(game) {
@@ -855,11 +874,11 @@ function takeExtraAction(game) {
 }
 function cancelExtraAction(game) {
   if(game.phase!=='playing' || !game.extraActionActive) throw new Error('No extra action is being chosen.');
-  game.extraActionActive=false; game.phase=game.turn===3?'roundReady':'handoff';
+  game.extraActionActive=false; game.phase=turnPosition(game)===3?'roundReady':'handoff';
 }
 function nextTurn(game) {
   if(game.phase!=='handoff') throw new Error('Finish the current turn first.');
-  game.turn++; game.phase='playing'; game.actionsThisTurn=0; game.extraActionActive=false;
+  game.turn=nextTeam(game); game.phase='playing'; game.actionsThisTurn=0; game.extraActionActive=false;
 }
 function planRound(game) {
   if(game.phase!=='roundReady') throw new Error('All four teams must finish their turns.');
@@ -903,11 +922,11 @@ function finishResolution(game) {
 }
 function nextRound(game) {
   if(game.phase!=='roundSummary') throw new Error('Finish this round first.');
-  game.round++; game.turn=0; game.phase='playing'; game.lastAction=''; game.lastActionType=null; game.actionsThisTurn=0; game.extraActionActive=false;
+  game.round++; game.turn=startingTeam(game); game.phase='playing'; game.lastAction=''; game.lastActionType=null; game.actionsThisTurn=0; game.extraActionActive=false;
 }
 function standings(game) { return game.players.map((player,team)=>({team,...teamStats(game,team)})).sort((a,b)=>b.score-a.score||a.team-b.team); }
 
-return { generateTeams, createGame, entertainmentIncomeByTeam, teamStats, waitingCounts, industryStats, industryMix, islandStats, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
+return { generateTeams, createGame, entertainmentIncomeByTeam, teamStats, waitingCounts, industryStats, industryMix, islandStats, nextBuildablePlot, startingTeam, turnPosition, nextTeam, canBuildEntertainment, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
 })();
 
 // motion.mjs
@@ -1002,7 +1021,7 @@ return { teamAnchor, ownershipPath, ownershipLinks };
 // saves.mjs
 newsModules["./saves.mjs"] = (() => {
 const { INDUSTRY, INCOME, industryJobs, workforceMix, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT, TEAMS, scaleMix } = newsModules["./data.mjs"];
-const { teamStats, entertainmentIncomeByTeam } = newsModules["./game.mjs"];
+const { teamStats, entertainmentIncomeByTeam, turnPosition } = newsModules["./game.mjs"];
 const invalid=()=>{throw new Error('This file is not a valid NEWS saved game.');};
 const check=condition=>{if(!condition) invalid();};
 const integer=(value,min,max)=>{check(Number.isInteger(value)&&value>=min&&value<=max);return value;};
@@ -1012,10 +1031,11 @@ const record=value=>{check(value!==null&&typeof value==='object'&&!Array.isArray
 const sum=values=>values.reduce((a,b)=>a+b,0);
 
 // Rebuild only recognized fields; imported data never supplies markup or game rules.
-function validateGame(input,{allowLegacy=false}={}) {
+function validateGame(input,{allowLegacy=false,allowLegacyRules=false}={}) {
   const raw=record(input), game={};
   game.rounds=integer(raw.rounds,1,100); game.round=integer(raw.round,1,game.rounds);
-  game.workforceVersion=raw.workforceVersion===undefined?1:integer(raw.workforceVersion,1,5);
+  game.workforceVersion=raw.workforceVersion===undefined?1:integer(raw.workforceVersion,1,6);
+  game.rulesVersion=raw.rulesVersion===undefined&&allowLegacyRules?1:integer(raw.rulesVersion,1,2);
   game.recurringRent=raw.recurringRent===undefined?false:bool(raw.recurringRent);
   const entertainmentMode=raw.entertainmentMode??(allowLegacy?'legacy-tax':null);
   check(['recurring','off','legacy-tax'].includes(entertainmentMode)); game.entertainmentMode=entertainmentMode;
@@ -1057,7 +1077,10 @@ function validateGame(input,{allowLegacy=false}={}) {
     const plots=list(island.plots,6).map((plot,index)=>{
       if(plot===null) return null;
       record(plot);
-      if(plot.type==='entertainment') return {type:'entertainment',builtBy:integer(plot.builtBy,0,3)};
+      if(plot.type==='entertainment') {
+        if(game.rulesVersion>=2) check(island.plots[index-1]?.type!=='entertainment');
+        return {type:'entertainment',builtBy:integer(plot.builtBy,0,3)};
+      }
       check(plot.type==='homes');
       if(game.workforceVersion>=3) check(list(plot.units,9).filter(unit=>unit?.income===EXCLUSIVE_INCOME).length<=MAX_EXCLUSIVE_UNITS_PER_PLOT);
       let taxes={};
@@ -1094,7 +1117,7 @@ function validateGame(input,{allowLegacy=false}={}) {
     if(game.extraActionActive) check(!game.players[game.turn].extraMoveUsed&&game.lastActionType!==null&&game.lastActionType!=='pass');
   } else {
     check(!game.extraActionActive&&game.actionsThisTurn>0&&game.lastActionType!==null);
-    check(game.phase==='handoff'?game.turn<3:game.turn===3);
+    check(game.phase==='handoff'?turnPosition(game)<3:turnPosition(game)===3);
     if(game.actionsThisTurn===2) check(game.players[game.turn].extraMoveUsed);
   }
   game.lastReport=null;
@@ -1134,7 +1157,7 @@ function serializeGame(game) {
   // Settlement has not mutated housing yet. Replay its animation after loading.
   const resumeMovement=game.phase==='resolving';
   const snapshot=validateGame({...game,phase:resumeMovement?'roundReady':game.phase,pending:null});
-  return JSON.stringify({format:'NEWS',version:6,resumeMovement,game:snapshot},null,2);
+  return JSON.stringify({format:'NEWS',version:7,resumeMovement,game:snapshot},null,2);
 }
 
 function parseSavedGame(text) {
@@ -1142,8 +1165,8 @@ function parseSavedGame(text) {
   let payload;
   try { payload=JSON.parse(text); } catch { invalid(); }
   record(payload); check(payload.format==='NEWS');
-  if(![1,2,3,4,5,6].includes(payload.version)) throw new Error('This NEWS save uses an unsupported version.');
-  const game=validateGame(payload.game,{allowLegacy:payload.version<3}), resumeMovement=bool(payload.resumeMovement);
+  if(![1,2,3,4,5,6,7].includes(payload.version)) throw new Error('This NEWS save uses an unsupported version.');
+  const game=validateGame(payload.game,{allowLegacy:payload.version<3,allowLegacyRules:payload.version<7}), resumeMovement=bool(payload.resumeMovement);
   check(!resumeMovement||game.phase==='roundReady');
   return {game,resumeMovement};
 }
@@ -1154,7 +1177,7 @@ return { serializeGame, parseSavedGame };
 // computer.mjs
 newsModules["./computer.mjs"] = (() => {
 const { INDUSTRY, INCOME, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT } = newsModules["./data.mjs"];
-const { applyAction, nextBuildablePlot, industryStats, teamStats, waitingCounts, beginResolution, finishResolution, canTakeExtraAction, takeExtraAction } = newsModules["./game.mjs"];
+const { applyAction, nextBuildablePlot, canBuildEntertainment, industryStats, teamStats, waitingCounts, beginResolution, finishResolution, canTakeExtraAction, takeExtraAction } = newsModules["./game.mjs"];
 const copy=value=>JSON.parse(JSON.stringify(value));
 function incomeMix(counts) {
   const mix=[];
@@ -1183,7 +1206,7 @@ function candidates(game) {
     else if(island.shipLevel<3) moves.push({type:'ship',island:index});
     const plot=nextBuildablePlot(game,index);
     if(plot>=0) {
-      moves.push({type:'entertainment',island:index,plot});
+      if(canBuildEntertainment(game,index,plot)) moves.push({type:'entertainment',island:index,plot});
       for(const mix of uniqueMixes) moves.push({type:'homes',island:index,plot,mix});
     }
   });
@@ -1265,7 +1288,7 @@ return { chooseComputerMove, computerWantsExtra };
 // Application and interface
 (() => {
 const { ISLANDS, INCOME, INDUSTRY, industryJobs, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT, TEAMS, INDUSTRY_RINGS, COASTLINES, BOARD_CENTER, PORT_POINTS, PORT_RADIUS, PLOT_POINTS, LABEL_POINTS, SHIP_ROTATIONS, LOCATION_ORDER, PLOT_SIZE, UNIT_SIZE } = newsModules["./data.mjs"];
-const { createGame, teamStats, industryStats, industryMix, nextBuildablePlot, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, beginResolution, finishResolution, nextRound, standings } = newsModules["./game.mjs"];
+const { createGame, teamStats, industryStats, industryMix, nextBuildablePlot, canBuildEntertainment, turnPosition, nextTeam, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, beginResolution, finishResolution, nextRound, standings } = newsModules["./game.mjs"];
 const { dockPoint, homePoint, shipPoint, travelerPosition } = newsModules["./motion.mjs"];
 const { ownershipLinks, teamAnchor } = newsModules["./ownership.mjs"];
 const { serializeGame, parseSavedGame } = newsModules["./saves.mjs"];
@@ -1574,7 +1597,8 @@ function actionDetails() {
     body = homesControls(); disabled = ui.plot < 0; label = 'Build 9 housing units';
   } else {
     body = `${plotPicker()}<div class="entertainment-preview">✳</div><p class="hint">Attracts workers to this island. ${entertainmentDescription()}</p>`;
-    disabled = ui.plot < 0; label = 'Build entertainment';
+    disabled = !canBuildEntertainment(game,ui.island,ui.plot); label = 'Build entertainment';
+    if(disabled&&ui.plot>=0) body+='<p class="notice">Zoning: build housing between entertainment venues.</p>';
   }
   return `<section class="action-details">${body}<p class="error" role="alert">${ui.error}</p><button class="primary" data-command="commit" ${disabled ? 'disabled' : ''}>${label}</button></section>`;
 }
@@ -1590,7 +1614,7 @@ function incomeReportMarkup() {
 }
 function turnBanner() {
   const ai=computerTurn(), picking=game.phase==='playing';
-  return `<div class="panel-intro active-turn-banner"><span class="eyebrow">${ai?'AI turn':picking?'Your turn':'Turn complete'} · ${game.turn+1} / 4${game.extraActionActive?' · +1':''}</span><h1>${teamLabel(game.turn)}</h1></div>`;
+  return `<div class="panel-intro active-turn-banner"><span class="eyebrow">${ai?'AI turn':picking?'Your turn':'Turn complete'} · ${turnPosition(game)+1} / 4${game.extraActionActive?' · +1':''}</span><h1>${teamLabel(game.turn)}</h1></div>`;
 }
 function renderPanel() {
   const previousUnit=document.activeElement?.dataset.unit;
@@ -1606,7 +1630,7 @@ function renderPanel() {
   } else if(game.phase==='handoff'||game.phase==='roundReady') {
     content=`${turnBanner()}<p class="move-receipt">${escapeText(game.lastAction)}</p>
       ${canTakeExtraAction(game)?'<button class="secondary" data-command="extra" title="Take a second action · once per game" aria-label="Take a second action">+1</button>':''}
-      <button class="primary" data-command="${game.phase==='roundReady'?'resolve':'next'}">${game.phase==='roundReady'?'End round →':`${teamLabel(game.turn+1)} →`}</button>`;
+      <button class="primary" data-command="${game.phase==='roundReady'?'resolve':'next'}">${game.phase==='roundReady'?'End round →':`${teamLabel(nextTeam(game))} →`}</button>`;
   } else if(game.phase==='resolving') {
     content=`<div class="panel-intro"><h1>${animation?.plan.moves.length?'Moving in.':'No arrivals.'}</h1></div>
       <div class="travel-progress"><strong id="arrivalProgress">0 / ${animation?.plan.moves.length||0}</strong><span>arrived</span></div><button class="secondary" data-command="skip">Skip →</button>`;
