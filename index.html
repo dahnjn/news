@@ -519,7 +519,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <li><b>Extra move.</b> Once per game, each team may take a second action immediately after its first move, before handing off or ending the round. Select “+1.” The extra move is used only when an action is completed; you can keep it for later while choosing.</li>
       <li><b>Connect.</b> An empty harbor circle is inactive; its center dot appears when activated. Build a shared port on any outer island, then launch an L1 ship serving that island. Upgrade it on later turns. L1 / L2 / L3 transport 10 / 20 / 30 people per round.</li>
       <li><b>Build.</b> Develop each island in order: plot 1, then 2, through 6. Each square holds nine housing units or one entertainment venue; either unlocks the next plot for any team. Choose the income level of each housing unit, with at most one $$$$$$$$$$ ($10) unit per housing plot. The team that builds the housing units owns them, wherever they are located. The team signal flags sit outside CENTRAL. Click a flag to highlight its ownership lines and housing units. All teams share CENTRAL. Empty units are outlined; filled units are solid with a check.</li>
-      <li><b>Create jobs.</b> Small / medium / large industries create 10 / 25 / 50 workers. CENTRAL has four slots for each size, for 340 workers when all 12 businesses are built. Each size has six businesses to choose from, each with a distinct income mix shown on its card. Choices affect the income totals; the catalog keeps roughly the previous proportions of $, $$, $$$, and $$$$ workers. Every large business brings one $$$$$$$$$$ ($10) worker; smaller businesses have none. The inner ring is small, middle medium, and outer large. Click CENTRAL to see waiting workers and remaining slots.</li>
+      <li><b>Create jobs.</b> Small / medium / large industries create 10 / 25 / 50 workers. CENTRAL has four slots for each size, for 340 workers when all 12 businesses are built. Each size has six businesses to choose from, each with a distinct income mix shown on its card. In new games, at most 80 workers earn above $: small / medium / large businesses bring at most 3 / 5 / 12 higher-income workers, even when the same business is built repeatedly. A full game has 260–276 $ workers, with the remaining $$ and $$$ totals depending on business choices. Every large business brings one $$$$ worker and one $$$$$$$$$$ ($10) worker, for four of each when all large slots are built; smaller businesses bring neither. The inner ring is small, middle medium, and outer large. Click CENTRAL to see waiting workers and remaining slots.</li>
       <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. They prefer more entertainment, then the plot furthest from the port: 6, 5, 4, 3, 2, 1. Remaining ties favor a different island each round: NORTH, EAST, SOUTH, WEST. Workers queue in creation order.</li>
       <li><b>Entertainment income.</b> In Recurring mode, each venue pays its builder $1 for every housed resident on its island at the end of every round, after arrivals, including the final round. All income levels, housing owners, existing residents, and new arrivals count. Each venue receives the full amount: two venues on an island with 20 residents each pay $20. Empty housing and workers waiting at CENTRAL do not count. Adjacency does not matter. With entertainment income Off, venues still attract workers but earn no money. Building housing does not charge a tax.</li>
       <li><b>Score.</b> Your housing income and collected entertainment income contribute to your score across all islands. Rent and entertainment both default to Recurring and can be set separately before starting. With rent set to Once, a filled housing unit earns its income value once. With recurring rent, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. The five income values are $1, $2, $3, $4, and $10. A $$$$$$$$$$ home occupied for three round endings earns $30 with recurring rent. Empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, and ships do not earn points.</li>
@@ -586,10 +586,8 @@ const WORKFORCE_700 = {
   }),
 };
 
-// Distinct profiles for the six business cards in each size. Four businesses
-// per size still total 340 people, whatever cards players choose. Across the
-// full catalog the lower four tiers retain the previous approximate ratios.
-const WORKFORCE = {
+// Preserve the original 340-worker edition for games saved before scarcity.
+const WORKFORCE_340_ORIGINAL = {
   small:[
     [9,1,0,0,0], [7,3,0,0,0], [8,0,2,0,0],
     [3,5,2,0,0], [1,3,5,1,0], [6,4,0,0,0],
@@ -601,6 +599,25 @@ const WORKFORCE = {
   large:[
     [24,14,9,2,1], [12,23,13,1,1], [37,9,3,0,1],
     [30,12,7,0,1], [43,4,1,1,1], [18,23,7,1,1],
+  ],
+};
+
+// Small / medium / large businesses bring at most 3 / 5 / 12 workers above $.
+// Four slots of each size therefore cap higher-income workers at 80, even
+// when the richest cards are repeated. Full games have 260–276 $ workers.
+// Every large company brings one $$$$ worker and one $10 worker.
+const WORKFORCE = {
+  small:[
+    [9,1,0,0,0], [8,2,0,0,0], [8,1,1,0,0],
+    [7,3,0,0,0], [7,1,2,0,0], [7,2,1,0,0],
+  ],
+  medium:[
+    [20,4,1,0,0], [20,3,2,0,0], [20,5,0,0,0],
+    [22,3,0,0,0], [20,2,3,0,0], [21,4,0,0,0],
+  ],
+  large:[
+    [38,8,2,1,1], [38,7,3,1,1], [38,9,1,1,1],
+    [38,6,4,1,1], [38,10,0,1,1], [38,5,5,1,1],
   ],
 };
 
@@ -661,11 +678,12 @@ const INDUSTRY = {
     legacyCard("INNOVATIVE CARE", [5,20,30,20],20,100),
   ]},
 };
-function industryJobs(size,workforceVersion=4) {
+function industryJobs(size,workforceVersion=5) {
   return workforceVersion>=4?INDUSTRY[size]?.jobs:INDUSTRY[size]?.legacyJobs;
 }
 function workforceMix(workforceVersion,size,cardIndex,slot) {
-  if(workforceVersion>=4) return WORKFORCE[size]?.[cardIndex];
+  if(workforceVersion>=5) return WORKFORCE[size]?.[cardIndex];
+  if(workforceVersion===4) return WORKFORCE_340_ORIGINAL[size]?.[cardIndex];
   if(workforceVersion>=2) return (workforceVersion===2?PREVIOUS_WORKFORCE:WORKFORCE_700)[size]?.[slot];
   return INDUSTRY[size]?.cards[cardIndex]?.mix;
 }
@@ -700,7 +718,7 @@ const TEAM_ANCHORS = [[-150,-150],[150,-150],[150,150],[-150,150]].map(([x,y]) =
 const LABEL_POINTS = [[1090,200],[1650,978],[1080,1400],[250,960]].map(alignIslandPoint);
 const SHIP_ROTATIONS = [0,90,180,270];
 
-return { ISLANDS, INCOME, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT, PREVIOUS_WORKFORCE, WORKFORCE_700, WORKFORCE, TEAMS, scaleMix, INDUSTRY, industryJobs, workforceMix, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
+return { ISLANDS, INCOME, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT, PREVIOUS_WORKFORCE, WORKFORCE_700, WORKFORCE_340_ORIGINAL, WORKFORCE, TEAMS, scaleMix, INDUSTRY, industryJobs, workforceMix, LOCATION_ORDER, PLOTS_PER_ISLAND, INDUSTRY_SLOTS_PER_SIZE, INDUSTRY_RINGS, PLOT_SIZE, PLOT_SPACING, PORT_RADIUS, UNIT_PITCH, UNIT_SIZE, BOARD_CENTER, DOCK_POINTS, PORT_POINTS, PLOT_POINTS, COASTLINES, TEAM_ANCHORS, LABEL_POINTS, SHIP_ROTATIONS };
 })();
 
 // game.mjs
@@ -714,7 +732,7 @@ function createGame(rounds = 12, {recurringRent=true,entertainmentMode='recurrin
   if (typeof recurringRent!=='boolean') throw new Error('Choose whether recurring rent is on or off.');
   if (!['recurring','off'].includes(entertainmentMode)) throw new Error('Choose recurring entertainment income or off.');
   return {
-    rounds, recurringRent, entertainmentMode, workforceVersion:4, round:1, turn:0, phase:'playing', nextWorkerId:1,
+    rounds, recurringRent, entertainmentMode, workforceVersion:5, round:1, turn:0, phase:'playing', nextWorkerId:1,
     players:generateTeams(),
     islands:ISLANDS.map(() => ({port:false,shipLevel:0,plots:Array(PLOTS_PER_ISLAND).fill(null)})),
     workers:[], industries:[], lastAction:'', lastActionType:null, actionsThisTurn:0, extraActionActive:false, lastReport:null, pending:null,
@@ -997,7 +1015,7 @@ const sum=values=>values.reduce((a,b)=>a+b,0);
 function validateGame(input,{allowLegacy=false}={}) {
   const raw=record(input), game={};
   game.rounds=integer(raw.rounds,1,100); game.round=integer(raw.round,1,game.rounds);
-  game.workforceVersion=raw.workforceVersion===undefined?1:integer(raw.workforceVersion,1,4);
+  game.workforceVersion=raw.workforceVersion===undefined?1:integer(raw.workforceVersion,1,5);
   game.recurringRent=raw.recurringRent===undefined?false:bool(raw.recurringRent);
   const entertainmentMode=raw.entertainmentMode??(allowLegacy?'legacy-tax':null);
   check(['recurring','off','legacy-tax'].includes(entertainmentMode)); game.entertainmentMode=entertainmentMode;
@@ -1116,7 +1134,7 @@ function serializeGame(game) {
   // Settlement has not mutated housing yet. Replay its animation after loading.
   const resumeMovement=game.phase==='resolving';
   const snapshot=validateGame({...game,phase:resumeMovement?'roundReady':game.phase,pending:null});
-  return JSON.stringify({format:'NEWS',version:5,resumeMovement,game:snapshot},null,2);
+  return JSON.stringify({format:'NEWS',version:6,resumeMovement,game:snapshot},null,2);
 }
 
 function parseSavedGame(text) {
@@ -1124,7 +1142,7 @@ function parseSavedGame(text) {
   let payload;
   try { payload=JSON.parse(text); } catch { invalid(); }
   record(payload); check(payload.format==='NEWS');
-  if(![1,2,3,4,5].includes(payload.version)) throw new Error('This NEWS save uses an unsupported version.');
+  if(![1,2,3,4,5,6].includes(payload.version)) throw new Error('This NEWS save uses an unsupported version.');
   const game=validateGame(payload.game,{allowLegacy:payload.version<3}), resumeMovement=bool(payload.resumeMovement);
   check(!resumeMovement||game.phase==='roundReady');
   return {game,resumeMovement};
