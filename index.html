@@ -376,6 +376,8 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 .plot-mark.locked .plot-base { fill:#e5eff1; stroke:#83969c; stroke-width:3; }
 .plot-mark.locked .empty-plot-number { fill:#6e858e; }
 
+.industry-card:disabled { opacity:.38; filter:grayscale(1); cursor:not-allowed; border-color:#aaa; box-shadow:none; }
+
 </style>
 </head>
 <body>
@@ -529,8 +531,8 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <li><b>Extra move.</b> Once per game, each team may take a second action immediately after its first move, before handing off or ending the round. Select “+1.” The extra move is used only when an action is completed; you can keep it for later while choosing.</li>
       <li><b>Connect.</b> An empty harbor circle is inactive; its center dot appears when activated. Build a shared port on any outer island, then launch an L1 ship serving that island. Upgrade it on later turns. L1 / L2 / L3 transport 10 / 20 / 30 people per round.</li>
       <li><b>Build.</b> Develop each island in order: plot 1, then 2, through 6. Each square holds nine housing units or one entertainment venue; either unlocks the next plot for any team. Zoning requires at least one housing plot between entertainment venues on the same island, regardless of ownership. Entertainment on different islands is allowed on consecutive turns. Choose the income level of each housing unit, with at most one $$$$$$$$$$ ($10) unit per housing plot. The team that builds the housing units owns them, wherever they are located. The team signal flags sit outside CENTRAL. Click a flag to highlight its ownership lines and housing units. All teams share CENTRAL. Empty units are outlined; filled units are solid with a check.</li>
-      <li><b>Create jobs.</b> Small / medium / large industries create 7 / 18 / 36 workers. CENTRAL still has four slots for each size and six business names to choose from. With all 12 companies built, the population is exactly 244. Each business has its own fixed income mix, shown on its card. Its mix stays the same regardless of construction order or earlier choices; the overall income totals depend on the companies you select. Every large company brings one $10 worker; small and medium companies bring none. The inner ring is small, middle medium, and outer large. Click CENTRAL to see waiting workers and remaining slots.</li>
-      <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. They prefer more entertainment, then the plot furthest from the port: 6, 5, 4, 3, 2, 1. Remaining ties favor a different island each round: NORTH, EAST, SOUTH, WEST. Workers queue in creation order.</li>
+      <li><b>Create jobs.</b> Small / medium / large industries create 7 / 18 / 36 workers. CENTRAL still has four slots for each size and six business names to choose from. With all 12 companies built, the population is exactly 244. Each business can be built only once per game. Used cards are greyed out. Each business has its own fixed income mix, shown on its card. Its mix stays the same regardless of construction order or earlier choices; the overall income totals depend on the companies you select. Every large company brings one $10 worker; small and medium companies bring none. The inner ring is small, middle medium, and outer large. Click CENTRAL to see waiting workers and remaining slots.</li>
+      <li><b>Welcome workers.</b> Ports, ships, and entertainment are shared infrastructure. After all four turns, workers need a port, a ship with space, and a housing unit at their exact income level, regardless of which team owns it. Workers board by company build order, then by income from $ through $10 within each company. Workers without matching housing wait at CENTRAL and use no ship space; remaining seats go to the next company. Housing preference is the highest plot number (6 first), then the island with more entertainment. Remaining ties are random.</li>
       <li><b>Entertainment income.</b> In Recurring mode, each venue pays its builder $1 for every housed resident on its island at the end of every round, after arrivals, including the final round. All income levels, housing owners, existing residents, and new arrivals count. Each venue receives the full amount: two venues on an island with 20 residents each pay $20. Empty housing and workers waiting at CENTRAL do not count. Income counts the entire island; zoning still requires housing between entertainment venues. With entertainment income Off, venues still attract workers but earn no money. Building housing does not charge a tax.</li>
       <li><b>Score.</b> Your housing income and collected entertainment income contribute to your score across all islands. Rent and entertainment both default to Recurring and can be set separately before starting. With rent set to Once, a filled housing unit earns its income value once. With recurring rent, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. The five income values are $1, $2, $3, $4, and $10. A $$$$$$$$$$ home occupied for three round endings earns $30 with recurring rent. Empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, and ships do not earn points.</li>
     </ol>
@@ -794,7 +796,7 @@ function createGame(rounds = 12, {recurringRent=true,entertainmentMode='recurrin
   if (typeof recurringRent!=='boolean') throw new Error('Choose whether recurring rent is on or off.');
   if (!['recurring','off'].includes(entertainmentMode)) throw new Error('Choose recurring entertainment income or off.');
   return {
-    rounds, recurringRent, entertainmentMode, workforceVersion:8, rulesVersion:3, round:1, turn:0, phase:'playing', nextWorkerId:1,
+    rounds, recurringRent, entertainmentMode, workforceVersion:8, rulesVersion:4, tieSeed:Math.floor(Math.random()*4294967296), round:1, turn:0, phase:'playing', nextWorkerId:1,
     players:generateTeams(),
     islands:ISLANDS.map(() => ({port:false,shipLevel:0,plots:Array(PLOTS_PER_ISLAND).fill(null)})),
     workers:[], industries:[], lastAction:'', lastActionType:null, actionsThisTurn:0, extraActionActive:false, lastReport:null, pending:null,
@@ -833,6 +835,9 @@ function waitingCounts(game) {
 function industryStats(game, size) {
   const built=game.industries.filter(business=>business.size===size).length;
   return {built,total:INDUSTRY_SLOTS_PER_SIZE,remaining:Math.max(0,INDUSTRY_SLOTS_PER_SIZE-built)};
+}
+function companyUsed(game,size,cardIndex) {
+  return game.rulesVersion>=4 && game.industries.some(b=>b.size===size&&b.cardIndex===cardIndex);
 }
 function industryMix(game,size,cardIndex) {
   const {built,remaining}=industryStats(game,size);
@@ -880,6 +885,7 @@ function applyAction(game, action) {
       const industry=INDUSTRY[action.size], card=industry?.cards[action.cardIndex];
       if(!card || !Number.isInteger(action.cardIndex)) throw new Error('Choose a business card.');
       if(!industryStats(game,action.size).remaining) throw new Error(`The ${industry.label.toLowerCase()} industry ring is full. Choose another size.`);
+      if(companyUsed(game,action.size,action.cardIndex)) throw new Error('This company has already been built.');
       const id=game.industries.length+1;
       const mix=industryMix(game,action.size,action.cardIndex);
       game.industries.push({id,owner:game.turn,size:action.size,cardIndex:action.cardIndex,round:game.round,mix:[...mix]});
@@ -943,7 +949,19 @@ function planRound(game) {
   }));
   vacancies.sort((a,b)=>entertainment[b.island]-entertainment[a.island] || b.plot-a.plot || ((a.island-start+4)%4)-((b.island-start+4)%4) || a.cell-b.cell);
   const moves=[], waiting=[];
-  for(const worker of game.workers) {
+  // Seeded per round so forecasts and reloaded arrivals reproduce the same draw.
+  let seed=((game.tieSeed??0)^Math.imul(game.round,2654435761))>>>0;
+  const random=()=>{seed=(seed+0x6D2B79F5)>>>0;let n=seed;n=Math.imul(n^(n>>>15),n|1);n^=n+Math.imul(n^(n>>>7),n|61);return ((n^(n>>>14))>>>0)/4294967296;};
+  const queue=game.rulesVersion>=4?[...game.workers].sort((a,b)=>a.industryId-b.industryId||a.income-b.income||a.id-b.id):game.workers;
+  for(const worker of queue) {
+    if(game.rulesVersion>=4) {
+      const options=vacancies.filter(home=>home.income===worker.income&&capacity[home.island]>0)
+        .sort((a,b)=>b.plot-a.plot||entertainment[b.island]-entertainment[a.island]);
+      if(!options.length) {waiting.push(worker.id);continue;}
+      const best=options[0], tied=options.filter(home=>home.plot===best.plot&&entertainment[home.island]===entertainment[best.island]);
+      const home=tied[Math.floor(random()*tied.length)];
+      vacancies.splice(vacancies.indexOf(home),1);capacity[home.island]--;moves.push({...home,workerId:worker.id});continue;
+    }
     const i=vacancies.findIndex(home=>home.income===worker.income && capacity[home.island]>0);
     if(i<0) { waiting.push(worker.id); continue; }
     const home=vacancies.splice(i,1)[0]; capacity[home.island]--; moves.push({...home,workerId:worker.id});
@@ -978,7 +996,7 @@ function nextRound(game) {
 }
 function standings(game) { return game.players.map((player,team)=>({team,...teamStats(game,team)})).sort((a,b)=>b.score-a.score||a.team-b.team); }
 
-return { generateTeams, createGame, entertainmentIncomeByTeam, teamStats, waitingCounts, industryStats, industryMix, islandStats, nextBuildablePlot, startingTeam, turnPosition, nextTeam, canBuildEntertainment, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
+return { generateTeams, createGame, entertainmentIncomeByTeam, teamStats, waitingCounts, industryStats, companyUsed, industryMix, islandStats, nextBuildablePlot, startingTeam, turnPosition, nextTeam, canBuildEntertainment, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, planRound, beginResolution, finishResolution, nextRound, standings };
 })();
 
 // motion.mjs
@@ -1087,7 +1105,8 @@ function validateGame(input,{allowLegacy=false,allowLegacyRules=false}={}) {
   const raw=record(input), game={};
   game.rounds=integer(raw.rounds,1,100); game.round=integer(raw.round,1,game.rounds);
   game.workforceVersion=raw.workforceVersion===undefined?1:integer(raw.workforceVersion,1,8);
-  game.rulesVersion=raw.rulesVersion===undefined&&allowLegacyRules?1:integer(raw.rulesVersion,1,3);
+  game.rulesVersion=raw.rulesVersion===undefined&&allowLegacyRules?1:integer(raw.rulesVersion,1,4);
+  if(raw.tieSeed!==undefined||game.rulesVersion>=4) game.tieSeed=integer(raw.tieSeed,0,4294967295);
   game.recurringRent=raw.recurringRent===undefined?false:bool(raw.recurringRent);
   const entertainmentMode=raw.entertainmentMode??(allowLegacy?'legacy-tax':null);
   check(['recurring','off','legacy-tax'].includes(entertainmentMode)); game.entertainmentMode=entertainmentMode;
@@ -1106,10 +1125,14 @@ function validateGame(input,{allowLegacy=false,allowLegacyRules=false}={}) {
   check(new Set(game.players.map(p=>p.letter)).size===4);
   const people=new Map(), sizeCounts={small:0,medium:0,large:0}, sizeMixes={small:[],medium:[],large:[]}; let nextId=1;
   check(Array.isArray(raw.industries)&&raw.industries.length<=12);
+  const companyKeys=new Set();
   game.industries=raw.industries.map((business,index)=>{
     record(business); check(Object.hasOwn(sizeCounts,business.size));
     check(++sizeCounts[business.size]<=4); check(business.id===index+1);
     const cardIndex=integer(business.cardIndex,0,5);
+    const key=business.size+':'+cardIndex;
+    if(game.rulesVersion>=4) check(!companyKeys.has(key));
+    companyKeys.add(key);
     const item={id:index+1,owner:integer(business.owner,0,3),size:business.size,cardIndex,round:integer(business.round,1,game.round)};
     const spec=INDUSTRY[item.size], card=spec.cards[cardIndex], jobs=industryJobs(item.size,game.workforceVersion), legacy=scaleMix(card.legacyMix,spec.legacyJobs);
     const expected=game.workforceVersion>=2?workforceMix(game.workforceVersion,item.size,cardIndex,sizeCounts[item.size]-1,sizeMixes[item.size]):null;
@@ -1230,7 +1253,7 @@ return { serializeGame, parseSavedGame };
 // computer.mjs
 newsModules["./computer.mjs"] = (() => {
 const { INDUSTRY, INCOME, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT } = newsModules["./data.mjs"];
-const { applyAction, nextBuildablePlot, canBuildEntertainment, industryStats, teamStats, waitingCounts, beginResolution, finishResolution, canTakeExtraAction, takeExtraAction } = newsModules["./game.mjs"];
+const { applyAction, nextBuildablePlot, canBuildEntertainment, companyUsed, industryStats, teamStats, waitingCounts, beginResolution, finishResolution, canTakeExtraAction, takeExtraAction } = newsModules["./game.mjs"];
 const copy=value=>JSON.parse(JSON.stringify(value));
 function incomeMix(counts) {
   const mix=[];
@@ -1264,7 +1287,7 @@ function candidates(game) {
     }
   });
   for(const [size,spec] of Object.entries(INDUSTRY)) if(industryStats(game,size).remaining) {
-    spec.cards.forEach((_,cardIndex)=>moves.push({type:'industry',island:'central',size,cardIndex}));
+    spec.cards.forEach((_,cardIndex)=>{if(!companyUsed(game,size,cardIndex)) moves.push({type:'industry',island:'central',size,cardIndex});});
   }
   return moves;
 }
@@ -1341,7 +1364,7 @@ return { chooseComputerMove, computerWantsExtra };
 // Application and interface
 (() => {
 const { ISLANDS, INCOME, INDUSTRY, industryJobs, EXCLUSIVE_INCOME, MAX_EXCLUSIVE_UNITS_PER_PLOT, TEAMS, INDUSTRY_RINGS, COASTLINES, BOARD_CENTER, PORT_POINTS, PORT_RADIUS, PLOT_POINTS, LABEL_POINTS, SHIP_ROTATIONS, LOCATION_ORDER, PLOT_SIZE, UNIT_SIZE } = newsModules["./data.mjs"];
-const { createGame, teamStats, industryStats, industryMix, nextBuildablePlot, canBuildEntertainment, turnPosition, nextTeam, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, beginResolution, finishResolution, nextRound, standings } = newsModules["./game.mjs"];
+const { createGame, teamStats, companyUsed, industryStats, industryMix, nextBuildablePlot, canBuildEntertainment, turnPosition, nextTeam, applyAction, canTakeExtraAction, takeExtraAction, cancelExtraAction, nextTurn, beginResolution, finishResolution, nextRound, standings } = newsModules["./game.mjs"];
 const { dockPoint, homePoint, shipPoint, travelerPosition } = newsModules["./motion.mjs"];
 const { ownershipLinks, teamAnchor } = newsModules["./ownership.mjs"];
 const { serializeGame, parseSavedGame } = newsModules["./saves.mjs"];
@@ -1604,7 +1627,7 @@ function industryControls() {
   const industry = INDUSTRY[ui.size];
   return `<div class="size-switch">${Object.entries(INDUSTRY).map(([size,item]) => `<button data-size="${size}" aria-pressed="${size === ui.size}" style="--size:${item.color}"><span>${item.label}</span><b>+${industryJobs(size,game.workforceVersion)} workers</b><small>${industryStats(game,size).remaining} available</small></button>`).join('')}</div>
     ${game.workforceVersion===7?'<p class="hint">Mixes reflect the workers left for this company size.</p>':''}
-    <div class="industry-deck">${industry.cards.map((card,index) => `<button class="industry-card ${ui.card === index ? 'selected' : ''}" data-card="${index}" aria-pressed="${ui.card === index}">
+    <div class="industry-deck">${industry.cards.map((card,index) => `<button class="industry-card ${ui.card === index ? 'selected' : ''}" data-card="${index}" ${companyUsed(game,ui.size,index)?'disabled title="Already built"':''} aria-pressed="${ui.card === index}">
       <div class="card-title"><span>${String.fromCharCode(65+index)}</span><b>${card.name}</b></div>
       <div class="card-mix">${industryMix(game,ui.size,index).slice(0,ui.size==='large'?INCOME.length:EXCLUSIVE_INCOME).map((count,i) => `<span style="--income:${INCOME[i].color}"><i></i><b>${INCOME[i].label}</b> ${count}</span>`).join('')}</div></button>`).join('')}</div>`;
 }
@@ -1645,8 +1668,8 @@ function actionDetails() {
     label = !player.port ? 'Port required' : player.shipLevel === 3 ? 'Fully upgraded' : player.shipLevel ? `Upgrade to L${level}` : 'Launch ship';
   } else if (ui.action === 'industry') {
     body = industryControls();
-    disabled=!industryStats(game,ui.size).remaining;
-    label = disabled ? `${INDUSTRY[ui.size].label} ring full` : `+${industryJobs(ui.size,game.workforceVersion)} workers`;
+    disabled=!industryStats(game,ui.size).remaining||companyUsed(game,ui.size,ui.card);
+    label = companyUsed(game,ui.size,ui.card) ? 'Already built' : disabled ? `${INDUSTRY[ui.size].label} ring full` : `+${industryJobs(ui.size,game.workforceVersion)} workers`;
   } else if (ui.action === 'homes') {
     body = homesControls(); disabled = ui.plot < 0; label = 'Build 9 housing units';
   } else {
@@ -1837,7 +1860,7 @@ $('#turnPanel').addEventListener('click',event => {
   const size = event.target.closest('[data-size]');
   if (size) { ui.size = size.dataset.size; ui.card = 0; renderPanel(); renderCenter(); return; }
   const card = event.target.closest('[data-card]');
-  if (card) { ui.card = Number(card.dataset.card); renderPanel(); }
+  if (card && !companyUsed(game,ui.size,Number(card.dataset.card))) { ui.card = Number(card.dataset.card); renderPanel(); }
 });
 $('#gameBoard').addEventListener('click',event=>{
   const owner=event.target.closest('[data-owner]');
