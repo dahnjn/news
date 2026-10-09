@@ -378,6 +378,9 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
 
 .industry-card:disabled { opacity:.38; filter:grayscale(1); cursor:not-allowed; border-color:#aaa; box-shadow:none; }
 
+.player-guide { display:block; width:100%; height:auto; margin:20px 0; }
+#rulesDialog:has(.player-guide) { max-width:1040px; }
+
 </style>
 </head>
 <body>
@@ -527,6 +530,40 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
   <dialog id="rulesDialog" aria-labelledby="rulesTitle">
     <div class="dialog-head"><h2 id="rulesTitle">How to play</h2><button data-close-dialog aria-label="Close rules">×</button></div>
     <p>Each of the four teams takes one action per round, plus one optional extra action during the game. Turns move clockwise in the same order every round: Star, Cross, Checker, then Stripes. Star always starts and Stripes always finishes. Select CENTRAL, WEST, SOUTH, EAST, or NORTH before choosing your action. Teams can build on every island.</p>
+<svg xmlns="http://www.w3.org/2000/svg" class="player-guide" width="960" height="1000" viewBox="0 0 960 1000" role="img" aria-labelledby="title desc">
+<title id="title">NEWS — where workers live and how you score</title><desc id="desc">Workers need matching income, a port and ship capacity. Housing preference is highest plot number, then most entertainment, then random ties. Score equals collected rent plus collected entertainment income minus current vacant unit value.</desc>
+<rect width="960" height="1000" rx="24" fill="#cfe8f0"/>
+<g font-family="Arial, sans-serif" fill="#172c32">
+<text x="42" y="56" font-size="18" letter-spacing="4">NEWS / PLAYER GUIDE</text>
+<text x="42" y="102" font-size="34" font-weight="700">Where workers live. How you score.</text>
+<rect x="28" y="130" width="904" height="286" rx="16" fill="white"/>
+<text x="50" y="166" font-size="23" font-weight="700">01 / Find a home</text>
+<text x="50" y="198" font-size="18">First: exact income match + active port + a ship with an available seat.</text>
+<g stroke="#172c32" stroke-width="2" fill="#cfe8f0"><rect x="52" y="219" width="258" height="85" rx="9"/><rect x="350" y="219" width="258" height="85" rx="9"/><rect x="648" y="219" width="258" height="85" rx="9"/></g>
+<g font-size="20" font-weight="700" text-anchor="middle"><text x="181" y="250">HIGHEST PLOT</text><text x="479" y="250">MOST ENTERTAINMENT</text><text x="777" y="250">RANDOM TIE-BREAK</text></g>
+<g font-size="19" text-anchor="middle"><text x="181" y="280">6 → 5 → 4 → 3 → 2 → 1</text><text x="479" y="280">Compare islands</text><text x="777" y="280">Equal plot + entertainment</text><text x="330" y="266">→</text><text x="628" y="266">→</text></g>
+<text x="50" y="338" font-size="18">Boarding queue: oldest company first; within it, $ → $$ → $$$ → $$$$ → $10.</text>
+<text x="50" y="366" font-size="18">An older company’s $10 worker boards before a newer company’s $ worker.</text>
+<text x="50" y="394" font-size="18">No matching home? Wait at CENTRAL. Spare seats serve the next company.</text>
+<rect x="28" y="434" width="904" height="236" rx="16" fill="white"/>
+<text x="50" y="470" font-size="23" font-weight="700">02 / Housing income and vacancies</text>
+<rect x="52" y="494" width="55" height="55" fill="#8438b5"/><text x="79" y="529" font-size="27" fill="white" text-anchor="middle">✓</text>
+<text x="126" y="517" font-size="21" font-weight="700">Occupied $$$ unit = +$3 rent</text>
+<text x="126" y="547" font-size="18">Recurring: every round it is occupied. Once: only when it fills.</text>
+<rect x="52" y="571" width="55" height="55" fill="white" stroke="#ce292f" stroke-width="4"/>
+<text x="126" y="594" font-size="21" font-weight="700">Vacant $$$$ unit = −$4 from your score</text>
+<text x="126" y="624" font-size="18">A current deduction, not a new charge each round. It disappears when filled.</text>
+<text x="50" y="654" font-size="17">Rent belongs to the housing owner. Unit values: $1, $2, $3, $4 and $10.</text>
+<rect x="28" y="688" width="904" height="172" rx="16" fill="white"/>
+<text x="50" y="724" font-size="23" font-weight="700">03 / Entertainment income</text>
+<text x="52" y="776" font-size="40" font-weight="700">✳ × 20 residents = $20 / round</text>
+<text x="50" y="811" font-size="18">Each venue pays its builder $1 per housed resident on its island, after arrivals.</text>
+<text x="50" y="840" font-size="18">All owners and incomes count. Two venues earn $40 total. Off mode pays $0.</text>
+<text x="42" y="903" font-size="23" font-weight="700">SCORE = collected rent + entertainment income − vacant unit value</text>
+<text x="42" y="941" font-size="21">Example: $30 rent + $20 entertainment − $4 vacancy = 46 points</text>
+<text x="42" y="975" font-size="17">Recurring is the default. Empty homes and workers at CENTRAL earn no entertainment income.</text>
+</g></svg>
+
     <ol class="rules-list">
       <li><b>Extra move.</b> Once per game, each team may take a second action immediately after its first move, before handing off or ending the round. Select “+1.” The extra move is used only when an action is completed; you can keep it for later while choosing.</li>
       <li><b>Connect.</b> An empty harbor circle is inactive; its center dot appears when activated. Build a shared port on any outer island, then launch an L1 ship serving that island. Upgrade it on later turns. L1 / L2 / L3 transport 10 / 20 / 30 people per round.</li>
@@ -537,6 +574,7 @@ dialog::backdrop { background:rgba(18,31,27,.35); backdrop-filter:blur(3px); }
       <li><b>Score.</b> Your housing income and collected entertainment income contribute to your score across all islands. Rent and entertainment both default to Recurring and can be set separately before starting. With rent set to Once, a filled housing unit earns its income value once. With recurring rent, every filled housing unit pays its income value at the end of each round, after arrivals, including the final round. The five income values are $1, $2, $3, $4, and $10. A $$$$$$$$$$ home occupied for three round endings earns $30 with recurring rent. Empty homes subtract their value while vacant; this penalty does not accumulate. Industry, ports, and ships do not earn points.</li>
     </ol>
     <p>↓ saves a game file; ↑ loads it. Saves include team controls, income modes, collected rent and entertainment income, the current turn and unused extra moves. Loading a save made during arrivals replays that movement and pays that round’s income once. Older saves keep their original turn order, zoning rules, worker mix, and income modes. Start a new game for fixed turns, entertainment zoning, and fixed company mixes and a 244-worker population.</p>
+    <p><b>Finish with AI.</b> From any unfinished game, let all four computer teams play the remaining turns and rounds quickly. Pause or resume using the AI control. “Back to my game” restores the position before simulation, including your team controls. This return point lasts only in this browser session: save your game before closing, loading another game, or starting a new one. Download the simulated result with ↓ if you want to keep it.</p>
     <p>Choose You or AI for each team and set rent and entertainment income before starting. The moving outline marks the active team on the board and in the scores at the top. AI teams follow the same rules and take their turns automatically. Pause AI to review play; undo also pauses it. Loaded practice games wait for you to resume AI.</p>
     <p>Click a team’s score card for its breakdown. The grid count shows people housed / housing units owned. The repeat symbol shows combined recurring income per round at the current occupancy; it updates as housing fills. Rent set to Once and entertainment set to Off do not contribute to this rate.</p>
     <p>Workers without a suitable housing unit stay in the center for the next round. The highest score after the final round wins. Equal scores share the win.</p>
@@ -1130,18 +1168,25 @@ function validateGame(input,{allowLegacy=false,allowLegacyRules=false}={}) {
   check(new Set(game.players.map(p=>p.letter)).size===4);
   const people=new Map(), sizeCounts={small:0,medium:0,large:0}, sizeMixes={small:[],medium:[],large:[]}; let nextId=1;
   check(Array.isArray(raw.industries)&&raw.industries.length<=12);
+  // A migrated save preserves the validated original workforce of its existing companies.
+  if(raw.legacyIndustryCount!==undefined) {
+    check(game.rulesVersion>=5&&game.workforceVersion===8);
+    game.legacyIndustryCount=integer(raw.legacyIndustryCount,1,raw.industries.length);
+    game.legacyWorkforceVersion=integer(raw.legacyWorkforceVersion,7,7);
+  }
   const companyKeys=new Set();
   game.industries=raw.industries.map((business,index)=>{
     record(business); check(Object.hasOwn(sizeCounts,business.size));
     check(++sizeCounts[business.size]<=4); check(business.id===index+1);
     const cardIndex=integer(business.cardIndex,0,5);
-    check(companyOptions(game,business.size).includes(cardIndex));
+    const inherited=index<(game.legacyIndustryCount??0);
+    check(inherited||companyOptions(game,business.size).includes(cardIndex));
     const key=business.size+':'+cardIndex;
     if(game.rulesVersion>=4) check(!companyKeys.has(key));
     companyKeys.add(key);
     const item={id:index+1,owner:integer(business.owner,0,3),size:business.size,cardIndex,round:integer(business.round,1,game.round)};
     const spec=INDUSTRY[item.size], card=spec.cards[cardIndex], jobs=industryJobs(item.size,game.workforceVersion), legacy=scaleMix(card.legacyMix,spec.legacyJobs);
-    const expected=game.workforceVersion>=2?workforceMix(game.workforceVersion,item.size,cardIndex,sizeCounts[item.size]-1,sizeMixes[item.size]):null;
+    const expected=game.workforceVersion>=2?workforceMix(inherited?game.legacyWorkforceVersion:game.workforceVersion,item.size,cardIndex,sizeCounts[item.size]-1,sizeMixes[item.size]):null;
     item.mix=business.mix===undefined?legacy:list(business.mix,expected?INCOME.length:4).map(n=>integer(n,0,jobs));
     check((expected?[expected]:[card.mix,card.previousMix,legacy]).some(mix=>mix.length===item.mix.length&&mix.every((count,i)=>count===item.mix[i])));
     sizeMixes[item.size].push(item.mix);
@@ -1385,6 +1430,7 @@ let game = createGame(12), started = false, animation = null;
 const undoMoves = [];
 const portPulseEpoch = Date.now();
 const turnIndicatorEpoch = Date.now();
+let simulation=null;
 let computerTimer=null, aiPaused=false, newGameTeams=null, newGameRecurringRent=true, newGameEntertainmentMode='recurring';
 const ui = { island:null, action:'port', plot:0, income:0, mix:Array(9).fill(0), size:'small', card:0, error:'', highlightOwner:null };
 
@@ -1471,7 +1517,7 @@ function scheduleComputer() {
     } catch(error) {
       aiPaused=true; render(); fileError(`The AI paused: ${error.message}`);
     }
-  },phase==='playing'?650:1100);
+  },simulation?30:phase==='playing'?650:1100);
 }
 
 function shipTriangles(level) {
@@ -1699,6 +1745,25 @@ function turnBanner() {
   const ai=computerTurn(), picking=game.phase==='playing';
   return `<div class="panel-intro active-turn-banner"><span class="eyebrow">${ai?'AI turn':picking?'Your turn':'Turn complete'} · ${turnPosition(game)+1} / 4${game.extraActionActive?' · +1':''}</span><h1>${teamLabel(game.turn)}</h1></div>`;
 }
+function startSimulation() {
+  if(!started||game.phase==='finished'||simulation) return;
+  stopComputer();
+  simulation={game:JSON.stringify(game),draft:JSON.stringify(ui),undo:[...undoMoves],paused:aiPaused};
+  game.players.forEach(player=>{player.controller='ai';}); aiPaused=false;
+  if(game.phase==='resolving') { completeMovement(); }
+  else render();
+  announce('Simulating the remaining rounds. You can pause or return to your original game.');
+}
+function restoreSimulation() {
+  if(!simulation) return;
+  stopComputer(); stopAnimation();
+  const original=simulation; simulation=null;
+  game=JSON.parse(original.game);Object.assign(ui,JSON.parse(original.draft));
+  undoMoves.splice(0,undoMoves.length,...original.undo);aiPaused=hasComputer()?true:original.paused;
+  if(game.phase==='resolving') {game.phase='roundReady';game.pending=null;animateRound();}
+  else render();
+  announce('Your original game is restored.');
+}
 function renderPanel() {
   const previousUnit=document.activeElement?.dataset.unit;
   let content;
@@ -1725,7 +1790,7 @@ function renderPanel() {
       <div class="final-scores">${ranking.map(item=>`<div>${teamLabel(item.team)}<strong>${money(item.score)}</strong><small>${game.recurringRent?'Rent collected ':''}+$${game.recurringRent?game.players[item.team].rentEarned:item.income} −$${item.vacancy}${game.recurringRent?' vacant':''}${game.entertainmentMode==='recurring'?` · Entertainment +$${item.entertainmentEarned}`:''}${item.tax?` · Entertainment tax +$${item.tax}`:''}</small></div>`).join('')}</div>${incomeReportMarkup()}<button class="primary" data-command="new">+ New game</button>`;
   }
   const computerControls=started&&hasComputer()&&game.phase!=='finished'?`<div class="ai-controls"><span>${aiPaused?'AI paused':'AI'}</span><button class="icon-button" data-command="toggle-ai" title="${aiPaused?'Resume AI':'Pause AI'}" aria-label="${aiPaused?'Resume AI':'Pause AI'}">${aiPaused?'▶':'Ⅱ'}</button></div>`:'';
-  $('#turnPanel').innerHTML=`<div class="panel-content">${content}${computerControls}</div>`;
+  $('#turnPanel').innerHTML=`<div class="panel-content">${content}${computerControls}${started?(simulation?'<button class="secondary" data-command="restore-simulation">↶ Back to my game</button>':game.phase!=='finished'?'<button class="secondary" data-command="simulate" title="Let AI finish all remaining turns; your original game is kept until you leave this session">▷ Finish with AI</button>':''):''}</div>`;
   if(previousUnit!==undefined) $(`[data-unit="${previousUnit}"]`)?.focus({preventScroll:true});
 }
 
@@ -1739,7 +1804,7 @@ function startGame(input) {
   const entertainmentMode=fromNewDialog?newGameEntertainmentMode:game.entertainmentMode;
   stopComputer(); stopAnimation(); game=createGame(Number(input.value),{recurringRent,entertainmentMode});
   if(initialTeams) game.players=initialTeams.map(team=>({...team,controller:team.controller??'human',extraMoveUsed:false,rentEarned:0,entertainmentEarned:0}));
-  started=true; aiPaused=false; undoMoves.length=0; ui.highlightOwner=null; scoreOwner=null; resetDraft(); render(); announce(`${game.players[0].name} takes the first turn.`);
+  simulation=null; started=true; aiPaused=false; undoMoves.length=0; ui.highlightOwner=null; scoreOwner=null; resetDraft(); render(); announce(`${game.players[0].name} takes the first turn.`);
 }
 function commit(type = ui.action) {
   const before={game:JSON.stringify(game),draft:{...ui,mix:[...ui.mix]}}, count=game.actionsThisTurn;
@@ -1775,7 +1840,7 @@ function animateRound() {
   $('#animationLayer').innerHTML = `${byIsland.map((count,team) => count ? `<circle id="arrivalRipple${team}" class="port-arrival-ripple" cx="${PORT_POINTS[team][0]}" cy="${PORT_POINTS[team][1]}" r="${PORT_RADIUS}" opacity="0" aria-hidden="true"/>` : '').join('')}
     ${byIsland.map((count,team) => count ? shipMarkup(team,dockPoint(team),game.islands[team].shipLevel,`movingShip${team}`) : '').join('')}
     ${trips.map((move,index) => `<circle id="traveler${index}" r="4" fill="${INCOME[move.income].color}" stroke="white" stroke-width="1.3"/>`).join('')}`;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { completeMovement(); return; }
+  if (simulation || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { completeMovement(); return; }
   const current = animation, duration = trips.length ? 5100+Math.max(...byIsland)*32 : 900;
   const travelers = trips.map((_,index) => $(`#traveler${index}`));
   const ships = byIsland.map((count,team) => count ? $(`#movingShip${team}`) : null);
@@ -1833,6 +1898,8 @@ $('#turnPanel').addEventListener('click',event => {
   const command = event.target.closest('[data-command]')?.dataset.command;
   if (command) {
     if (command === 'start') return startGame($('#roundsInput'));
+    if (command === 'simulate') { startSimulation(); return; }
+    if (command === 'restore-simulation') { restoreSimulation(); return; }
     if (command === 'toggle-ai') { aiPaused=!aiPaused; stopComputer(); render(); return; }
     if (computerTurn()&&['commit','pass','extra','cancel-extra','next','resolve'].includes(command)) return;
     if (command === 'commit') return commit();
@@ -1938,7 +2005,7 @@ $('#loadGameInput').addEventListener('change',async event=>{
   try {
     if(file.size>1000000) throw new Error('Choose a NEWS saved game smaller than 1 MB.');
     const restored=parseSavedGame(await file.text());
-    stopComputer(); stopAnimation(); game=restored.game; started=true; aiPaused=hasComputer(); undoMoves.length=0; ui.highlightOwner=null; scoreOwner=null;
+    stopComputer(); stopAnimation(); simulation=null; game=restored.game; started=true; aiPaused=hasComputer(); undoMoves.length=0; ui.highlightOwner=null; scoreOwner=null;
     resetDraft(); ui.size='small'; ui.card=0;
     for(const selector of ['#newGameDialog','#centralDialog','#detailDialog','#fileDialog']) $(selector).close();
     render();
