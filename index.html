@@ -1086,7 +1086,7 @@ const { BOARD_CENTER, TEAM_ANCHORS, PLOT_POINTS, PLOT_SIZE } = newsModules["./da
 function teamAnchor(owner) { return [...TEAM_ANCHORS[owner]]; }
 
 // Each team uses its own rectangular track outside CENTRAL. All connections
-// follow horizontal or vertical segments, then enter the edge of a housing block.
+// follow horizontal or vertical segments, then enter the edge of an owned plot.
 function ownershipPath(owner,island,plot) {
   const [cx,cy]=BOARD_CENTER, start=teamAnchor(owner), radius=196+owner*8;
   const side=radius*2, perimeter=side*4, lane=PLOT_SIZE/2+24+owner*8;
@@ -1125,7 +1125,7 @@ function ownershipPath(owner,island,plot) {
 
 function ownershipLinks(game) {
   return game.islands.flatMap((island,index)=>island.plots.flatMap((plot,p)=>
-    plot?.type==='homes' ? [{owner:plot.owner,island:index,plot:p,path:ownershipPath(plot.owner,index,p)}] : []));
+    ['homes','entertainment'].includes(plot?.type) ? [{owner:plot.type==='homes'?plot.owner:plot.builtBy,island:index,plot:p,path:ownershipPath(plot.type==='homes'?plot.owner:plot.builtBy,index,p)}] : []));
 }
 
 return { teamAnchor, ownershipPath, ownershipLinks };
@@ -1627,9 +1627,10 @@ function renderIslands() {
         const plot=island.plots[index], locked=!plot&&index!==nextBuildablePlot(game,t), selected=!locked&&active&&['homes','entertainment'].includes(ui.action)&&ui.plot===index&&!plot;
         const filled=plot?.type==='homes'?plot.units.filter(unit=>unit.workerId!==null).length:0;
         const description=plot?.type==='homes'?`${game.players[plot.owner].name} · ${9-filled} available · ${filled} filled`:plot?.type||(locked?`Build plot ${nextBuildablePlot(game,t)+1} first`:'ready to build');
-        const ownership=plot?.type==='homes'&&ui.highlightOwner!==null?(plot.owner===ui.highlightOwner?'ownership-highlight':'ownership-muted'):'';
+        const owner=plot?.type==='homes'?plot.owner:plot?.type==='entertainment'?plot.builtBy:null;
+        const ownership=owner!==null&&ui.highlightOwner!==null?(owner===ui.highlightOwner?'ownership-highlight':'ownership-muted'):'';
         return `<g class="plot-mark ${selected?'selected':''} ${plot?'built':''} ${locked?'locked':''} ${ownership}" data-plot="${index}" data-island="${t}" role="button" tabindex="0" aria-disabled="${locked}" aria-label="${place.name} plot ${index+1}: ${description}">
-          <title>${place.name} plot ${index+1} · ${description}</title><rect class="plot-base" x="${x-PLOT_SIZE/2}" y="${y-PLOT_SIZE/2}" width="${PLOT_SIZE}" height="${PLOT_SIZE}"/>
+          <title>${plot?.type==='entertainment'?escapeText(game.players[plot.builtBy].name):`${place.name} plot ${index+1} · ${description}`}</title><rect class="plot-base" x="${x-PLOT_SIZE/2}" y="${y-PLOT_SIZE/2}" width="${PLOT_SIZE}" height="${PLOT_SIZE}"/>
           ${plot?.type==='homes'?drawHomeUnits(plot,t,index):plot?.type==='entertainment'?`<path class="entertainment-spark" d="M${x} ${y-21}V${y+21} M${x-18.2} ${y-10.5}L${x+18.2} ${y+10.5} M${x-18.2} ${y+10.5}L${x+18.2} ${y-10.5}"/>`:`<text class="empty-plot-number" x="${x}" y="${y+5}" text-anchor="middle">${index+1}</text>`}
           ${selected?`<rect class="plot-selection" x="${x-PLOT_SIZE/2-3}" y="${y-PLOT_SIZE/2-3}" width="${PLOT_SIZE+6}" height="${PLOT_SIZE+6}"/>`:''}</g>`;
       }).join('')}</g>`;
@@ -1872,7 +1873,7 @@ function showPlot(island,index) {
   const plot=game.islands[island].plots[index];
   if(!plot) return;
   $('#detailDialog').innerHTML=`<div class="dialog-head"><h2>${ISLANDS[island].name} · plot ${index+1}</h2><button data-close-dialog aria-label="Close plot details">×</button></div>
-    ${plot.type==='homes'?`<p class="plot-owner-detail"><b>${teamLabel(plot.owner)}</b> · 9 housing units</p><div class="home-inspector">${plot.units.map(unit=>`<div class="${unit.workerId!==null?'filled':'available'}" style="--income:${INCOME[unit.income].color}"><b>${INCOME[unit.income].label}</b><span>${unit.workerId!==null?'✓ Filled':'□ Available'}</span><small>${unit.workerId!==null?'+':'−'}$${INCOME[unit.income].value}</small></div>`).join('')}</div>`:`<p>Built by ${teamLabel(plot.builtBy)}. Attracts workers to this island. ${entertainmentDescription()}</p>`}`;
+    ${plot.type==='homes'?`<p class="plot-owner-detail"><b>${teamLabel(plot.owner)}</b> · 9 housing units</p><div class="home-inspector">${plot.units.map(unit=>`<div class="${unit.workerId!==null?'filled':'available'}" style="--income:${INCOME[unit.income].color}"><b>${INCOME[unit.income].label}</b><span>${unit.workerId!==null?'✓ Filled':'□ Available'}</span><small>${unit.workerId!==null?'+':'−'}$${INCOME[unit.income].value}</small></div>`).join('')}</div>`:`<p class="plot-owner-detail">${teamLabel(plot.builtBy)}</p>`}`;
   $('#detailDialog').showModal();
 }
 function renderCentralDetails() {
@@ -1944,7 +1945,7 @@ $('#gameBoard').addEventListener('click',event=>{
     ui.highlightOwner=ui.highlightOwner===index?null:index;
     renderBoard();
     if(restoreFocus) $(`[data-owner="${index}"]`)?.focus();
-    announce(ui.highlightOwner===null?'All ownership connections shown.':`${game.players[index].name}: ${teamStats(game,index).homes} housing units highlighted.`);
+    announce(ui.highlightOwner===null?'All ownership connections shown.':`${game.players[index].name}: Housing and entertainment highlighted.`);
     return;
   }
   if(event.target.closest('[data-central]')) return;
